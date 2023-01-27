@@ -2,7 +2,7 @@ import Discord from '../png&svg/discord.svg'
 import Whatsapp from '../png&svg/whatsapp.svg'
 import Telegram from '../png&svg/telegram-plane.svg'
 import Twitter from '../png&svg/Twitter.svg'
-
+import '../cssfiles/Homepage.css'
 
 function Footer(){
     return(
