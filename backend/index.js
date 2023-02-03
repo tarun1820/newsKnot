@@ -99,5 +99,30 @@ app.post("/login",async(req,res)=>{
     
 })
 
+app.post("/login",async(req,res)=>{
+    const {username,password}=req.body;
+     
+    try{
+      const olduser=await userinfo.findOne({username});
+      //checking for email if alredy registered or not
+      if(olduser){
+        const validuser = await bcrypt.compare(password,olduser.password);
+        if(validuser){
+            return res.json({error:"succesfully logged in"});
+        }
+        else{
+            return res.json({error:"incorrect password"});
+        }
+        // return res.json({error:"email alredy regitered"});
+      }
+      res.send({status:"user not registered"});
+    }
+    catch(err){
+        console.log(err);
+        res.send({status:"not ok"})
+    }
+    
+})
+
 //backend is listing to port 5000
 app.listen(5000,()=>{console.log("sever started")});

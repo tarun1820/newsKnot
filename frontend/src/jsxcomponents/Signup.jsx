@@ -38,6 +38,10 @@ function Signup() {
   //function to handle submit button when it is clicked
   function handleSubmit(event){
     const {username,email,password}=loginCredtials;
+    if(username==="" || password=""){
+      setUserExist(-1)
+      return 
+    }
     const data = JSON.stringify({username,email,password});
     const options = {
       headers: {"content-type": "application/json"}
@@ -47,6 +51,9 @@ function Signup() {
     .then((res)=>{
       if(res.data.error){
           setUserExist(1);
+      }
+      else{
+        setUserExist(0);
       }
       console.log(res.data)
     })
@@ -65,10 +72,10 @@ function Signup() {
     <div id="signupBox">
         <h1 className="signup-heading" >Sign Up</h1>
         <div id="signup-Form">
-        {/* {
+        {
           userExist===1?<p style={{backgroundColor:"black",color:"white",width:150,alignContent:"center"}}>user alredy regidtered</p>:null
           
-        } */}
+        }
         <form onSubmit={handleSubmit} style={{marginTop:0}}>
           <label className="label-form-item" >Username</label><br />
             <div className="image-side-inputfield">
