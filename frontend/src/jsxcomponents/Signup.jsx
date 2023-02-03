@@ -38,6 +38,9 @@ function Signup() {
   //function to handle submit button when it is clicked
   function handleSubmit(event){
     const {username,email,password}=loginCredtials;
+    if(username.length === 0){
+       
+    }
     const data = JSON.stringify({username,email,password});
     const options = {
       headers: {"content-type": "application/json"}
@@ -47,6 +50,10 @@ function Signup() {
     .then((res)=>{
       if(res.data.error){
           setUserExist(1);
+      }else if(res.data.status === "ok"){
+        setUserExist(2);
+      }else{
+        setUserExist(0);
       }
       console.log(res.data)
     })
@@ -58,6 +65,19 @@ function Signup() {
     event.preventDefault();
     // console.log(username,email,password);
   }
+  var classNameForuserExist = "" 
+  var banner ;
+  if(userExist === 0){
+    classNameForuserExist = "user_exists__not" 
+    
+  }else{
+    classNameForuserExist = "user_exists"
+    if(userExist === 1){
+      banner = "User Already Exists"
+    }else{
+      banner = "Account created Successfully"
+    }
+  }
 
   return (
     <div id="signup-Container">
@@ -65,10 +85,7 @@ function Signup() {
     <div id="signupBox">
         <h1 className="signup-heading" >Sign Up</h1>
         <div id="signup-Form">
-        {/* {
-          userExist===1?<p style={{backgroundColor:"black",color:"white",width:150,alignContent:"center"}}>user alredy regidtered</p>:null
-          
-        } */}
+        <p className = {classNameForuserExist}>{banner}</p>
         <form onSubmit={handleSubmit} style={{marginTop:0}}>
           <label className="label-form-item" >Username</label><br />
             <div className="image-side-inputfield">
@@ -79,7 +96,7 @@ function Signup() {
             <label className="label-form-item" >Email</label><br/>
             <div className="image-side-inputfield">
             <img alt="" src={envelopeopen} className="icon" />
-            <input onChange={handleChange} value={loginCredtials.email} name="email" type="text" id="" className="input-form-item" placeholder="Enter Your Email" /><br/>
+            <input onChange={handleChange} value={loginCredtials.email} name="email" type="email" id="" className="input-form-item" placeholder="Enter Your Email" /><br/>
             </div>
             <hr className="line-btw-items" />
             <label className="label-form-item" >Passcode</label><br/>

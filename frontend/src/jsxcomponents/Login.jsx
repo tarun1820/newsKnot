@@ -11,6 +11,8 @@ import axios from "axios";
 function Login() {
 
     //json object for storing email,password and username when changed
+    const [userExist,setUserExist] = useState(0);
+
     const [loginCredtials,setLoginCreditials] = useState({
         username:"",
         password:""
@@ -31,7 +33,7 @@ function Login() {
            )
         })
     }
-    
+    let banner ;
     //function to handle submit button when it is clicked
     function handleSubmit(event){
         const {username,password}=loginCredtials;
@@ -39,12 +41,18 @@ function Login() {
         const options = {
         	headers: {"content-type": "application/json"}
         }
+       
         //axios post reqest for sign in
         axios.post("http://localhost:5000/login", data, options)
-        .then((res)=>{
-        //   if(res.data.error){
-        //       setUserExist(1);
-        //   }
+        .then((res)=>{            
+            if(res.data.error==="incorrect password"){
+                setUserExist(2);              
+                
+            }else if(res.data.status==="user not registered"){
+                setUserExist(3);                
+            }else{
+                setUserExist(1);               
+            }
           console.log(res.data)
         })
         // .then((data)=>console.log(data))
@@ -57,11 +65,31 @@ function Login() {
         // console.log(username,password);
     }
 
+
+    var classNameForuserExist = "" 
+    
+    if(userExist === 0){
+      classNameForuserExist = "login_user_exists__not" 
+      
+    }else{
+      classNameForuserExist = "login_user_exists"
+      if(userExist === 1){
+        banner = "Successfully logged in"
+      }else if(userExist === 2){
+        banner = "Incorrect password"
+      }else{
+        banner = "User not Registered yet"
+      }
+    }
+    
+    // console.log(banner);
     return (
             <div id="login-Container">
             <h1 id="pro-Name">NewsKnot</h1>
             <div id="LoginBox">
+                
                 <h1 className="Login-heading" >Login</h1>
+                <p className = {classNameForuserExist}>{banner}</p>
                 <div id="Login-Form">
                 <form onSubmit={handleSubmit} type="post" action="/login" style={{marginTop:0}}>
                     <label className="label-form-item" >Username</label><br/>
@@ -77,7 +105,7 @@ function Login() {
                     </div>
                     <hr className="line-btw-items"/>
                     <label className="label-form-item" id="forget-passcode">Forgot passcode?</label>            
-                    <button type="submit" className="signup-page-button" id="signup-button" >Create Account</button>
+                    <button type="submit" className="signup-page-button" id="signup-button" >LOGIN</button>
                 </form>
                 </div>
                 {/* <input type="button" className="login-page-button" id="login-button" value="LOGIN" />    */}
