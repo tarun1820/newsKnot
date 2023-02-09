@@ -5,11 +5,11 @@ import usersolid from "../png&svg/user-solid.svg";
 import metalogo from "../png&svg/meta.png";
 import googlelogo from "../png&svg/google.png";
 import '../cssfiles/login.css';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 function Login() {
-
+    const navigate = useNavigate()
     //json object for storing email,password and username when changed
     const [userExist,setUserExist] = useState(0);
 
@@ -23,6 +23,7 @@ function Login() {
         
         // console.log(loginCredtials);
         const {name,value}=event.target;
+        // console.log(event.target);
         // const value=event.target.value;
         setLoginCreditials((prevItem)=>{
            return(
@@ -39,21 +40,31 @@ function Login() {
         const {username,password}=loginCredtials;
         const data = JSON.stringify({username,password});
         const options = {
+          withCredentials:true,
         	headers: {"content-type": "application/json"}
         }
        
         //axios post reqest for sign in
         axios.post("http://localhost:5000/login", data, options)
         .then((res)=>{            
-            if(res.data.error==="incorrect password"){
-                setUserExist(2);              
+            // if(res.data.error==="incorrect password"){
+            //     setUserExist(2);              
                 
-            }else if(res.data.status==="user not registered"){
-                setUserExist(3);                
-            }else{
-                setUserExist(1);               
+            // }else if(res.data.status==="user not registered"){
+            //     setUserExist(3);                
+            // }else{
+            //     setUserExist(1);               
+            // }
+            console.log("hello")
+            console.log(res.data)
+            if(res.data.status==="ok"){
+              setUserExist(1);
+              navigate("/user");
             }
-          console.log(res.data)
+            else{
+              setUserExist(2);
+            }
+          // console.log(res.data)
         })
         // .then((data)=>console.log(data))
         .catch((err)=>console.log(err)
@@ -76,7 +87,7 @@ function Login() {
       if(userExist === 1){
         banner = "Successfully logged in"
       }else if(userExist === 2){
-        banner = "Incorrect password"
+        banner = "username or password is Incorrect"
       }else{
         banner = "User not Registered yet"
       }
@@ -95,13 +106,13 @@ function Login() {
                     <label className="label-form-item" >Username</label><br/>
                     <div className="image-side-inputfield">
                     <img alt="" src={usersolid} className="icon"/>
-                    <input onChange={handleChange} name="username" value={loginCredtials.username} type="text" id="username-textField" className="input-form-item" placeholder="Type Your Username"  /><br />
+                    <input required onChange={handleChange} name="username" value={loginCredtials.username} type="text" id="username-textField" className="input-form-item" placeholder="Type Your Username"  /><br />
                     </div>
                     <hr className="line-btw-items" />
                     <label className="label-form-item" >Passcode</label><br />
                     <div className="image-side-inputfield" >
                     <img alt="" src={locksolid} className="icon" />
-                    <input onChange={handleChange} name="password" value={loginCredtials.password} type="password" id="passcode-field" className="input-form-item" placeholder="Type Your Passcode" /><br/>
+                    <input required minLength={8} onChange={handleChange} name="password" value={loginCredtials.password} type="password" id="passcode-field" className="input-form-item" placeholder="Type Your Passcode" /><br/>
                     </div>
                     <hr className="line-btw-items"/>
                     <label className="label-form-item" id="forget-passcode">Forgot passcode?</label>            

@@ -1,9 +1,13 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-
-export const Homestaticpage = () => {
+import axios from 'axios';
+export const Homestaticpage = (props) => {
     const navigate = useNavigate();
-    
+    if(props.logout===true){
+      axios.get("http://localhost:5000/logout",{withCredentials:true}).then((res=>{
+      console.log(res.data);
+   }))
+    }
   return (
     <div>
     <h1>Homestaticpage</h1>

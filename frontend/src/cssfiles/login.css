@@ -12,7 +12,7 @@ input:focus, textarea:focus, select:focus{
 }
 
 body{
-    transform:scale(0.80);
+    /* transform:scale(0.80); */
     position:relative;
     bottom:35px;
     background-color:#ECECEC;

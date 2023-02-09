@@ -1,15 +1,25 @@
-const express = require("express");
-const bodyParser = require("body-parser");
+const express = require("express"); 
 const mongoose = require("mongoose");
-const coros = require("cors");
-const bcrypt=require("bcryptjs");
+const cors = require("cors");
+const session = require("express-session");
+const passport = require("passport") 
+const passportLocalMongoose = require("passport-local-mongoose");
+const bodyParser = require("body-parser");
 
 const app = express();
 app.use(express.json());
-app.use(coros());
-
-
-
+app.use(cors({origin: true, credentials: true}));
+app.use(bodyParser.urlencoded({extended:true}));
+app.use(session({
+  secret:'news api',
+  resave:true,
+  saveUninitialized:true,
+  cookie:{maxAge:600000},
+}))
+app.use(passport.initialize());
+app.use(passport.session());
+const NewsAPI = require('newsapi');
+const newsapi = new NewsAPI('17fd79449aed499ea71d113d678dea49');
 
 //mogodb connection,schema and model
 
@@ -33,36 +43,53 @@ const userschema = new mongoose.Schema(
         username:String,
         email:{type:String,unique:true},
         password:String
+        
     },
     {
         collection:"userinfo"
     }
 )
 
+userschema.plugin(passportLocalMongoose);
+
 const userinfo=mongoose.model("userinfo",userschema);
+passport.use(userinfo.createStrategy());
 
-
-
-
+passport.serializeUser(userinfo.serializeUser())
+passport.deserializeUser(userinfo.deserializeUser());
 
 
 //listining to signup form 
 app.post("/signup",async(req,res)=>{
     const {username,email,password}=req.body;
-    const encriptedpassword = await bcrypt.hash(password,10);
+    console.log(username)
+    // const encriptedpassword = await bcrypt.hash(password,10);
     try{
-      const olduser=await userinfo.findOne({email});
+      const olduserWithMail=await userinfo.findOne({email});
       //checking for email if alredy registered or not
-      if(olduser){
+      const olduserWithUserName=await userinfo.findOne({username});
+      if(olduserWithMail){
+        // console.log("user")
         return res.json({error:"email alredy regitered"});
       }
-      //creating user with unique email
-      await userinfo.create({
-         username,
-         email,
-         password:encriptedpassword
+      if(olduserWithUserName){
+        // console.log("user")
+        return res.json({error:"username alredy regitered"});
+      }
+      
+      userinfo.register({username:req.body.username,email:email},password,(err,user)=>{
+        if(err){
+          console.log(err)
+          // res.("/login")
+        }
+        else{
+          passport.authenticate("local")(req,res,()=>{
+            //  req.session.save();
+             res.send({status:"ok"})
+            
+          })
+        }
       })
-      res.send({status:"ok"})
     }
     catch(err){
         console.log(err);
@@ -74,55 +101,68 @@ app.post("/signup",async(req,res)=>{
 
 
 //listining to login form 
-app.post("/login",async(req,res)=>{
+app.post("/login",async(req,res,next)=>{
     const {username,password}=req.body;
-     
-    try{
-      const olduser=await userinfo.findOne({username});
-      //checking for email if alredy registered or not
-      if(olduser){
-        const validuser = await bcrypt.compare(password,olduser.password);
-        if(validuser){
-            return res.json({error:"succesfully logged in"});
-        }
-        else{
-            return res.json({error:"incorrect password"});
-        }
-        // return res.json({error:"email alredy regitered"});
+
+    const newuser = new userinfo({
+      username,
+      password
+    });
+    
+    console.log("hello1")
+    passport.authenticate('local', function (err, newuser, info) {
+      if (err) {
+          return res.status(401).json(err);
       }
-      res.send({status:"user not registered"});
-    }
-    catch(err){
-        console.log(err);
-        res.send({status:"not ok"})
-    }
+      if (!newuser) { 
+          return res.send({status:"Unauth"}) 
+      }
+  
+      req.logIn(newuser, function (err) {
+          if (err) { return next(err); }
+          return res.send({status:"ok"});
+      });
+  
+  })(req, res, next);
+    
     
 })
 
-app.post("/login",async(req,res)=>{
-    const {username,password}=req.body;
-     
-    try{
-      const olduser=await userinfo.findOne({username});
-      //checking for email if alredy registered or not
-      if(olduser){
-        const validuser = await bcrypt.compare(password,olduser.password);
-        if(validuser){
-            return res.json({error:"succesfully logged in"});
-        }
-        else{
-            return res.json({error:"incorrect password"});
-        }
-        // return res.json({error:"email alredy regitered"});
-      }
-      res.send({status:"user not registered"});
-    }
-    catch(err){
-        console.log(err);
-        res.send({status:"not ok"})
-    }
-    
+
+//post request for axising newsapi
+app.post("/user",function(req,res){
+    let category=req.body.category;
+    // console.log(category)
+    newsapi.v2.topHeadlines({
+        category: category,
+        country: req.body.country||"in",
+        pageSize:20
+      }).then(response => {
+        res.send(response);
+      });
 })
 
+app.get("/user",(req,res)=>{
+  // console.log(req.session)
+  if(req.isAuthenticated()){
+    res.send(req.session.passport.user);
+  }
+  else{
+    res.send({status:"not login"});
+  }
+})
+
+// app.get("/logout",function(req,res){
+//   req.logOut(function(err) {
+//     if (err) { return next(err)}
+  
+// })
+
+app.get('/logout', function(req, res, next) {
+  req.logout(function(err) {
+    if (err) { return next(err); }
+    res.send({status:"logout"})
+  });
+});
 //backend is listing to port 5000
 app.listen(5000,()=>{console.log("sever started")});
