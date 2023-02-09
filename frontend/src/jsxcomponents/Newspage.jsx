@@ -1,6 +1,13 @@
 import axios from "axios";
 import {React,useState,useEffect} from "react";
-import Card from "../StandardComponents/JsxFiles/card";
+import NewsCardItem from "../NewsPageComponents/newsCardItem";
+import '../cssfiles/News-Page/main_page.css'
+
+
+
+
+
+
 function Newspage(){
     axios.get("http://localhost:5000/user",{withCredentials:true}).then((res=>{
           console.log(res.data);
@@ -50,9 +57,11 @@ function Newspage(){
         <li  onClick={()=>handleChange("entertainment")}>entertainment</li>
         <li  onClick={()=>handleChange("technology")}>technology</li>
       </ul>
+      <div className = "news_articles__container">
         {topHeadlinesNews.map((article) => (
-          <Card cardarticle={article}/>
+          <NewsCardItem cardarticle={article}/>
         ))}
+      </div>
       </div>) 
 }
 

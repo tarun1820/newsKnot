@@ -12,12 +12,14 @@ input:focus, textarea:focus, select:focus{
 }
 
 #login-Container{ 
+    position:relative;
+    bottom:20px;
     margin-top:10px;   
     margin-left:auto;
     margin-right:auto;
     background-color:#ffffff;
-    width:500px;    
-    transform:scale(0.90);
+    width:500px;   
+    transform:scale(0.80); 
 }
 
 
@@ -105,8 +107,8 @@ input:focus, textarea:focus, select:focus{
     font-size:25px;
     display:block;
     height:45px;
-    width:50%;
-    margin:auto;
+    width:250px;
+    right:8px;
     margin-top:4%;
     margin-bottom:4%;
     background: #FFFFFF;
@@ -189,4 +191,21 @@ input:focus, textarea:focus, select:focus{
 
 #signup-page:hover{
     color:blue;
+}
+
+.login_user_exists{
+    color:blue;
+    opacity:1;
+    text-align:center;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-size:15px;
+    margin-bottom:10px;
+    margin-top:5px;
+    position:relative;
+    right:0px;
+}
+
+.login_user_exists__not{
+    opacity:0;
 }

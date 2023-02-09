@@ -87,7 +87,7 @@ function Login() {
       if(userExist === 1){
         banner = "Successfully logged in"
       }else if(userExist === 2){
-        banner = "username or password is Incorrect"
+        banner = "Username or Password is Incorrect"
       }else{
         banner = "User not Registered yet"
       }
@@ -116,7 +116,7 @@ function Login() {
                     </div>
                     <hr className="line-btw-items"/>
                     <label className="label-form-item" id="forget-passcode">Forgot passcode?</label>            
-                    <button type="submit" className="signup-page-button" id="signup-button" >LOGIN</button>
+                    <button type="submit" className="login-page-button" id="login-button" >LOGIN</button>
                 </form>
                 </div>
                 {/* <input type="button" className="login-page-button" id="login-button" value="LOGIN" />    */}

@@ -19,6 +19,7 @@ export const Homestaticpage = () => {
     </Header>
     <Line/>
     <Description/>
+    <Line/>
     <Details/>
     <Line />
     <Footer className="footer_block"/>
