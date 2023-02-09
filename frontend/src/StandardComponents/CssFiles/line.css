@@ -1,0 +1,10 @@
+.Line_Component__line{
+    margin-top:30px;
+    width:70%;
+    height:3px;
+    border:0px;
+    margin-left:auto;
+    margin-right:auto;
+    background: rgb(247,241,241);
+    background: linear-gradient(90deg, rgba(247,241,241,1) 15%, rgba(47,43,43,1) 50%, rgba(247,241,241,1) 85%);
+}

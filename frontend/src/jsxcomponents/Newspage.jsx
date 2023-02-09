@@ -1,6 +1,6 @@
 import axios from "axios";
 import {React,useState,useEffect} from "react";
-import Card from "./Card";
+import Card from "../StandardComponents/JsxFiles/card";
 function Newspage(){
     axios.get("http://localhost:5000/user",{withCredentials:true}).then((res=>{
           console.log(res.data);
