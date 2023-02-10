@@ -1,10 +1,11 @@
 import axios from "axios";
 import {React,useState,useEffect} from "react";
-import { useNavigate } from "react-router-dom";
-import Card from "../StandardComponents/JsxFiles/card";
+import NewsCardItem from "../NewsPageComponents/newsCardItem";
+import '../cssfiles/News-Page/main_page.css'
+import {useNavigate} from 'react-router-dom'
 
 function Newspage(){
-    const [userfound,setuserfound] = useState(0);
+  const [userfound,setuserfound] = useState(0);
     const navigate=useNavigate()
     
     useEffect( () => {
@@ -19,9 +20,9 @@ function Newspage(){
           }
       }))
     },[]);
-    // setTimeout(()=>{
-    //   console.log("loading")
-    // },1000000000)
+
+    
+    
     const [category,setcategory] = useState(null);
 
     const [topHeadlinesNews,setNews] = useState([]);
@@ -62,26 +63,25 @@ function Newspage(){
         <ul>
         <h1>select one</h1>
         <a href="/logout">logout</a>
-        {/* <label name="sports" onClick={handleChange} value="sports"/> */}
         <li  onClick={()=>handleChange("sports")}>sports</li>
         <li  onClick={()=>handleChange("health")}>health</li>
         <li  onClick={()=>handleChange("entertainment")}>entertainment</li>
         <li  onClick={()=>handleChange("technology")}>technology</li>
         </ul>
         {topHeadlinesNews.map((article) => (
-          <Card cardarticle={article}/>
+          <NewsCardItem cardarticle={article}/>
         ))}
         </div>
         :
         <div>
-           <h1>plese wait</h1>
+           <h1>please wait</h1>
            {/* <img src="load" alt="loader"></img> */}
         </div>
 
 
       }
       
-      </div>) 
+      </div>)
 }
 
 

@@ -7,8 +7,9 @@ import Description from '../HomePageComponents/description'
 import Details from '../HomePageComponents/details'
 import Button from '../StandardComponents/JsxFiles/button'
 import axios from 'axios'
-const Homestaticpage = (props) => {
-    if(props.logout===true){
+
+export const Homestaticpage = (props) => {
+if(props.logout===true){
       axios.get("http://localhost:5000/logout",{withCredentials:true}).then((res)=>{
         console.log(res.body);
       })
@@ -16,7 +17,7 @@ const Homestaticpage = (props) => {
         console.log(err);
       })
     }
-   
+    
   return (
     <div className = "home_page_container" >
     <Header className = "header_block">
@@ -27,6 +28,7 @@ const Homestaticpage = (props) => {
     </Header>
     <Line/>
     <Description/>
+    <Line/>
     <Details/>
     <Line />
     <Footer className="footer_block"/>
