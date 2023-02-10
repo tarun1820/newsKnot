@@ -134,7 +134,7 @@ app.post("/user",function(req,res){
     let category=req.body.category;
     // console.log(category)
     newsapi.v2.topHeadlines({
-        category: category,
+        category: category||"sports",
         country: req.body.country||"in",
         pageSize:20
       }).then(response => {
@@ -163,6 +163,9 @@ app.get('/logout', function(req, res, next) {
     if (err) { return next(err); }
     res.send({status:"logout"})
   });
+  // req.logOut();
+  // res.clearCookie('connect.sid');
+  console.log("cookie deleted");
 });
 //backend is listing to port 5000
 app.listen(5000,()=>{console.log("sever started")});
