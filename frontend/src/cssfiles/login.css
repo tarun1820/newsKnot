@@ -27,7 +27,7 @@ input:focus, textarea:focus, select:focus{
     font-family: 'Pacifico';
     font-style: normal; 
     font-size:48px;
-    color: #FE1D1D;
+    color: rgba(255,8,0);
     text-align:center;
     margin-top:10px;
     margin-bottom:20px;

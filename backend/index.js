@@ -42,8 +42,8 @@ const userschema = new mongoose.Schema(
     {
         username:String,
         email:{type:String,unique:true},
-        password:String
-        
+        password:String,
+        saved:Object
     },
     {
         collection:"userinfo"
@@ -131,7 +131,7 @@ app.post("/login",async(req,res,next)=>{
 
 //post request for axising newsapi
 app.post("/user",function(req,res){
-    let category=req.body.category;
+    let category=req.body.category||"general";
     // console.log(category)
     newsapi.v2.topHeadlines({
         category: category,
@@ -164,5 +164,9 @@ app.get('/logout', function(req, res, next) {
     res.send({status:"logout"})
   });
 });
+
+app.post('/save' , function(req,res){
+
+})
 //backend is listing to port 5000
 app.listen(5000,()=>{console.log("sever started")});

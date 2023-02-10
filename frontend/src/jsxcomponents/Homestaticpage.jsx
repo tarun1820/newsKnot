@@ -6,8 +6,17 @@ import Line from '../StandardComponents/JsxFiles/line'
 import Description from '../HomePageComponents/description'
 import Details from '../HomePageComponents/details'
 import Button from '../StandardComponents/JsxFiles/button'
+import axios from 'axios'
 
-export const Homestaticpage = () => {
+export const Homestaticpage = (props) => {
+if(props.logout===true){
+      axios.get("http://localhost:5000/logout",{withCredentials:true}).then((res)=>{
+        console.log(res.body);
+      })
+      .catch((err)=>{
+        console.log(err);
+      })
+    }
     
   return (
     <div className = "home_page_container" >

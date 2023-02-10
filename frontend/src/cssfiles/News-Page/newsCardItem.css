@@ -1,4 +1,51 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
+
 .new_article__styles{
     display:flex;
     flex-direction:row;
+    height:300px;
+    align-items:center;
+    gap:40px;
+    width:1000px;
+    justify-content:center;
+    margin:auto;
+    margin-bottom:30px;
+}
+
+.article__image{
+    width:330px;
+    height:220px;
+    margin-left:5px;
+    border-radius:5%;
+}
+
+.Content__container{
+    width:500px;
+}
+
+.title__article{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-size:12px;
+}
+
+.content__article{
+    font-family: 'Montserrat';
+    font-style: normal;
+}
+
+.bookmark__image_icon{
+    height:32px;
+    width:32px;
+    margin-bottom:200px;
+    transition:0.8s;
+    fill : orange;
+}
+
+.bookmark__image_icon:hover{
+    transform:scale(1.15)
 }
