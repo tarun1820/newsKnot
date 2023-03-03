@@ -3,6 +3,9 @@ import {React,useState,useEffect} from "react";
 import NewsCardItem from "../NewsPageComponents/newsCardItem";
 import '../cssfiles/News-Page/main_page.css'
 import {useNavigate} from 'react-router-dom'
+import Button from '../StandardComponents/JsxFiles/button'
+import Line from '../StandardComponents/JsxFiles/line'
+import Header from '../HomePageComponents/Header'
 
 function Newspage(){
   const [userfound,setuserfound] = useState(0);
@@ -60,16 +63,24 @@ function Newspage(){
       {
         userfound===2?
         <div>
-        <ul>
-        <h1>select one</h1>
-        <a href="/logout">logout</a>
-        <li  onClick={()=>handleChange("sports")}>sports</li>
-        <li  onClick={()=>handleChange("health")}>health</li>
-        <li  onClick={()=>handleChange("entertainment")}>entertainment</li>
-        <li  onClick={()=>handleChange("technology")}>technology</li>
-        </ul>
+      <div className = "navbar_newspage_header"> 
+      <div className = "proName_newspage">NewsKnot</div>  
+      <div className = "navbar_newspage_btns">
+      <div><Button className = "navbar_newspage_btn" link = "/saved"  > Saved</Button></div>
+      <div><Button className = "navbar_newspage_btn" link = "/logout"> Logout </Button></div>
+      </div>
+      </div>
+      
+        <div className = "navbar_newspage">
+        <div className = "navbar_newspage_item" onClick={()=>handleChange("sports")}>Sports</div>
+        <div  className = "navbar_newspage_item" onClick={()=>handleChange("health")}>Health</div>
+        <div  className = "navbar_newspage_item" onClick={()=>handleChange("entertainment")}>Entertainment</div>
+        <div  className = "navbar_newspage_item" onClick={()=>handleChange("technology")}>Technology</div>
+        
+        </div>
+        <Line className = "newspage_line"/>
         {topHeadlinesNews.map((article) => (
-          <NewsCardItem cardarticle={article}/>
+          <NewsCardItem save={false} cardarticle={article}/>
         ))}
         </div>
         :
@@ -77,8 +88,6 @@ function Newspage(){
            <h1>please wait</h1>
            {/* <img src="load" alt="loader"></img> */}
         </div>
-
-
       }
       
       </div>)

@@ -23,8 +23,11 @@ function NewsCardItem(props){
     <div className = "Content__container">
       <div className = "title__article"><h1>{props.cardarticle.title}</h1></div>
       <div><p className = "content__article">{content}</p></div> 
-    </div>   
-    <div style = {{"width" : 45}}> <img onClick={()=>click(props)} className = "bookmark__image_icon" alt= "NI"  src = {Bookmark}/> </div>
+    </div> 
+    {props.save===false? 
+    <div style = {{"width" : 45}}> <img onClick={()=>click(props)} className = "bookmark__image_icon" alt= "NI"  src = {Bookmark}/> </div>:
+    <div></div>
+    }
   </Card>);          
 }
 

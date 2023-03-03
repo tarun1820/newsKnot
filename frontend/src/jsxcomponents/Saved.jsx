@@ -2,6 +2,7 @@ import axios from "axios";
 import {React,useState,useEffect} from "react";
 import {useNavigate} from 'react-router-dom'
 import NewsCardItem from "../NewsPageComponents/newsCardItem";
+import Button from '../StandardComponents/JsxFiles/button'
 function Saved(){ 
 
     const [userfound,setuserfound] = useState(0);
@@ -27,11 +28,13 @@ function Saved(){
         {
           userfound===2?
           <div>
+          <Button className = "btn_login" link = "/user"  >Home</Button>
           {userArticles.map((article) => (
-            <NewsCardItem cardarticle={article}/>
+            <NewsCardItem save={true} cardarticle={article}/>
           ))}
           </div>
           :
+          
           <div>
              <h1>please wait</h1>
              {/* <img src="load" alt="loader"></img> */}
