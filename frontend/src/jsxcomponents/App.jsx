@@ -5,6 +5,7 @@ import Homestaticpage from './Homestaticpage';
 import Login from './Login';
 import Newspage from './Newspage';
 import Signup from './Signup';
+import Saved from './Saved';
 export const App = () => {
   
   return (
@@ -13,6 +14,7 @@ export const App = () => {
         <Route path="/signup" element={<Signup />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/user" element={<Newspage />}></Route>
+        <Route path="/saved" element={<Saved />}></Route>
         <Route path="/logout" element={<Homestaticpage logout={true}/>}></Route>
     </Routes>
   );

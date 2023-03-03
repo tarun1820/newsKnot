@@ -5,7 +5,7 @@ import Bookmark from '../png&svg/bookmark-solid.svg'
 import axios from 'axios'
 
 function click(newsArticle){
-  axios.post('http://localhost:5000/save',{withCredentials:true}).then((res)=>{
+  axios.post('http://localhost:5000/save',newsArticle,{withCredentials:true}).then((res)=>{
     console.log(res.body);
   })
   .catch((err)=>{
@@ -16,8 +16,8 @@ function click(newsArticle){
 function NewsCardItem(props){
   var content = props.cardarticle.content
   var image = props.cardarticle.urlToImage 
-  console.log(image) 
-  console.log(content)
+  // console.log(image) 
+  // console.log(content)
    return(<Card className = "new_article__styles" >
     <div><img  className = "article__image"  alt="img" src={image===null ? Random : image}></img></div>
     <div className = "Content__container">

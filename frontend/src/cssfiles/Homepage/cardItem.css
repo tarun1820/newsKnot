@@ -39,3 +39,29 @@
     font-style: normal;
 }
 
+@media screen and (max-width: 780px){
+    .cardItem__style{
+        margin:auto;
+        width:80%;
+        height:auto;    
+        align-items:center;
+        justify-items:center;
+        gap : 15px;
+        display:flex;
+        flex-direction:column;
+    }
+
+    .cardImage__style{
+        margin-top: 10px;
+        margin-left:0px;
+        border-radius :10%;
+    }
+
+    .cardText_style{
+        width:75%;
+        height:auto;
+        padding-bottom:25px;
+        margin-left:0px;
+        
+    }
+}

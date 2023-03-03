@@ -27,5 +27,24 @@
     margin-bottom:4%;
 }
 
+@media screen and (max-width: 780px) {
+    .Description_box__style{
+        width:75%;
+        margin:auto;
+        font-family: 'Poppins';
+        font-style: normal;
+        text-align: center;
+        color: #000000;
+        font-size:20px;
+    }
+    .Description_box__button{    
+        height:50px;
+        width:260px;
+        margin:auto;
+        margin-top:40px;
+        margin-bottom:4%;
+    }
+}
+
 
 

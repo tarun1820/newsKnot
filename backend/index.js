@@ -14,7 +14,7 @@ app.use(session({
   secret:'news api',
   resave:true,
   saveUninitialized:true,
-  cookie:{maxAge:600000},
+  cookie:{maxAge:6000000},
 }))
 app.use(passport.initialize());
 app.use(passport.session());
@@ -43,7 +43,7 @@ const userschema = new mongoose.Schema(
         username:String,
         email:{type:String,unique:true},
         password:String,
-        saved:Object
+        saved:[Object]
     },
     {
         collection:"userinfo"
@@ -134,7 +134,7 @@ app.post("/user",function(req,res){
     let category=req.body.category||"general";
     // console.log(category)
     newsapi.v2.topHeadlines({
-        category: category||"sports",
+        category: category,
         country: req.body.country||"in",
         pageSize:20
       }).then(response => {
@@ -169,7 +169,49 @@ app.get('/logout', function(req, res, next) {
 });
 
 app.post('/save' , function(req,res){
+  const {cardarticle}=req.body
+  const userid=req.user.id;
+  userinfo.findById(userid,(err,foundUser)=>{
+    if(err){
+      console.log(err);
+    }
+    else{
+      if(foundUser){
+        console.log("user found")
+        // for(let i=0;i<foundUser.saved.length)
+        console.log(foundUser.saved.indexOf(cardarticle));
+        if(foundUser.saved.indexOf(cardarticle)===-1){
+          console.log("inside");
+          return res.send({status:"alredy saved"});
+        }
+        foundUser.saved.unshift(cardarticle)//pushing article to saved object to user
+        foundUser.save(()=>{
+          res.send({status:"saved sucess"});
+        })//function to save founduserobject in db
+      }
+    }
+  });
 
+})
+
+app.get('/save',function(req,res){
+  if(req.isAuthenticated()){
+    // console.log(res.send(req.session.passport.user));
+    const userid=req.user.id;
+    userinfo.findById(userid,(err,foundUser)=>{
+      if(err){
+        console.log(err);
+      }
+      else{
+        if(foundUser){
+            res.send({saved_articles:foundUser.saved});
+        }
+      }
+    })
+}
+  else{
+    res.send({status:"not login"});
+  }
 })
 //backend is listing to port 5000
 app.listen(5000,()=>{console.log("sever started")});
