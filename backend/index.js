@@ -111,7 +111,6 @@ app.post('/login', async (req, res, next) => {
     password,
   });
 
-  console.log('hello1');
   passport.authenticate('local', function (err, newuser, info) {
     if (err) {
       return res.status(401).json(err);
