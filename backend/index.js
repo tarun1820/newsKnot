@@ -43,6 +43,7 @@ mongoose
     console.log(err);
   });
 
+/////////////////////////////////////////////////////            User Schema   ///////////////////////////////////////////////////
 const userschema = new mongoose.Schema(
   {
     username: String,
@@ -55,9 +56,35 @@ const userschema = new mongoose.Schema(
   }
 );
 
+////////////////////////////////////////////////////              Reactions Schema /////////////////////////////////////////////
+
+const reactionSchema = new mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    likes: {
+      type: Number,
+      default: 0,
+    },
+    dislikes: {
+      type: Number,
+      default: 0,
+    },
+  },
+  {
+    collection: 'reactionInfo',
+  }
+);
+
+///////////////////////////////////////////////////              Authentication API               ///////////////////////////////////////////
+
 userschema.plugin(passportLocalMongoose);
 
 const userinfo = mongoose.model('userinfo', userschema);
+const reactionInfo = mongoose.model('reactionInfo', reactionSchema);
 passport.use(userinfo.createStrategy());
 
 passport.serializeUser(userinfo.serializeUser());
@@ -102,6 +129,8 @@ app.post('/signup', async (req, res) => {
   }
 });
 
+/////////////////////////////////////////////////////////    Login Route /////////////////////////////////////////////////
+
 //listining to login form
 app.post('/login', async (req, res, next) => {
   const { username, password } = req.body;
@@ -128,6 +157,7 @@ app.post('/login', async (req, res, next) => {
   })(req, res, next);
 });
 
+///////////////////////////////////////////////////////////////// User Route /////////////////////////////////////////////
 //post request for axising newsapi
 app.post('/user', function (req, res) {
   let category = req.body.category || 'general';
@@ -140,6 +170,9 @@ app.post('/user', function (req, res) {
     })
     .then((response) => {
       res.send(response);
+    })
+    .catch((err) => {
+      console.log(err.message);
     });
 });
 
@@ -152,11 +185,92 @@ app.get('/user', (req, res) => {
   }
 });
 
-// app.get("/logout",function(req,res){
-//   req.logOut(function(err) {
-//     if (err) { return next(err)}
+/////////////////////////////////////////////////////////////   Reaction Route ///////////////////////////////////////////////////
 
-// })
+app.get('/user/:title', async (req, res) => {
+  try {
+    const item = await reactionInfo.find({ title: req.params.title });
+    if (item.length === 0) {
+      return res.status(400).json({
+        success: false,
+        error_id: 0,
+        message: 'The article with title not found',
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'successFull get Request',
+      likes: item[0].likes,
+      dislikes: item[0].dislikes,
+    });
+  } catch (err) {
+    res.status(408).json({
+      success: false,
+      error_id: 1,
+      message: err.message,
+    });
+  }
+});
+
+app.post('/user/:title', async (req, res) => {
+  try {
+    const articleReactions = await reactionInfo.find({
+      title: req.params.title,
+    });
+    // console.log(articleReactions);
+    if (articleReactions.length !== 0) {
+      try {
+        console.log('Inside Put');
+        console.log('article=', articleReactions);
+        const item = await reactionInfo.findOneAndReplace(
+          { title: req.params.title },
+          {
+            title: req.params.title,
+            likes: req.body.likes,
+            dislikes: req.body.dislikes,
+          }
+        );
+        const update_item = await reactionInfo.find({
+          title: req.params.title,
+        });
+
+        console.log('up_item=', update_item);
+
+        res.status(200).json({
+          success: true,
+          data: update_item,
+        });
+      } catch (err) {
+        res.status(400).json({
+          success: false,
+          message: 'replace Failed',
+        });
+      }
+    } else {
+      try {
+        const item = await reactionInfo.create(req.body);
+
+        res.status(200).json({
+          success: true,
+          data: item,
+        });
+      } catch (err) {
+        res.status(400).json({
+          success: false,
+          message: 'creating an entry in database failed',
+        });
+      }
+    }
+  } catch (err) {
+    res.status(400).json({
+      success: false,
+      message: err.message,
+    });
+  }
+});
+
+///////////////////////////////////////////////////////////////// Logout Route ////////////////////////////////////////////////////
 
 app.get('/logout', function (req, res, next) {
   req.logout(function (err) {
@@ -169,6 +283,8 @@ app.get('/logout', function (req, res, next) {
   // res.clearCookie('connect.sid');
   console.log('cookie deleted');
 });
+
+///////////////////////////////////////////////////////////////////// Save Route ////////////////////////////////////////////////////
 
 app.post('/save', function (req, res) {
   const { cardarticle } = req.body;
@@ -184,15 +300,12 @@ app.post('/save', function (req, res) {
             return res.send({ status: 'alredy saved' });
           }
         }
-        console.log(foundUser.saved);
 
         foundUser.saved.unshift(cardarticle); //pushing article to saved object to user
         foundUser.save(() => {
           res.send({ status: 'saved sucess' });
         });
         return; //function to save founduserobject in db
-
-        console.log('inside');
       }
     }
   });
@@ -219,3 +332,5 @@ app.get('/save', function (req, res) {
 app.listen(5000, () => {
   console.log('sever started');
 });
+
+////////////////////////////////////////////////    Reactions

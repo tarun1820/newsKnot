@@ -5,6 +5,7 @@ import '../cssfiles/News-Page/main_page.css'
 import {useNavigate} from 'react-router-dom'
 import Button from '../StandardComponents/JsxFiles/button'
 import Line from '../StandardComponents/JsxFiles/line'
+  
 
 
 function Newspage(){
@@ -80,10 +81,9 @@ function Newspage(){
         
         </div>
         <Line className = "newspage_line"/>
-        {
-               
+        {    
         topHeadlinesNews.map((article) => (
-          <NewsCardItem save={false} cardarticle={article} likes = {0} dislikes = {0}/>
+          <NewsCardItem key = {Math.random()} save={false} cardarticle={article} likes = {0} dislikes = {0}/>
         ))}
         </div>
         :
