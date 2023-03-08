@@ -5,6 +5,7 @@ const session = require('express-session');
 const passport = require('passport');
 const passportLocalMongoose = require('passport-local-mongoose');
 const bodyParser = require('body-parser');
+const PORT = 5000;
 
 const app = express();
 app.use(express.json());
@@ -37,7 +38,7 @@ mongoose
     useNewUrlParser: true,
   })
   .then(() => {
-    console.log('connection succesfull');
+    console.log('MongoDB connection Successfull');
   })
   .catch((err) => {
     console.log(err);
@@ -69,10 +70,7 @@ const reactionSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
-    dislikes: {
-      type: Number,
-      default: 0,
-    },
+    liked_users: [],
   },
   {
     collection: 'reactionInfo',
@@ -197,12 +195,10 @@ app.get('/user/:title', async (req, res) => {
         message: 'The article with title not found',
       });
     }
-
     res.status(200).json({
       success: true,
       message: 'successFull get Request',
       likes: item[0].likes,
-      dislikes: item[0].dislikes,
     });
   } catch (err) {
     res.status(408).json({
@@ -218,28 +214,39 @@ app.post('/user/:title', async (req, res) => {
     const articleReactions = await reactionInfo.find({
       title: req.params.title,
     });
-    // console.log(articleReactions);
     if (articleReactions.length !== 0) {
+      let liked_users_data = articleReactions[0].liked_users;
+      let presentFlag = 0;
+      for (let iter = 0; iter < liked_users_data.length; iter++) {
+        if (liked_users_data[iter] === req.user.username) {
+          /// this user has already liked , clicking again leads in removing the like
+          presentFlag = 1;
+        }
+      }
+
+      if (presentFlag === 0) {
+        // This user is not present in liked users list , onclicking should append to liked users list
+        liked_users_data.push(req.user.username); // increases the number of likes
+      } else {
+        // This user has already liked the article on clicking again , should remove from liked users list
+        liked_users_data.splice(liked_users_data.indexOf(req.user.username), 1);
+      }
       try {
-        console.log('Inside Put');
-        console.log('article=', articleReactions);
         const item = await reactionInfo.findOneAndReplace(
           { title: req.params.title },
           {
             title: req.params.title,
-            likes: req.body.likes,
-            dislikes: req.body.dislikes,
+            likes: liked_users_data.length,
+            liked_users: liked_users_data,
           }
         );
         const update_item = await reactionInfo.find({
           title: req.params.title,
         });
 
-        console.log('up_item=', update_item);
-
         res.status(200).json({
           success: true,
-          data: update_item,
+          likes: update_item[0].likes,
         });
       } catch (err) {
         res.status(400).json({
@@ -248,12 +255,17 @@ app.post('/user/:title', async (req, res) => {
         });
       }
     } else {
-      try {
-        const item = await reactionInfo.create(req.body);
+      let obj = {
+        title: req.body.title,
+        likes: 1,
+        liked_users: [req.user.username],
+      };
 
+      try {
+        const item = await reactionInfo.create(obj);
         res.status(200).json({
           success: true,
-          data: item,
+          likes: item.likes,
         });
       } catch (err) {
         res.status(400).json({
@@ -329,8 +341,8 @@ app.get('/save', function (req, res) {
   }
 });
 //backend is listing to port 5000
-app.listen(5000, () => {
-  console.log('sever started');
+app.listen(PORT, () => {
+  console.log(`Server Running on Port : ${PORT}`);
 });
 
 ////////////////////////////////////////////////    Reactions

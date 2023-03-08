@@ -49,7 +49,6 @@
     width:32px;
     margin-bottom:200px;
     transition:0.8s;
-    fill : orange;
 }
 
 .bookmark__image_icon:hover{
@@ -70,11 +69,18 @@
     flex-direction:row;
     gap:10px;
     align-items:center;
+    justify-content:center;
+    width:70px;
+    height:35px;
+    background: #FFFFFF;
+    border: 1.5px solid #BEB5B5;
+    border-radius: 10px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 0px 8px -2px,
+      rgba(0, 0, 0, 0.3) 0px 0px 5px -3px;
 }
 
 .article_reaction_icon{
-    height:30px;
-    width:30px;
+    color:#E0144C;
 }
 
 .article_reaction_label{
