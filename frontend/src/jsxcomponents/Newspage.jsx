@@ -5,6 +5,9 @@ import '../cssfiles/News-Page/main_page.css'
 import {useNavigate} from 'react-router-dom'
 import Button from '../StandardComponents/JsxFiles/button'
 import Line from '../StandardComponents/JsxFiles/line'
+import {arrows_square_plus} from 'react-icons-kit/linea/arrows_square_plus'
+import {user} from 'react-icons-kit/fa/user'
+import { Icon } from 'react-icons-kit'
   
 
 
@@ -67,9 +70,12 @@ function Newspage(){
         <div>
       <div className = "navbar_newspage_header"> 
       <div className = "proName_newspage">NewsKnot</div>  
-      <div className = "navbar_newspage_btns">
-      <div><Button className = "navbar_newspage_btn" link = "/saved"  > Saved</Button></div>
-      <div><Button className = "navbar_newspage_btn" link = "/logout"> Logout </Button></div>
+      <div className = "navbar_newspage_btns"> 
+      {/* Should change routes */}
+      <div className = "navbar_newspage_btn" onClick = {() => navigate('/saved')}><Icon size={32} icon={arrows_square_plus} /></div> 
+      <div className = "navbar_newspage_btn" onClick = {() => navigate('/saved')}><Icon size={32} icon={user} /></div>
+      {/* <Button className = "navbar_newspage_btn" link = "/saved"  > Saved</Button> */}
+      <div className = "navbar_newspage_btn"><Button  link = "/logout"> Logout </Button></div>
       </div>
       </div>
       

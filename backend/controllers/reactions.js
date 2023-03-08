@@ -1,4 +1,5 @@
 const reactionInfo = require('../models/reactions');
+const userinfo = require('../models/user');
 
 exports.getReactions = async (req, res, next) => {
   try {
@@ -25,6 +26,7 @@ exports.getReactions = async (req, res, next) => {
 };
 
 exports.putReactions = async (req, res, next) => {
+  const userid = req.user.id; // User id to access into database
   try {
     const articleReactions = await reactionInfo.find({
       title: req.params.title,
@@ -39,34 +41,50 @@ exports.putReactions = async (req, res, next) => {
         }
       }
 
-      if (presentFlag === 0) {
-        // This user is not present in liked users list , onclicking should append to liked users list
-        liked_users_data.push(req.user.username); // increases the number of likes
-      } else {
-        // This user has already liked the article on clicking again , should remove from liked users list
-        liked_users_data.splice(liked_users_data.indexOf(req.user.username), 1);
-      }
       try {
-        const item = await reactionInfo.findOneAndReplace(
-          { title: req.params.title },
-          {
+        const user_details = await userinfo.findById(userid);
+        if (presentFlag === 1) {
+          user_details.liked.splice(
+            user_details.liked.indexOf(req.params.title),
+            1
+          ); // Remove from the liked array in userInfo Schema
+          liked_users_data.splice(
+            liked_users_data.indexOf(req.user.username),
+            1
+          );
+        } else {
+          user_details.liked.push(req.params.title);
+          liked_users_data.push(req.user.username);
+        }
+        user_details.save();
+        try {
+          const item = await reactionInfo.findOneAndReplace(
+            { title: req.params.title },
+            {
+              title: req.params.title,
+              likes: liked_users_data.length,
+              liked_users: liked_users_data,
+            }
+          );
+          const update_item = await reactionInfo.find({
             title: req.params.title,
-            likes: liked_users_data.length,
-            liked_users: liked_users_data,
-          }
-        );
-        const update_item = await reactionInfo.find({
-          title: req.params.title,
-        });
+          });
 
-        res.status(200).json({
-          success: true,
-          likes: update_item[0].likes,
-        });
+          res.status(200).json({
+            success: true,
+            likes: update_item[0].likes,
+          });
+        } catch {
+          res.status(400).json({
+            success: false,
+            message: 'replace Failed',
+          });
+        }
       } catch (err) {
+        console.log(err.message);
         res.status(400).json({
           success: false,
-          message: 'replace Failed',
+          messsage: 'user Not found',
         });
       }
     } else {
@@ -78,6 +96,13 @@ exports.putReactions = async (req, res, next) => {
 
       try {
         const item = await reactionInfo.create(obj);
+        try {
+          const user_details = await userinfo.findById(userid);
+          user_details.liked.push(req.params.title);
+          user_details.save();
+        } catch (err) {
+          console.log(err.message);
+        }
         res.status(200).json({
           success: true,
           likes: item.likes,
