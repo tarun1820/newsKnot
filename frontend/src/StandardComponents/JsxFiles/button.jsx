@@ -32,7 +32,6 @@ function Button(props){
         <button onClick={()=>navigate(props.link)} className= {classes}>
             {props.children}
         </button>
-        <img className = "button_transition_logo" src = {Arrow} alt = "NI"/>
         </div>
     )
 }

@@ -51,9 +51,28 @@
 .navbar_newspage_btns{
     display:flex;
     flex-direction:row;
+    gap:30px;
 }
 
 .navbar_newspage_btn{
     height:40px;
+}
+
+@media screen and (max-width: 780px){
+    .navbar_newspage_btns{
+        display:flex;
+        flex-direction:column;
+        justify-content:center;
+        gap:10px;
+    }
+
+    .navbar_newspage_btn{
+        height:8%;
+        width:100px;
+        font-size:12px;
+        border-radius:4px;
+        font-family:"Montserrat";
+        font-weight:500;
+    }
 }
 

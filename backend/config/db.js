@@ -1,4 +1,3 @@
-//for local mongobb comment it to use cloud mongodb
 const mongoose = require('mongoose');
 
 const mongoDbUrl = 'mongodb://127.0.0.1:27017/testdb';
@@ -6,13 +5,12 @@ const mongoDbUrl = 'mongodb://127.0.0.1:27017/testdb';
 
 mongoose.set('strictQuery', false);
 
-mongoose
-  .connect(mongoDbUrl, {
+const connectDB = async () => {
+  const conn = await mongoose.connect(mongoDbUrl, {
     useNewUrlParser: true,
-  })
-  .then(() => {
-    console.log('MongoDB connection Successfull');
-  })
-  .catch((err) => {
-    console.log(err);
   });
+
+  console.log(`MonGoDB Connected`);
+};
+
+module.exports = connectDB;

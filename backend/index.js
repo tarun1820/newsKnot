@@ -1,9 +1,8 @@
 const express = require('express');
-const mongoose = require('mongoose');
+const connectDB = require('./config/db');
 const cors = require('cors');
 const session = require('express-session');
 const passport = require('passport');
-const passportLocalMongoose = require('passport-local-mongoose');
 const bodyParser = require('body-parser');
 const PORT = 5000;
 
@@ -20,327 +19,30 @@ app.use(
     cookie: { maxAge: 600000000 },
   })
 );
+
+// Passport Initialize
 app.use(passport.initialize());
 app.use(passport.session());
-const NewsAPI = require('newsapi');
-const newsapi = new NewsAPI('17fd79449aed499ea71d113d678dea49');
 
-//mogodb connection,schema and model
+//Mongo DB connection
 
-//for local mongobb comment it to use cloud mongodb
-const mongoDbUrl = 'mongodb://127.0.0.1:27017/testdb';
-// const mongoDbUrl="mongodb+srv://tarun1820:$Tarun%401820@cluster0.aksnxov.mongodb.net/?retryWrites=true&w=majority";
+connectDB();
+const userinfo = require('./models/user');
+const reactionsRoute = require('./routes/reactions');
+const newsPageRoute = require('./routes/newspage');
+const savedRoute = require('./routes/save');
+const authenticationRoute = require('./routes/authentication');
 
-mongoose.set('strictQuery', false);
-
-mongoose
-  .connect(mongoDbUrl, {
-    useNewUrlParser: true,
-  })
-  .then(() => {
-    console.log('MongoDB connection Successfull');
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-
-/////////////////////////////////////////////////////            User Schema   ///////////////////////////////////////////////////
-const userschema = new mongoose.Schema(
-  {
-    username: String,
-    email: { type: String, unique: true },
-    password: String,
-    saved: [Object],
-  },
-  {
-    collection: 'userinfo',
-  }
-);
-
-////////////////////////////////////////////////////              Reactions Schema /////////////////////////////////////////////
-
-const reactionSchema = new mongoose.Schema(
-  {
-    title: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    likes: {
-      type: Number,
-      default: 0,
-    },
-    liked_users: [],
-  },
-  {
-    collection: 'reactionInfo',
-  }
-);
-
-///////////////////////////////////////////////////              Authentication API               ///////////////////////////////////////////
-
-userschema.plugin(passportLocalMongoose);
-
-const userinfo = mongoose.model('userinfo', userschema);
-const reactionInfo = mongoose.model('reactionInfo', reactionSchema);
 passport.use(userinfo.createStrategy());
 
 passport.serializeUser(userinfo.serializeUser());
 passport.deserializeUser(userinfo.deserializeUser());
 
-//listining to signup form
-app.post('/signup', async (req, res) => {
-  const { username, email, password } = req.body;
-  console.log(username);
-  // const encriptedpassword = await bcrypt.hash(password,10);
-  try {
-    const olduserWithMail = await userinfo.findOne({ email });
-    //checking for email if alredy registered or not
-    const olduserWithUserName = await userinfo.findOne({ username });
-    if (olduserWithMail) {
-      // console.log("user")
-      return res.json({ error: 'email alredy regitered' });
-    }
-    if (olduserWithUserName) {
-      // console.log("user")
-      return res.json({ error: 'username alredy regitered' });
-    }
+app.use('/', reactionsRoute);
+app.use('/', newsPageRoute);
+app.use('/', savedRoute);
+app.use('/', authenticationRoute);
 
-    userinfo.register(
-      { username: req.body.username, email: email },
-      password,
-      (err, user) => {
-        if (err) {
-          console.log(err);
-          // res.("/login")
-        } else {
-          passport.authenticate('local')(req, res, () => {
-            //  req.session.save();
-            res.send({ status: 'ok' });
-          });
-        }
-      }
-    );
-  } catch (err) {
-    console.log(err);
-    res.send({ status: 'not ok' });
-  }
-});
-
-/////////////////////////////////////////////////////////    Login Route /////////////////////////////////////////////////
-
-//listining to login form
-app.post('/login', async (req, res, next) => {
-  const { username, password } = req.body;
-
-  const newuser = new userinfo({
-    username,
-    password,
-  });
-
-  passport.authenticate('local', function (err, newuser, info) {
-    if (err) {
-      return res.status(401).json(err);
-    }
-    if (!newuser) {
-      return res.send({ status: 'Unauth' });
-    }
-
-    req.logIn(newuser, function (err) {
-      if (err) {
-        return next(err);
-      }
-      return res.send({ status: 'ok' });
-    });
-  })(req, res, next);
-});
-
-///////////////////////////////////////////////////////////////// User Route /////////////////////////////////////////////
-//post request for axising newsapi
-app.post('/user', function (req, res) {
-  let category = req.body.category || 'general';
-  // console.log(category)
-  newsapi.v2
-    .topHeadlines({
-      category: category,
-      country: req.body.country || 'in',
-      pageSize: 20,
-    })
-    .then((response) => {
-      res.send(response);
-    })
-    .catch((err) => {
-      console.log(err.message);
-    });
-});
-
-app.get('/user', (req, res) => {
-  // console.log(req.session)
-  if (req.isAuthenticated()) {
-    res.send(req.session.passport.user);
-  } else {
-    res.send({ status: 'not login' });
-  }
-});
-
-/////////////////////////////////////////////////////////////   Reaction Route ///////////////////////////////////////////////////
-
-app.get('/user/:title', async (req, res) => {
-  try {
-    const item = await reactionInfo.find({ title: req.params.title });
-    if (item.length === 0) {
-      return res.status(400).json({
-        success: false,
-        error_id: 0,
-        message: 'The article with title not found',
-      });
-    }
-    res.status(200).json({
-      success: true,
-      message: 'successFull get Request',
-      likes: item[0].likes,
-    });
-  } catch (err) {
-    res.status(408).json({
-      success: false,
-      error_id: 1,
-      message: err.message,
-    });
-  }
-});
-
-app.post('/user/:title', async (req, res) => {
-  try {
-    const articleReactions = await reactionInfo.find({
-      title: req.params.title,
-    });
-    if (articleReactions.length !== 0) {
-      let liked_users_data = articleReactions[0].liked_users;
-      let presentFlag = 0;
-      for (let iter = 0; iter < liked_users_data.length; iter++) {
-        if (liked_users_data[iter] === req.user.username) {
-          /// this user has already liked , clicking again leads in removing the like
-          presentFlag = 1;
-        }
-      }
-
-      if (presentFlag === 0) {
-        // This user is not present in liked users list , onclicking should append to liked users list
-        liked_users_data.push(req.user.username); // increases the number of likes
-      } else {
-        // This user has already liked the article on clicking again , should remove from liked users list
-        liked_users_data.splice(liked_users_data.indexOf(req.user.username), 1);
-      }
-      try {
-        const item = await reactionInfo.findOneAndReplace(
-          { title: req.params.title },
-          {
-            title: req.params.title,
-            likes: liked_users_data.length,
-            liked_users: liked_users_data,
-          }
-        );
-        const update_item = await reactionInfo.find({
-          title: req.params.title,
-        });
-
-        res.status(200).json({
-          success: true,
-          likes: update_item[0].likes,
-        });
-      } catch (err) {
-        res.status(400).json({
-          success: false,
-          message: 'replace Failed',
-        });
-      }
-    } else {
-      let obj = {
-        title: req.body.title,
-        likes: 1,
-        liked_users: [req.user.username],
-      };
-
-      try {
-        const item = await reactionInfo.create(obj);
-        res.status(200).json({
-          success: true,
-          likes: item.likes,
-        });
-      } catch (err) {
-        res.status(400).json({
-          success: false,
-          message: 'creating an entry in database failed',
-        });
-      }
-    }
-  } catch (err) {
-    res.status(400).json({
-      success: false,
-      message: err.message,
-    });
-  }
-});
-
-///////////////////////////////////////////////////////////////// Logout Route ////////////////////////////////////////////////////
-
-app.get('/logout', function (req, res, next) {
-  req.logout(function (err) {
-    if (err) {
-      return next(err);
-    }
-    res.send({ status: 'logout' });
-  });
-  // req.logOut();
-  // res.clearCookie('connect.sid');
-  console.log('cookie deleted');
-});
-
-///////////////////////////////////////////////////////////////////// Save Route ////////////////////////////////////////////////////
-
-app.post('/save', function (req, res) {
-  const { cardarticle } = req.body;
-  const userid = req.user.id;
-  userinfo.findById(userid, (err, foundUser) => {
-    if (err) {
-      console.log(err);
-    } else {
-      if (foundUser) {
-        console.log('user found');
-        for (let i = 0; i < foundUser.saved.length; i++) {
-          if (foundUser.saved[i].title === cardarticle.title) {
-            return res.send({ status: 'alredy saved' });
-          }
-        }
-
-        foundUser.saved.unshift(cardarticle); //pushing article to saved object to user
-        foundUser.save(() => {
-          res.send({ status: 'saved sucess' });
-        });
-        return; //function to save founduserobject in db
-      }
-    }
-  });
-});
-
-app.get('/save', function (req, res) {
-  if (req.isAuthenticated()) {
-    // console.log(res.send(req.session.passport.user));
-    const userid = req.user.id;
-    userinfo.findById(userid, (err, foundUser) => {
-      if (err) {
-        console.log(err);
-      } else {
-        if (foundUser) {
-          res.send({ saved_articles: foundUser.saved });
-        }
-      }
-    });
-  } else {
-    res.send({ status: 'not login' });
-  }
-});
-//backend is listing to port 5000
 app.listen(PORT, () => {
   console.log(`Server Running on Port : ${PORT}`);
 });

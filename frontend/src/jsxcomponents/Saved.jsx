@@ -28,10 +28,10 @@ function Saved(){
         <div>
         {
           userfound===2?
-          <div>
-          <Button className = "btn_login" link = "/user"  >Home</Button>
+          <div className = "saved_page_container">
+          <div className = "btn_save_page"><Button className = "btn_login" link = "/user">Home</Button></div>
           {userArticles.map((article) => (
-            <NewsCardItem save={true} cardarticle={article}/>
+            <div><NewsCardItem save={true} cardarticle={article}/></div>
           ))}
           </div>
           :
