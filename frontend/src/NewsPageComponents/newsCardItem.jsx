@@ -13,7 +13,7 @@ import { Icon } from 'react-icons-kit'
 
 function click(newsArticle){
   axios.post('http://localhost:5000/save',newsArticle,{withCredentials:true}).then((res)=>{
-    console.log(res.body);
+    //console.log(res.body);
   })
   .catch((err)=>{
     console.log(err);
@@ -60,6 +60,7 @@ function NewsCardItem(props){
   function  likeHandler(e){
     let data = {
       title : Title,
+      article : props.cardarticle
     }
     let a = 0;
     const options = {
@@ -67,10 +68,8 @@ function NewsCardItem(props){
       headers: {"content-type": "application/json"},
     }
     axios.post(`http://localhost:5000/user/${Title}`, data , options).then((res) =>{
-      console.log(res)
       a = res.data.likes; 
-      setReactions(a);  
-      console.log(a);
+      setReactions(a); 
       
     }).catch((err) => {
       console.log(err.message);

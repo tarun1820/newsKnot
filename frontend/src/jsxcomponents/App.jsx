@@ -6,6 +6,8 @@ import Login from './Login';
 import Newspage from './Newspage';
 import Signup from './Signup';
 import Saved from './Saved';
+import ArticlePage from './articlePage';
+import Profile from './Profile'
 export const App = () => {
   
   return (
@@ -16,6 +18,8 @@ export const App = () => {
         <Route path="/user" element={<Newspage />}></Route>
         <Route path="/saved" element={<Saved />}></Route>
         <Route path="/logout" element={<Homestaticpage logout={true}/>}></Route>
+        <Route path ="/user/profile" element = {<Profile />}></Route>
+        <Route path ="/user/article" element = {<ArticlePage />}></Route>
     </Routes>
   );
 }

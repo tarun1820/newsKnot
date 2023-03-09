@@ -44,16 +44,21 @@ exports.putReactions = async (req, res, next) => {
       try {
         const user_details = await userinfo.findById(userid);
         if (presentFlag === 1) {
-          user_details.liked.splice(
-            user_details.liked.indexOf(req.params.title),
-            1
-          ); // Remove from the liked array in userInfo Schema
+          for (let i = 0; i <= user_details.liked.length; i++) {
+            if (user_details.liked[i].title === req.params.title) {
+              user_details.liked.splice(i, 1);
+            }
+          }
+          // user_details.liked.splice(
+          //   user_details.liked.indexOf(req.params.title),
+          //   1
+          // ); // Remove from the liked array in userInfo Schema
           liked_users_data.splice(
             liked_users_data.indexOf(req.user.username),
             1
           );
         } else {
-          user_details.liked.push(req.params.title);
+          user_details.liked.push(req.body);
           liked_users_data.push(req.user.username);
         }
         user_details.save();
@@ -98,7 +103,7 @@ exports.putReactions = async (req, res, next) => {
         const item = await reactionInfo.create(obj);
         try {
           const user_details = await userinfo.findById(userid);
-          user_details.liked.push(req.params.title);
+          user_details.liked.push(req.body);
           user_details.save();
         } catch (err) {
           console.log(err.message);

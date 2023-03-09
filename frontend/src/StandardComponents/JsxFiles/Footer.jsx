@@ -1,8 +1,8 @@
-import Discord from '../png&svg/discord.png'
-import Whatsapp from '../png&svg/whatsapp.png'
-import Telegram from '../png&svg/telegram.png'
-import Twitter from '../png&svg/twitter.png'
-import '../cssfiles/Homepage/footer.css'
+import Discord from '../componentSvgs/discord.png'
+import Whatsapp from '../componentSvgs/whatsapp.png'
+import Telegram from '../componentSvgs/telegram.png'
+import Twitter from '../componentSvgs/twitter.png'
+import '../CssFiles/footer.css'
 
 function Footer(){
     return(

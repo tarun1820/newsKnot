@@ -1,0 +1,22 @@
+.article_page_header{
+    display:flex;
+    flex-direction :row;
+    align-items:center;
+}
+
+.article_page_proName{
+    margin-left:50px;
+    margin-top:20px;
+    display:inline;
+    margin-block-start: 0.1em;
+    margin-block-end: 0.1em;
+    font-size:60px;
+    font-family: 'Pacifico';
+    font-style: normal;
+    color: #FE1D1D;
+}
+
+
+.article_page_btns{
+    margin-left:60%;
+}

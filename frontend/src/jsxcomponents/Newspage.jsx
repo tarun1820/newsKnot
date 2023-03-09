@@ -72,8 +72,10 @@ function Newspage(){
       <div className = "proName_newspage">NewsKnot</div>  
       <div className = "navbar_newspage_btns"> 
       {/* Should change routes */}
-      <div className = "navbar_newspage_btn" onClick = {() => navigate('/saved')}><Icon size={32} icon={arrows_square_plus} /></div> 
-      <div className = "navbar_newspage_btn" onClick = {() => navigate('/saved')}><Icon size={32} icon={user} /></div>
+      <div className = "newspage__Icons">
+      <div className = "navbar_newspage_btn_icon" onClick = {() => navigate('/saved')}><Icon size={32} icon={arrows_square_plus} /></div> 
+      <div className = "navbar_newspage_btn_icon" onClick = {() => navigate('/user/profile')}><Icon size={32} icon={user} /></div>
+      </div>
       {/* <Button className = "navbar_newspage_btn" link = "/saved"  > Saved</Button> */}
       <div className = "navbar_newspage_btn"><Button  link = "/logout"> Logout </Button></div>
       </div>

@@ -55,8 +55,17 @@
     gap:30px;
 }
 
+
+.newspage__Icons{
+    display:flex;
+    flex-direction:row;
+    gap:20px;
+}
+
 .navbar_newspage_btn{
-    height:40px;
+    height:45px;
+    justify-content:center;
+    align-items:center;
 }
 
 @media screen and (max-width: 780px){
@@ -67,13 +76,22 @@
         gap:10px;
     }
 
+    .newspage__Icons{
+        display:flex;
+        flex-direction:row;
+        justify-content:flex-end;
+        gap:20px;
+        
+    }
+
     .navbar_newspage_btn{
-        height:8%;
-        width:100px;
-        font-size:12px;
+        height:5%;
+        width:60px;
+        font-size:8px;
         border-radius:4px;
         font-family:"Montserrat";
         font-weight:500;
+        margin-right:60px;
     }
 }
 

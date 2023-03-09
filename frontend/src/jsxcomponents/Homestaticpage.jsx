@@ -1,5 +1,5 @@
 import React from 'react'
-import Footer from '../HomePageComponents/Footer'
+import Footer from '../StandardComponents/JsxFiles/Footer'
 import '../cssfiles/Homepage/main_page.css'
 import Header from '../HomePageComponents/Header'
 import Line from '../StandardComponents/JsxFiles/line'
