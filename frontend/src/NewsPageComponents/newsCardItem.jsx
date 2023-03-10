@@ -7,6 +7,7 @@ import {useState , useEffect} from 'react';
 import {heart} from 'react-icons-kit/fa/heart'
 import {basic_heart} from 'react-icons-kit/linea/basic_heart'
 import { Icon } from 'react-icons-kit'
+import {useNavigate} from 'react-router-dom';
 
 
 
@@ -23,6 +24,7 @@ function click(newsArticle){
 
 
 function NewsCardItem(props){
+  const navigate = useNavigate();
 
   // useEffect(fetchReactions,[]);
   var content = props.cardarticle.content
@@ -80,9 +82,9 @@ function NewsCardItem(props){
 
 
    return(<Card className = "new_article__styles"  >
-    <div className = "article__container">
-    <div><img  className = "article__image"  alt="img" src={image===null ? Random : image}></img></div>
-    <div className = "Content__container">
+    <div className = "article__container" onClick = {() => navigate('/user/article')}>
+    <div><img  className = "article__image"  alt="img" src={image===null ? Random : image} onClick = {() => navigate('/user/article')}></img></div>
+    <div className = "Content__container" onClick = {() => navigate('/user/article')}>
       <div className = "title__article"><h1>{props.cardarticle.title}</h1></div>
       <div><p className = "content__article">{content}</p></div> 
     </div> 
