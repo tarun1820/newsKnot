@@ -82,7 +82,7 @@ function NewsCardItem(props){
 
 
    return(<Card className = "new_article__styles"  >
-    <div className = "article__container" onClick = {() => navigate('/user/article')}>
+    <div className = "article__container" >
     <div><img  className = "article__image"  alt="img" src={image===null ? Random : image} onClick = {() => navigate('/user/article')}></img></div>
     <div className = "Content__container" onClick = {() => navigate('/user/article')}>
       <div className = "title__article"><h1>{props.cardarticle.title}</h1></div>
