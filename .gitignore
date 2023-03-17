@@ -1,5 +1,6 @@
 # Exclude node modules
 *node_modules/*
+Todo
 # Logs
 logs
 *.log

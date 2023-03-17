@@ -28,6 +28,7 @@ exports.getSavedArticles = (req, res, next) => {
   if (req.isAuthenticated()) {
     // console.log(res.send(req.session.passport.user));
     const userid = req.user.id;
+
     userinfo.findById(userid, (err, foundUser) => {
       if (err) {
         console.log(err);

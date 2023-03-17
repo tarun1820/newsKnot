@@ -1,0 +1,10 @@
+.profile_page_btns_lf{
+    display:flex;
+    flex-direction:row;
+    justify-content:center;
+    gap:80px;
+}
+
+.article_card_profile{
+    transform : scale(0.9);
+}

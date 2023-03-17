@@ -45,50 +45,34 @@
     font-style: normal;
 }
 
-.bookmark__image_icon{
-    height:32px;
-    width:32px;
-    margin-bottom:200px;
-    transition:0.8s;
-}
 
-.bookmark__image_icon:hover{
-    transform:scale(1.15)
-}
-
-
-.article_reactions{
+.article_bottom{
     display:flex;
     flex-direction:row;
-    gap:20px;
-    justify-content:flex-end;
-    margin-right:40px;
+    justify-content:space-between;
+    align-items:center;
 }
+
 
 .article_reaction{
     display:flex;
     flex-direction:row;
-    gap:10px;
+    gap:15px;
     align-items:center;
     justify-content:center;
-    width:70px;
-    height:35px;
+    width:auto;    
+    height:auto;
+    padding: 3px 6px 3px 6px;
     background: #FFFFFF;
-    border: 1.5px solid #BEB5B5;
-    border-radius: 10px;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 0px 8px -2px,
-      rgba(0, 0, 0, 0.3) 0px 0px 5px -3px;
+    margin-left:20px;
 }
 
-.article_reaction_icon{
-    color:#E0144C;
-}
 
 .article_reaction_label{
     font-family: 'Poppins';
     font-style: normal;
     font-size:15px;
-}
+} 
 
 @media screen and (max-width: 780px){
     .new_article__styles{
@@ -132,13 +116,12 @@
         font-size:10px;
         
     }
-
+/* 
     .bookmark__image_icon{
         height:20px;
         width:32px;
         margin-bottom:5px;
         margin-left: 380%;
         transition:0.8s;
-        fill : orange;
-    }
+    } */
 }
