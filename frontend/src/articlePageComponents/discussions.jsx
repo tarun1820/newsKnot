@@ -13,7 +13,6 @@ function Discussions(props) {
   const username = props.username;
   useEffect(() => {
     const fetchDisussions = () => {
-      const newtitle = JSON.stringify(title);
       console.log(title);
       console.log("inside fetch");
       try {

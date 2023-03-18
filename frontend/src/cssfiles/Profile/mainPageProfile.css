@@ -20,3 +20,15 @@
 .profilepage_feed_btn{
     margin-left:60%;
 }
+
+.profilepage_body{
+    display:flex;
+    flex-direction:row;
+    gap:10px;
+    justify-content:center;
+    margin-top:40px;
+}
+
+.profilepage_details{
+    margin-right:20px;
+}

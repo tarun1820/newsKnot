@@ -3,14 +3,45 @@ import { React, useState, useEffect } from "react";
 import NewsCardItem from "../NewsPageComponents/newsCardItem";
 import "../cssfiles/News-Page/main_page.css";
 import { useNavigate, useLocation } from "react-router-dom";
-import Button from "../StandardComponents/JsxFiles/button";
+import MyButton from "../StandardComponents/JsxFiles/button";
 import Line from "../StandardComponents/JsxFiles/line";
 import { arrows_square_plus } from "react-icons-kit/linea/arrows_square_plus";
 import { user } from "react-icons-kit/fa/user";
 import { Icon } from "react-icons-kit";
+import { Button} from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import Tabs from '@mui/joy/Tabs';
+import TabList from '@mui/joy/TabList';
+import Tab from '@mui/joy/Tab';
+
+
+const theme = createTheme({
+  typography: {
+    allVariants: {
+      fontFamily: "'Montserrat', sans-serif",
+      textTransform: "none",
+    },
+    button: {
+      fontFamily: "'Montserrat', sans-serif",
+      textTransform: "none",
+      fontSize: 20
+
+    }
+  },
+  palette: {
+    primary : {
+      main : "#000000",
+      dark : "#ffffff",
+    }
+  }
+});
+
 
 function Newspage() {
+  const [index, setIndex] = useState(0);
+
   const [userfound, setuserfound] = useState(0);
+ 
   const navigate = useNavigate();
   const location = useLocation();
   const username = location.state.username;
@@ -63,6 +94,7 @@ function Newspage() {
 
   return (
     <div>
+      <ThemeProvider theme={theme}>
       {userfound === 2 ? (
         <div>
           <div className="navbar_newspage_header">
@@ -85,13 +117,17 @@ function Newspage() {
               </div>
               {/* <Button className = "navbar_newspage_btn" link = "/saved"  > Saved</Button> */}
               <div className="navbar_newspage_btn">
-                <Button link="/logout"> Logout </Button>
+                <MyButton link="/logout"> Logout </MyButton>
               </div>
             </div>
           </div>
 
           <div className="navbar_newspage">
-            <div
+              <Button variant = "text" size= "medium" onClick={() => handleChange("sports")}>Sports</Button>
+              <Button variant = "text" size= "medium" onClick={() => handleChange("health")}>Health</Button>
+              <Button variant = "text" size= "medium" onClick={() => handleChange("entertainment")}>Entertainment</Button>
+              <Button variant = "text" size= "medium" onClick={() => handleChange("technology")}>Technology</Button>
+            {/* <div
               className="navbar_newspage_item"
               onClick={() => handleChange("sports")}
             >
@@ -114,8 +150,8 @@ function Newspage() {
               onClick={() => handleChange("technology")}
             >
               Technology
+              </div> */}
             </div>
-          </div>
           <Line className="newspage_line" />
           {topHeadlinesNews.map((article) => (
             <NewsCardItem
@@ -134,6 +170,7 @@ function Newspage() {
           {/* <img src="load" alt="loader"></img> */}
         </div>
       )}
+      </ThemeProvider>
     </div>
   );
 }
