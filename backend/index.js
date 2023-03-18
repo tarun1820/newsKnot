@@ -7,6 +7,9 @@ const bodyParser = require("body-parser");
 const http = require("http");
 const socket = require("socket.io");
 const PORT = 5000;
+const { JSDOM } = require("jsdom");
+const { Readability } = require("@mozilla/readability");
+const axios = require("axios");
 
 const app = express();
 app.use(express.json());
@@ -108,4 +111,22 @@ io.on("connect", (socket) => {
   });
 });
 
+app.get("/news_article/:encoded", (req, res) => {
+  const encodedurl = req.params.encoded;
+  const url = decodeURI(encodedurl);
+  console.log("scraping started");
+  axios.get(url).then(function (r2) {
+    // We now have the article HTML, but before we can use Readability to locate the article content we need jsdom to convert it into a DOM object
+    let dom = new JSDOM(r2.data, {
+      url: firstResult.url,
+    });
+
+    // now pass the DOM document into readability to parse
+    var article = new Readability(dom.window.document).parse();
+
+    // Done! The article content is in the textContent property
+    console.log("scraped article", article.textContent);
+  });
+  res.send(article);
+});
 ////////////////////////////////////////////////    Reactions
