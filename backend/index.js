@@ -1,12 +1,19 @@
 const express = require('express');
 const connectDB = require('./config/db');
+const colors = require('colors');
 const cors = require('cors');
 const session = require('express-session');
+const fileupload = require('express-fileupload');
+const dotenv = require('dotenv');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const http = require('http');
 const socket = require('socket.io');
-const PORT = 5000;
+const path = require('path');
+const PORT = process.env.PORT || 5000;
+
+// Load env Vars
+dotenv.config({ path: './config/config.env' });
 
 const app = express();
 app.use(express.json());
@@ -29,6 +36,13 @@ app.use(passport.session());
 //Mongo DB connection
 
 connectDB();
+
+app.use(fileupload());
+
+// Set static folder
+
+app.use(express.static(path.join(__dirname, 'public')));
+
 const userinfo = require('./models/user');
 const discussionsInfo = require('./models/discussion'); //discussion model
 const reactionsRoute = require('./routes/reactions');
@@ -80,7 +94,11 @@ app.use('/', authenticationRoute);
 app.use('/', discussionsRoute);
 app.use('/', profileRoute);
 
-const server = app.listen(5000, () => console.log(`Server started on ${PORT}`));
+const server = app.listen(5000, () =>
+  console.log(
+    `Server running in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
+  )
+);
 
 const io = socket(server, {
   cors: {
@@ -91,9 +109,7 @@ const io = socket(server, {
 });
 
 io.on('connect', (socket) => {
-  console.log('connected' + new Date());
   socket.on('discuus_on_article', (data) => {
-    console.log('title==', data);
     const userexist = discussionsInfo.findOne(
       { title: data },
       (err, foundArticle) => {
@@ -106,21 +122,16 @@ io.on('connect', (socket) => {
             created_room.save((err, data) => {
               if (err) {
                 console.log(err);
-              } else {
-                console.log('Data inserted');
               }
             });
-            console.log('creation success');
           }
         }
       }
     );
     socket.join(data);
-    console.log('joined room');
   });
 
   socket.on('send_message', (data) => {
-    console.log('back end send message');
     console.log(data.username);
     const userexist = discussionsInfo.findOne(
       { title: data.title },
@@ -129,9 +140,7 @@ io.on('connect', (socket) => {
           console.log(err);
         } else {
           foundArticle.list_of_message_and_user.unshift(data);
-          foundArticle.save(() => {
-            console.log('message pushed success');
-          });
+          foundArticle.save(() => {});
         }
       }
     );
@@ -139,4 +148,10 @@ io.on('connect', (socket) => {
   });
 });
 
-////////////////////////////////////////////////    Reactions
+// Handle Unhandled promise rejections
+
+process.on('unhandledRejections', (err, promise) => {
+  console.log(`Error : ${err.message}.red`);
+
+  server.close(() => process.exit(1));
+});

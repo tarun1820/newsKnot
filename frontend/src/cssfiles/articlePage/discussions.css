@@ -1,0 +1,24 @@
+.user_comment{
+    display : flex ;
+    flex-direction : row ; 
+    gap :20px;
+    justify-content: center;
+    margin-top : 20px;
+}
+
+.article_other_comments{
+    margin-top:20px;
+    display : flex;
+    flex-direction:column;
+    width : 75%;
+    gap:3px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+.article_other_comment{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+

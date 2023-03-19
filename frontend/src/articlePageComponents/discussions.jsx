@@ -2,7 +2,31 @@ import "../cssfiles/articlePage/discussions.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import io from "socket.io-client";
-// import { useEffect, useState } from "react";
+import { Typography ,Box , Button , Divider , TextField} from '@mui/material';
+import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+
+
+
+const theme = createTheme({
+  typography: {
+    allVariants: {
+      fontFamily: "'Montserrat', sans-serif",
+      textTransform: "none",
+    },
+    button: {
+      fontFamily: "'Montserrat', sans-serif",
+      textTransform: "none",
+      fontSize: 20,  
+    }
+  },
+  palette: {
+    primary : {
+      main : "#000000",
+      dark : "#ffffff",
+    }
+  }
+});
 
 const socket = io.connect("http://localhost:5000");
 
@@ -61,21 +85,35 @@ function Discussions(props) {
 
   return (
     <div>
-      <input
-        placeholder="Message..."
+      <ThemeProvider theme={theme}>
+      <Box sx = {{display : 'flex' , alignItems : 'center' , justifyContent : 'center' , gap : 3}}>
+      <PeopleOutlinedIcon sx = {{fontSize : 40}}/>
+      <Typography variant ="h3"> Discussion </Typography>      
+      </Box>
+      <div className = "user_comment">
+      <TextField id = "comment_field"
+        helperText="Your Opinions (max 400 characters)"
+        label="Comment"
         onChange={(event) => {
           setMessage(event.target.value);
         }}
+        sx = {{width : '65%' }}
+        inputProps = {{minLength : 1 , maxLength : 400}}
       />
-      <button onClick={sendMessage}> Send Message</button>
-      <h1> Message:</h1>
-      {/* {console.log("arry=" + messageReceived)} */}
+      <div>
+      {message.length >=1 ? <Button onClick={sendMessage} variant = "outlined" sx = {{mt : 0.5}}  >Post</Button> : <Button onClick={sendMessage} variant = "outlined" sx = {{mt : 0.5}} disabled>Post</Button> }
+      </div>
+      </div>
+      </ThemeProvider>
+      <div className = "article_other_comments">
       {Discussions.map((msg) => (
-        <div>
-          <h3>{msg.username}</h3>
-          <p key={msg.index}>{msg.message}</p>
+        <div className = "article_other_comment">        
+        <Typography variant = "p">{msg.username}</Typography>
+        <Typography variant = "p">{msg.message}</Typography>        
+        <Divider/>
         </div>
       ))}
+      </div>
     </div>
   );
 }
