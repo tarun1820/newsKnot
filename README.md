@@ -50,7 +50,7 @@ Go to Backend Directory
 - Start the server
 
 ```bash
-  nodemon index.js
+  npm run dev
 ```
 
 Go to Frontend Directory
