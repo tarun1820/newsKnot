@@ -15,6 +15,7 @@ exports.photoUpload = async (req, res, next) => {
       }
 
       const file = req.files.file;
+      console.log(file);
 
       // Make sure that file is a photo
 
@@ -160,7 +161,6 @@ exports.editProfilePostForm = async (req, res, next) => {
     allLinks.push(details.link2);
     allLinks.push(details.link3);
     allLinks.push(details.link4);
-    console.log(allLinks);
     try {
       const user = await userinfo.findByIdAndUpdate(userId, {
         FirstName: details.FirstName,

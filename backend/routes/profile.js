@@ -17,7 +17,7 @@ router.route('/user/profile/saved').get(getSavedArticles);
 
 router.route('/user/profile/liked').get(getLikedArtcles);
 
-router.route('user/profile/photo').put(photoUpload);
+router.route('/user/profile/edit/photo').post(photoUpload);
 
 router.route('/user/profile/edit').post(editProfilePostForm);
 

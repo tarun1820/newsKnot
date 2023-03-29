@@ -28,6 +28,8 @@ const theme = createTheme({
 
 function EditForm(props){
 
+    const [photo,setPhoto] = useState(0);
+
     const [details , setDetails] = useState({
         FirstName : "",
         LastName  : "",
@@ -74,10 +76,9 @@ function EditForm(props){
     function handleSubmit(e){
         const data = {...details};
         console.log(data);
-        console.log("Hello");
         const options = {
             withCredentials: true,
-            headers: { "content-type": "application/json" },
+            headers: {"Content-Type": "multipart/form-data" },
           };
         axios.post("http://localhost:5000/user/profile/edit" , data , options)
         .then((res)=>{
@@ -90,18 +91,37 @@ function EditForm(props){
         })
         .catch((err)=>{
             console.log(err);
-            console.log(err.message);
         })
     }
 
-    function SomeFunction(e){
+    function openFileLocater(e){
         const ele = document.querySelector("#img-upload");
         console.log("Element Found");
         ele.click();
     }
 
     function handlePhotoChange(e){
-        console.log(e.target.files);
+        console.log(e);
+        if(e.target.files[0].type.startsWith("image")){
+            setPhoto(1);
+            // Post to backend
+            const options = {
+                withCredentials: true,
+                headers: { "content-type": "application/json" },
+              };
+
+            let file = e.target.files[0]
+            axios.post("http://localhost:5000/user/profile/edit/photo" , file , options)
+            .then(res => {
+                console.log(res);
+                console.log("Hello World");
+            })
+            .catch(err => {
+                console.log(err.message)
+            })
+        }else{
+            setPhoto(0);
+        }
     }
 
     return(
@@ -135,12 +155,14 @@ function EditForm(props){
         </div>
         <div >
         <img className= "EditProfile_image"  src ={Random} alt = "NI"  />
-        <input type = "file" id = "img-upload" onChange={handlePhotoChange} ></input>
+        <button onClick = {openFileLocater}>ImageFileUpload</button>
+        <input className = "invisible-ele" type = "file" id = "img-upload" onChange={handlePhotoChange} ></input>
+        {console.log(photo)}
         </div>
         
         </div>
     <Button variant = "outlined" sx= {{borderRadius : 1}} onClick = {handleSubmit} >Save Changes</Button>
-    <button onClick = {SomeFunction}>Sample Button </button>
+    
     </ThemeProvider>
     </div>
     )
