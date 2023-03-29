@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import "../cssfiles/articlePage/articleData.css";
+import axios from "axios";
 // import { useLocation } from "react-router-dom";
 import Random from "../png&svg/random.png";
 // import io from "socket.io-client";
@@ -17,6 +19,20 @@ function ArticleData(props) {
   var author = data.author;
   var description = data.description;
   var url = data.url;
+  const encoded = encodeURIComponent(url);
+  useEffect(() => {
+    console.log("scraping req sent from front end");
+    axios
+      .get(`http://localhost:5000/news_article/${encoded}`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res.textcontent);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <div>

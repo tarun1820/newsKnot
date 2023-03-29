@@ -45,7 +45,7 @@ function Discussions(props) {
             withCredentials: true,
           })
           .then((res) => {
-            console.log("response ====", res);
+            // console.log("response ====", res);
             setDiscussions(() => {
               console.log(res.data.discussions);
               return res.data.discussions;
