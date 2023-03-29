@@ -15,7 +15,7 @@ function ArticlePage(props) {
         <div className="article_page_proName">NewsKnot</div>
         <div className="article_page_btns">
           <div className="article_page_feed_btn">
-            <Button line="/user">Feed</Button>
+            <Button link="/user">Feed</Button>
           </div>
         </div>
       </div>

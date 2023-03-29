@@ -1,19 +1,20 @@
-const express = require('express');
-const connectDB = require('./config/db');
-const colors = require('colors');
-const cors = require('cors');
-const session = require('express-session');
-const fileupload = require('express-fileupload');
-const dotenv = require('dotenv');
-const passport = require('passport');
-const bodyParser = require('body-parser');
-const http = require('http');
-const socket = require('socket.io');
-const path = require('path');
+const express = require("express");
+const connectDB = require("./config/db");
+const colors = require("colors");
+const cors = require("cors");
+const session = require("express-session");
+const fileupload = require("express-fileupload");
+const dotenv = require("dotenv");
+const passport = require("passport");
+const bodyParser = require("body-parser");
+const http = require("http");
+const socket = require("socket.io");
+const path = require("path");
 const PORT = process.env.PORT || 5000;
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
 // Load env Vars
-dotenv.config({ path: './config/config.env' });
+dotenv.config({ path: "./config/config.env" });
 
 const app = express();
 app.use(express.json());
@@ -21,7 +22,7 @@ app.use(cors({ origin: true, credentials: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   session({
-    secret: 'news api',
+    secret: "news api",
     resave: true,
     saveUninitialized: true,
     rolling: true,
@@ -41,25 +42,25 @@ app.use(fileupload());
 
 // Set static folder
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, "public")));
 
-const userinfo = require('./models/user');
-const discussionsInfo = require('./models/discussion'); //discussion model
-const reactionsRoute = require('./routes/reactions');
-const newsPageRoute = require('./routes/newspage');
-const savedRoute = require('./routes/save');
-const authenticationRoute = require('./routes/authentication');
-const discussionsRoute = require('./routes/discussions');
-const profileRoute = require('./routes/profile');
+const userinfo = require("./models/user");
+const discussionsInfo = require("./models/discussion"); //discussion model
+const reactionsRoute = require("./routes/reactions");
+const newsPageRoute = require("./routes/newspage");
+const savedRoute = require("./routes/save");
+const authenticationRoute = require("./routes/authentication");
+const discussionsRoute = require("./routes/discussions");
+const profileRoute = require("./routes/profile");
 
-const { title } = require('process');
+const { title } = require("process");
 
 passport.use(userinfo.createStrategy());
 
 passport.serializeUser(userinfo.serializeUser());
 passport.deserializeUser(userinfo.deserializeUser());
 
-app.get('/user/profile', async (req, res) => {
+app.get("/user/profile", async (req, res) => {
   if (req.isAuthenticated()) {
     const userId = req.user.id;
     try {
@@ -68,7 +69,7 @@ app.get('/user/profile', async (req, res) => {
         return res.status(402).json({
           success: false,
           message:
-            'Some weird error already login , so this should not come while getting user Details',
+            "Some weird error already login , so this should not come while getting user Details",
         });
       }
       res.status(200).json({
@@ -78,21 +79,21 @@ app.get('/user/profile', async (req, res) => {
     } catch {
       res.status(400).json({
         success: false,
-        message: 'database fetching failed',
+        message: "database fetching failed",
       });
     }
   } else {
-    console.log('log out');
-    res.send({ status: 'not login' });
+    console.log("log out");
+    res.send({ status: "not login" });
   }
 });
 
-app.use('/', reactionsRoute);
-app.use('/', newsPageRoute);
-app.use('/', savedRoute);
-app.use('/', authenticationRoute);
-app.use('/', discussionsRoute);
-app.use('/', profileRoute);
+app.use("/", reactionsRoute);
+app.use("/", newsPageRoute);
+app.use("/", savedRoute);
+app.use("/", authenticationRoute);
+app.use("/", discussionsRoute);
+app.use("/", profileRoute);
 
 const server = app.listen(5000, () =>
   console.log(
@@ -102,19 +103,19 @@ const server = app.listen(5000, () =>
 
 const io = socket(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: "http://localhost:3000",
     credentials: true,
-    methods: ['GET', 'POST'],
+    methods: ["GET", "POST"],
   },
 });
 
-io.on('connect', (socket) => {
-  socket.on('discuus_on_article', (data) => {
+io.on("connect", (socket) => {
+  socket.on("discuus_on_article", (data) => {
     const userexist = discussionsInfo.findOne(
       { title: data },
       (err, foundArticle) => {
         if (err) {
-          console.log('error responce =', err);
+          console.log("error responce =", err);
         } else {
           // console.log("title in room find", foundArticle);
           if (!foundArticle) {
@@ -131,7 +132,7 @@ io.on('connect', (socket) => {
     socket.join(data);
   });
 
-  socket.on('send_message', (data) => {
+  socket.on("send_message", (data) => {
     console.log(data.username);
     const userexist = discussionsInfo.findOne(
       { title: data.title },
@@ -144,13 +145,58 @@ io.on('connect', (socket) => {
         }
       }
     );
-    io.to(data.title).emit('receve_message', data);
+    io.to(data.title).emit("receve_message", data);
   });
 });
 
+const client_id = process.env.CLIENT_ID;
+const client_secret = process.env.CLIENT_SECRET;
+
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: client_id,
+      clientSecret: client_secret,
+      callbackURL: "http://localhost:5000/google/callback",
+    },
+    async function (accessToken, refreshToken, profile, cb) {
+      console.log("user credit tocken", profile.emails[0].value);
+      await userinfo.findOrCreate(
+        {
+          socialId: profile.id,
+          email: profile.emails[0].value,
+          username: profile.displayName,
+        },
+        function (err, user) {
+          console.log("user credit tocken", user);
+          return cb(null, user);
+        }
+      );
+      console.log("done", profile);
+    }
+  )
+);
+
+app.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
+);
+
+app.get(
+  "/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "http://localhost:3000/login",
+  }),
+  function (req, res) {
+    console.log("success");
+    // Successful authentication, redirect home.
+    res.redirect("http://localhost:3000/user");
+  }
+);
+
 // Handle Unhandled promise rejections
 
-process.on('unhandledRejections', (err, promise) => {
+process.on("unhandledRejections", (err, promise) => {
   console.log(`Error : ${err.message}.red`);
 
   server.close(() => process.exit(1));
