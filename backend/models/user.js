@@ -8,6 +8,11 @@ const userSchema = new mongoose.Schema(
     password: String,
     saved: [Object],
     liked: [Object],
+    FirstName: { type: String, default: '' },
+    LastName: { type: String, default: '' },
+    Bio: { type: String, default: '' },
+    Org: { type: String, default: '' },
+    links: { type: [String], default: ['', '', '', ''] },
     profilePhoto: { type: String, default: 'no-photo.jpg' },
   },
   {

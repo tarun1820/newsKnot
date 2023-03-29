@@ -30,7 +30,7 @@ function MyButton(props){
     return (
         <div>
         <ThemeProvider theme={theme}>
-        <Button variant = "outlined" onClick={()=>navigate(props.link)} sx={{borderRadius:3}}className= {classes}>
+        <Button variant = "outlined" onClick={()=>navigate(props.link)} sx={{borderRadius:2}} className= {classes}>
             {props.children}
         </Button>
         </ThemeProvider>

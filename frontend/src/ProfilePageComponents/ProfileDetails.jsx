@@ -5,16 +5,18 @@ import Typography from '@mui/joy/Typography';
 import {useState , useEffect} from 'react';
 import axios from 'axios'
 import Button from '../StandardComponents/JsxFiles/button'; 
+import {useNavigate} from "react-router-dom";
+
 
 const url = 'http://localhost:5000/user/profile';
 
 
-function addDetailsHandler(){
-    console.log("Hello");
-}
 
 
 function ProfileDetails(props){  
+
+    const navigate = useNavigate();
+    
 
     const [details , setDetails] = useState({
         username : "",
@@ -50,8 +52,8 @@ function ProfileDetails(props){
                 <Typography level = "h2">{details.username}</Typography>
                 <Typography level = "p">{details.email}</Typography>
             </div>
-            <div onClick = {addDetailsHandler}>
-            <Button>Add Details</Button>
+            <div >
+            <Button link = "/user/profile/edit" >Edit Profile</Button>
             </div>
             </div>
         </div>

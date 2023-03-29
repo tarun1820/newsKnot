@@ -48,7 +48,7 @@ exports.photoUpload = async (req, res, next) => {
         const user = await userinfo.findByIdAndUpdate(userId, {
           profilePhoto: file.name,
         });
-        if (!userDetails) {
+        if (!user) {
           return res.status(402).json({
             success: false,
             message:
@@ -138,7 +138,6 @@ exports.getLikedArtcles = async (req, res, next) => {
     for (let i = 0; i < li.length; i++) {
       liked_articles.push(li[i].article);
     }
-    console.log(liked_articles);
     res.status(200).json({
       success: true,
       liked: liked_articles,
@@ -148,5 +147,73 @@ exports.getLikedArtcles = async (req, res, next) => {
       success: false,
       message: 'Database operation failed',
     });
+  }
+};
+
+exports.editProfilePostForm = async (req, res, next) => {
+  if (req.isAuthenticated()) {
+    const details = req.body;
+    const userId = req.user.id;
+
+    const allLinks = [];
+    allLinks.push(details.link1);
+    allLinks.push(details.link2);
+    allLinks.push(details.link3);
+    allLinks.push(details.link4);
+    console.log(allLinks);
+    try {
+      const user = await userinfo.findByIdAndUpdate(userId, {
+        FirstName: details.FirstName,
+        LastName: details.LastName,
+        Bio: details.Bio,
+        Org: details.Org,
+        links: allLinks,
+      });
+
+      if (!user) {
+        return res.status(402).json({
+          success: false,
+          message:
+            'Some weird error already login , so this should not come while getting user Details',
+        });
+      }
+      res.status(200).json({
+        success: true,
+        message: 'Profile Updated Successfully',
+      });
+    } catch {
+      res.status(400).json({
+        success: false,
+        message: 'Database operation failed',
+      });
+    }
+  }
+};
+
+exports.getProfileEditDetails = async (req, res, next) => {
+  if (req.isAuthenticated()) {
+    const userId = req.user.id;
+    try {
+      const user = await userinfo.findById(userId);
+      var data = {
+        FirstName: user.FirstName,
+        LastName: user.LastName,
+        Bio: user.Bio,
+        Org: user.Org,
+        link1: user.links[0],
+        link2: user.links[1],
+        link3: user.links[2],
+        link4: user.links[3],
+      };
+      res.status(200).json({
+        success: true,
+        details: data,
+      });
+    } catch {
+      res.status(400).json({
+        success: false,
+        message: 'Database operation failed',
+      });
+    }
   }
 };

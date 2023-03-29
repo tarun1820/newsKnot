@@ -8,6 +8,7 @@ import Signup from './Signup';
 import Saved from './Saved';
 import ArticlePage from './articlePage';
 import Profile from './Profile'
+import EditProfile from '../ProfilePageComponents/EditProfileForm'
 export const App = () => {
   
   return (
@@ -19,6 +20,7 @@ export const App = () => {
         <Route path="/saved" element={<Saved />}></Route>
         <Route path="/logout" element={<Homestaticpage logout={true}/>}></Route>
         <Route path ="/user/profile" element = {<Profile />}></Route>
+        <Route path = "/user/profile/edit" element = {<EditProfile />}></Route>
         <Route path ="/user/article" element = {<ArticlePage />}></Route>
     </Routes>
   );
