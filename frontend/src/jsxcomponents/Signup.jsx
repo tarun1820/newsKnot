@@ -48,13 +48,15 @@ function Signup() {
     //   headers: {"content-type": "application/json"}
     // }
     //axios post reqest for sign in
-    axios.defaults.withCredentials = true;
+    // axios.defaults.withCredentials = true;
     axios
       .post("http://localhost:5000/signup", data, { withCredentials: true })
       .then((res) => {
-        if (res.data.error === "email alredy regitered") {
+        console.log(res);
+        if (res.data.error === "email alredy registered") {
+          console.log(res.data.error);
           setUserExist(1);
-        } else if (res.data.error === "username alredy regitered") {
+        } else if (res.data.error === "username alredy registered") {
           setUserExist(2);
         } else if (res.data.status === "ok") {
           setUserExist(3);
@@ -86,7 +88,7 @@ function Signup() {
       banner = "Account created Successfully";
     }
   }
-
+  console.log("banner=", banner);
   return (
     <div id="signup-Container">
       <h1 id="pro-Name">NewsKnot</h1>

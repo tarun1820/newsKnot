@@ -46,18 +46,19 @@ function Newspage() {
     axios
       .get("http://localhost:5000/user", { withCredentials: true })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res);
         if (res.data.status === "not login") {
           setuserfound(1);
           navigate("/login");
         } else {
           setUsername(res.data);
+          // setNews(res.data.articles);
           setuserfound(2);
         }
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
+  // console.log("username after login=", username);
   const [category, setcategory] = useState(null);
 
   const [topHeadlinesNews, setNews] = useState([]);
@@ -66,7 +67,7 @@ function Newspage() {
   //     return null;
   // }
   function topHeadlinesArticals() {
-    const data = JSON.stringify({ category });
+    const data = JSON.stringify({ category, username });
     const options = {
       withCredentials: true,
       headers: { "content-type": "application/json" },
@@ -75,8 +76,8 @@ function Newspage() {
     axios
       .post("http://localhost:5000/user", data, options)
       .then((res) => {
-        // console.log(res.data.articles)
-        setNews(res.data.articles);
+        console.log(res.data);
+        setNews(res.data);
       })
       .catch((error) => {
         console.log(error);
@@ -174,16 +175,19 @@ function Newspage() {
               </div> */}
             </div>
             <Line className="newspage_line" />
-            {topHeadlinesNews.map((article) => (
-              <NewsCardItem
-                username={username}
-                key={Math.random()}
-                save={false}
-                cardarticle={article}
-                likes={0}
-                dislikes={0}
-              />
-            ))}
+            {topHeadlinesNews.map((article) => {
+              console.log("username in before newscard item=", username);
+              return (
+                <NewsCardItem
+                  username={username}
+                  key={Math.random()}
+                  save={false}
+                  cardarticle={article}
+                  likes={0}
+                  dislikes={0}
+                />
+              );
+            })}
           </div>
         ) : (
           <div>

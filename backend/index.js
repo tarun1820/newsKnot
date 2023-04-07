@@ -23,6 +23,10 @@ const app = express();
 app.use(express.json());
 app.use(cors({ origin: true, credentials: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json({ limit: "10mb", extended: true }));
+app.use(
+  express.urlencoded({ limit: "10mb", extended: true, parameterLimit: 50000 })
+);
 app.use(
   session({
     secret: "news api",
@@ -152,24 +156,24 @@ io.on("connect", (socket) => {
   });
 });
 
-app.get("/news_article/:encoded", (req, res) => {
-  const encodedurl = req.params.encoded;
-  const url = decodeURI(encodedurl);
-  console.log("scraping started");
-  axios.get(url).then(function (r2) {
-    // We now have the article HTML, but before we can use Readability to locate the article content we need jsdom to convert it into a DOM object
-    let dom = new JSDOM(r2.data, {
-      url: firstResult.url,
-    });
+// app.get("/news_article/:encoded", (req, res) => {
+//   const encodedurl = req.params.encoded;
+//   const url = decodeURI(encodedurl);
+//   console.log("scraping started");
+//   axios.get(url).then(function (r2) {
+//     // We now have the article HTML, but before we can use Readability to locate the article content we need jsdom to convert it into a DOM object
+//     let dom = new JSDOM(r2.data, {
+//       url: firstResult.url,
+//     });
 
-    // now pass the DOM document into readability to parse
-    var article = new Readability(dom.window.document).parse();
+//     // now pass the DOM document into readability to parse
+//     var article = new Readability(dom.window.document).parse();
 
-    // Done! The article content is in the textContent property
-    console.log("scraped article", article.textContent);
-  });
-  res.send(article);
-});
+//     // Done! The article content is in the textContent property
+//     console.log("scraped article", article.textContent);
+//   });
+//   res.send(article);
+// });
 
 const client_id = process.env.CLIENT_ID;
 const client_secret = process.env.CLIENT_SECRET;
