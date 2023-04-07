@@ -33,7 +33,7 @@ exports.getReactions = async (req, res, next) => {
       });
     }
   } else {
-    console.log('log out');
+    // console.log('log out');
     res.send({ status: 'not login' });
   }
 };
@@ -147,7 +147,7 @@ exports.putReactions = async (req, res, next) => {
       });
     }
   } else {
-    console.log('log out');
+    // console.log('log out');
     res.send({ status: 'not login' });
   }
 };

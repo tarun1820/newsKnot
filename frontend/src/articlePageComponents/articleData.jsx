@@ -11,7 +11,7 @@ import Random from "../png&svg/random.png";
 function ArticleData(props) {
   // const location = useLocation();
   const data = props.article_data;
-  console.log(data);
+  console.log("from article data=", data.description);
   const username = props.username;
   var content = data.content;
   var image = data.urlToImage;
@@ -20,19 +20,19 @@ function ArticleData(props) {
   var description = data.description;
   var url = data.url;
   const encoded = encodeURIComponent(url);
-  useEffect(() => {
-    console.log("scraping req sent from front end");
-    axios
-      .get(`http://localhost:5000/news_article/${encoded}`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        console.log(res.textcontent);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }, []);
+  // useEffect(() => {
+  //   console.log("scraping req sent from front end");
+  //   axios
+  //     .get(`http://localhost:5000/news_article/${encoded}`, {
+  //       withCredentials: true,
+  //     })
+  //     .then((res) => {
+  //       console.log(res.textcontent);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // }, []);
 
   return (
     <div>

@@ -16,6 +16,7 @@ const userSchema = new mongoose.Schema(
     Org: { type: String, default: "" },
     links: { type: [String], default: ["", "", "", ""] },
     profilePhoto: { type: String, default: "no-photo.jpg" },
+    latent_features: [Object],
   },
   {
     collection: "userinfo",

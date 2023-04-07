@@ -46,7 +46,6 @@ function Newspage() {
     axios
       .get("http://localhost:5000/user", { withCredentials: true })
       .then((res) => {
-        console.log(res.data);
         if (res.data.status === "not login") {
           setuserfound(1);
           navigate("/login");
@@ -62,21 +61,16 @@ function Newspage() {
 
   const [topHeadlinesNews, setNews] = useState([]);
 
-  // if(!userData){
-  //     return null;
-  // }
   function topHeadlinesArticals() {
-    const data = JSON.stringify({ category });
+    const data = JSON.stringify({ category, username });
     const options = {
       withCredentials: true,
       headers: { "content-type": "application/json" },
     };
-    //axios post reqest for news data from backend server 5000
     axios
       .post("http://localhost:5000/user", data, options)
       .then((res) => {
-        // console.log(res.data.articles)
-        setNews(res.data.articles);
+        setNews(res.data);
       })
       .catch((error) => {
         console.log(error);
@@ -174,16 +168,18 @@ function Newspage() {
               </div> */}
             </div>
             <Line className="newspage_line" />
-            {topHeadlinesNews.map((article) => (
-              <NewsCardItem
-                username={username}
-                key={Math.random()}
-                save={false}
-                cardarticle={article}
-                likes={0}
-                dislikes={0}
-              />
-            ))}
+            {topHeadlinesNews.map((article) => {
+              return (
+                <NewsCardItem
+                  username={username}
+                  key={Math.random()}
+                  save={false}
+                  cardarticle={article}
+                  likes={0}
+                  dislikes={0}
+                />
+              );
+            })}
           </div>
         ) : (
           <div>

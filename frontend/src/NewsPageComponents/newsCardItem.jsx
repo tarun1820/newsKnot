@@ -1,16 +1,16 @@
 import Card from "../StandardComponents/JsxFiles/card";
 import "../cssfiles/News-Page/newsCardItem.css";
 import Random from "../png&svg/random.png";
-import IconButton from '@mui/material/IconButton';
+import IconButton from "@mui/material/IconButton";
 import axios from "axios";
-import Button from '@mui/material/Button';
+import Button from "@mui/material/Button";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
-import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
-import BookmarkAddedOutlinedIcon from '@mui/icons-material/BookmarkAddedOutlined';
-import ArrowDown from '@mui/icons-material/KeyboardDoubleArrowDownOutlined';
+import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
+import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import BookmarkAddedOutlinedIcon from "@mui/icons-material/BookmarkAddedOutlined";
+import ArrowDown from "@mui/icons-material/KeyboardDoubleArrowDownOutlined";
 
 function saveArticle(newsArticle) {
   const options = {
@@ -35,18 +35,20 @@ function NewsCardItem(props) {
   // let en_title=encodeURIComponent(Title).substring(0,10);
   // console.log(en_title);
   const username = props.username;
-  // console.log("usename==", username);
-
+  // console.log(" from new page usename==", username);
 
   const [reactions, setReactions] = useState(0);
   const [clickarticle, setClickArticle] = useState(false);
-  const [icon,setIcon] = useState(0);
-
+  const [icon, setIcon] = useState(0);
 
   const navigate = useNavigate();
   useEffect(() => {
     if (clickarticle === true) {
-      navigate("/user/article", {
+      const aricles_info = encodeURIComponent(
+        JSON.stringify(props.cardarticle)
+      );
+      console.log(props.cardarticle);
+      navigate(`/user/article/${aricles_info}`, {
         state: { article_data: props.cardarticle, username: username },
       });
     }
@@ -78,7 +80,7 @@ function NewsCardItem(props) {
             console.log(err.message)
           });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[]);
+  }, []);
 
   function likeHandler(e) {
     let data = {
@@ -100,7 +102,7 @@ function NewsCardItem(props) {
       .catch((err) => {
         console.log(err.message);
       });
-      console.log("Icon" + icon);
+    console.log("Icon" + icon);
   }
 
   return (
@@ -121,46 +123,49 @@ function NewsCardItem(props) {
             <p className="content__article">{content}</p>
           </div>
         </div>
-        
       </div>
-      
-      <div className = "article_bottom">
+
+      <div className="article_bottom">
         {/* In this div keep saved liked and view More*/}
 
         <div className="article_reaction">
-          <div >{icon === 1 ? <FavoriteOutlinedIcon onClick={likeHandler}  sx = {{color : 'red' , fontSize:30 }}></FavoriteOutlinedIcon> : <FavoriteBorderOutlinedIcon onClick={likeHandler} sx = {{color : 'red' ,  fontSize:30}} ></FavoriteBorderOutlinedIcon>}
-            
+          <div>
+            {icon === 1 ? (
+              <FavoriteOutlinedIcon
+                onClick={likeHandler}
+                sx={{ color: "red", fontSize: 30 }}
+              ></FavoriteOutlinedIcon>
+            ) : (
+              <FavoriteBorderOutlinedIcon
+                onClick={likeHandler}
+                sx={{ color: "red", fontSize: 30 }}
+              ></FavoriteBorderOutlinedIcon>
+            )}
           </div>
           <div>
             <label className="article_reaction_label">{reactions}</label>
-          </div>          
-        </div>  
-        
+          </div>
+        </div>
 
-          <div className = "article_viewmore">
-            <IconButton
-              onClick={() => {
-                setClickArticle(true);
-              }}
-            >
-              <ArrowDown  sx = {{color : 'black',fontSize:40}} />
-            </IconButton>
-          </div> 
-
-
-        
-
+        <div className="article_viewmore">
+          <IconButton
+            onClick={() => {
+              setClickArticle(true);
+            }}
+          >
+            <ArrowDown sx={{ color: "black", fontSize: 40 }} />
+          </IconButton>
+        </div>
 
         {props.save === false ? (
-          <div className = "bookmark_icon">
-            <IconButton  size="large" onClick={() =>saveArticle(props)} >
-              <BookmarkBorderIcon  sx = {{color : 'black',fontSize:40}} />
+          <div className="bookmark_icon">
+            <IconButton size="large" onClick={() => saveArticle(props)}>
+              <BookmarkBorderIcon sx={{ color: "black", fontSize: 40 }} />
             </IconButton>
           </div>
         ) : (
-          <div className = "bookmark_icon"></div>
+          <div className="bookmark_icon"></div>
         )}
-             
       </div>
     </Card>
   );

@@ -4,7 +4,9 @@ const path = require('path');
 // Uploading a photo to user Schema
 
 exports.photoUpload = async (req, res, next) => {
+  console.log(req);
   if (req.isAuthenticated()) {
+    console.log('hello');
     const userId = req.user.id;
     try {
       console.log(req.files);
@@ -119,7 +121,7 @@ exports.getUserDetails = async (req, res, next) => {
       });
     }
   } else {
-    console.log('log out');
+    // console.log("log out");
     res.send({ status: 'not login' });
   }
 };

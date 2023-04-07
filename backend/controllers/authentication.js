@@ -11,12 +11,12 @@ exports.SignUpPostRequest = async (req, res, next) => {
     //checking for email if alredy registered or not
     const olduserWithUserName = await userinfo.findOne({ username });
     if (olduserWithMail) {
-      // console.log("user")
-      return res.json({ error: 'email alredy registered' });
+      console.log('user');
+      return res.send({ error: 'email alredy registered' });
     }
     if (olduserWithUserName) {
       // console.log("user")
-      return res.json({ error: 'username alredy registered' });
+      return res.send({ error: 'username alredy registered' });
     }
 
     userinfo.register(

@@ -5,10 +5,11 @@ import usersolid from "../png&svg/user-solid.svg";
 import metalogo from "../png&svg/meta.png";
 import googlelogo from "../png&svg/google.png";
 import "../cssfiles/login.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 function Login() {
+  const location = useLocation();
   const navigate = useNavigate();
   //json object for storing email,password and username when changed
   const [userExist, setUserExist] = useState(0);
@@ -58,6 +59,14 @@ function Login() {
         console.log(res.data);
         if (res.data.status === "ok") {
           setUserExist(1);
+          if (
+            location.state != null &&
+            location.state.url === "/user/article"
+          ) {
+            return navigate(`/user/article/${location.state.article_data}`, {
+              state: { article_data: location.state.article_data },
+            });
+          }
           navigate("/user", { state: { username: username } });
         } else {
           setUserExist(2);
