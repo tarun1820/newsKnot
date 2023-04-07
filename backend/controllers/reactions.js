@@ -2,40 +2,40 @@ const reactionInfo = require('../models/reactions');
 const userinfo = require('../models/user');
 
 exports.getReactions = async (req, res, next) => {
-if (req.isAuthenticated()) {
-  try {
-    const item = await reactionInfo.find({ title: req.params.title });
-    if (item.length === 0) {
-      return res.status(400).json({
+  if (req.isAuthenticated()) {
+    try {
+      const item = await reactionInfo.find({ title: req.params.title });
+      if (item.length === 0) {
+        return res.status(200).json({
+          success: false,
+          error_id: 0,
+          message: 'The article with title not found',
+        });
+      }
+      item_liked_users = item[0].liked_users;
+      let isLiked = false;
+      if (item_liked_users.indexOf(req.user.username) !== -1) {
+        isLiked = true;
+      } else {
+        isLiked = false;
+      }
+      res.status(200).json({
+        success: true,
+        message: 'successFull get Request',
+        likes: item[0].likes,
+        liked: isLiked,
+      });
+    } catch (err) {
+      res.status(408).json({
         success: false,
-        error_id: 0,
-        message: 'The article with title not found',
+        error_id: 1,
+        message: err.message,
       });
     }
-    item_liked_users = item[0].liked_users;
-    let isLiked = false;
-    if (item_liked_users.indexOf(req.user.username) !== -1) {
-      isLiked = true;
-    } else {
-      isLiked = false;
-    }
-    res.status(200).json({
-      success: true,
-      message: 'successFull get Request',
-      likes: item[0].likes,
-      liked: isLiked,
-    });
-  } catch (err) {
-    res.status(408).json({
-      success: false,
-      error_id: 1,
-      message: err.message,
-    });
+  } else {
+    console.log('log out');
+    res.send({ status: 'not login' });
   }
-} else {
-  console.log('log out');
-  res.send({ status: 'not login' });
-}
 };
 
 exports.putReactions = async (req, res, next) => {
@@ -44,11 +44,9 @@ exports.putReactions = async (req, res, next) => {
     let isLiked = true;
     console.log('hello');
     try {
-      console.log('hello Inside Try');
       const articleReactions = await reactionInfo.find({
         title: req.params.title,
       });
-      console.log('hello After database Query');
       if (articleReactions.length !== 0) {
         let liked_users_data = articleReactions[0].liked_users;
         let presentFlag = 0;
@@ -68,7 +66,6 @@ exports.putReactions = async (req, res, next) => {
                 user_details.liked.splice(i, 1);
               }
               console.log(req.params.title);
-              console.log('Hello in Another Try');
             }
             // user_details.liked.splice(
             //   user_details.liked.indexOf(req.params.title),

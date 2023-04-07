@@ -74,6 +74,7 @@ function NewsCardItem(props) {
             }
           })
           .catch((err) => {
+            console.log(err)
             console.log(err.message)
           });
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -7,6 +7,7 @@ exports.photoUpload = async (req, res, next) => {
   if (req.isAuthenticated()) {
     const userId = req.user.id;
     try {
+      console.log(req.files);
       if (!req.files) {
         return res.status(403).json({
           success: false,
@@ -14,8 +15,7 @@ exports.photoUpload = async (req, res, next) => {
         });
       }
 
-      const file = req.files.file;
-      console.log(file);
+      const file = req.files[0];
 
       // Make sure that file is a photo
 
@@ -25,7 +25,6 @@ exports.photoUpload = async (req, res, next) => {
           message: `Please upload an image file`,
         });
       }
-
       // Check file size
 
       if (file.size > process.env.MAX_FILE_UPLOAD) {
@@ -34,9 +33,10 @@ exports.photoUpload = async (req, res, next) => {
           message: `Please upload the file less than ${process.env.MAX_FILE_UPLOAD}`,
         });
       }
+
       // Create custom fileName
 
-      file.name = `photo_${userID}${path.parse(file.name).ext}`;
+      file.name = `photo_${userId}${path.parse(file.name).ext}`;
       file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async (err) => {
         if (err) {
           console.log(err);
@@ -45,7 +45,6 @@ exports.photoUpload = async (req, res, next) => {
             message: `Problem with file Upload`,
           });
         }
-
         const user = await userinfo.findByIdAndUpdate(userId, {
           profilePhoto: file.name,
         });
@@ -68,6 +67,32 @@ exports.photoUpload = async (req, res, next) => {
         message: 'database fetching failed',
       });
     }
+  }
+};
+
+exports.getPhoto = async (req, res, next) => {
+  if (req.isAuthenticated()) {
+    const userId = req.user.id;
+    try {
+      const userDetails = await userinfo.findById(userId);
+      if (!userDetails) {
+        return res.status(402).json({
+          success: false,
+          message:
+            'Some weird error already login , so this should not come while getting user Details',
+        });
+      }
+
+      res.status(200).json({});
+    } catch {
+      res.status(400).json({
+        success: false,
+        message: 'database fetching failed',
+      });
+    }
+  } else {
+    console.log('Logged Out');
+    res.send({ status: 'not login' });
   }
 };
 

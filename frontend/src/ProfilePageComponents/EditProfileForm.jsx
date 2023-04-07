@@ -63,6 +63,8 @@ function EditForm(props){
         })
     },[]);
 
+    useEffect()
+
     function handleChange(e){
         setDetails((prevItem)=>{
             return{
@@ -103,22 +105,24 @@ function EditForm(props){
     function handlePhotoChange(e){
         console.log(e);
         if(e.target.files[0].type.startsWith("image")){
-            setPhoto(1);
+            const files = {...e.target.files}
+            
             // Post to backend
             const options = {
                 withCredentials: true,
-                headers: { "content-type": "application/json" },
+                headers: { "Content-Type": "multipart/form-data" ,
+                "Access-Control-Allow-Origin": "*"},
               };
-
-            let file = e.target.files[0]
-            axios.post("http://localhost:5000/user/profile/edit/photo" , file , options)
+            axios.post("http://localhost:5000/user/profile/edit/photo" , files , options)
             .then(res => {
                 console.log(res);
                 console.log("Hello World");
             })
             .catch(err => {
+                console.log(err);
                 console.log(err.message)
             })
+            setPhoto(1);
         }else{
             setPhoto(0);
         }
