@@ -1,5 +1,5 @@
-const userinfo = require('../models/user');
-const passport = require('passport');
+const userinfo = require("../models/user");
+const passport = require("passport");
 
 // SignUpPostRequest
 // Route  '/signup'
@@ -11,32 +11,36 @@ exports.SignUpPostRequest = async (req, res, next) => {
     //checking for email if alredy registered or not
     const olduserWithUserName = await userinfo.findOne({ username });
     if (olduserWithMail) {
-      console.log('user');
-      return res.send({ error: 'email alredy registered' });
+      console.log("user");
+      return res.send({ error: "email alredy registered" });
     }
     if (olduserWithUserName) {
       // console.log("user")
-      return res.send({ error: 'username alredy registered' });
+      return res.send({ error: "username alredy registered" });
     }
 
     userinfo.register(
-      { username: req.body.username, email: email },
+      {
+        username: req.body.username,
+        email: email,
+        latent_features: [25, 25, 25, 25, 100],
+      },
       password,
       (err, user) => {
         if (err) {
           console.log(err);
           // res.("/login")
         } else {
-          passport.authenticate('local')(req, res, () => {
+          passport.authenticate("local")(req, res, () => {
             //  req.session.save();
-            res.send({ status: 'ok' });
+            res.send({ status: "ok" });
           });
         }
       }
     );
   } catch (err) {
     console.log(err);
-    res.send({ status: 'not ok' });
+    res.send({ status: "not ok" });
   }
 };
 
@@ -50,19 +54,19 @@ exports.LoginPostRequest = async (req, res, next) => {
     password,
   });
 
-  passport.authenticate('local', function (err, newuser, info) {
+  passport.authenticate("local", function (err, newuser, info) {
     if (err) {
       return res.status(401).json(err);
     }
     if (!newuser) {
-      return res.send({ status: 'Unauth' });
+      return res.send({ status: "Unauth" });
     }
 
     req.logIn(newuser, function (err) {
       if (err) {
         return next(err);
       }
-      return res.send({ status: 'ok' });
+      return res.send({ status: "ok" });
     });
   })(req, res, next);
 };
@@ -75,6 +79,6 @@ exports.LogoutGetRequest = async (req, res, next) => {
     if (err) {
       return next(err);
     }
-    res.send({ status: 'logout' });
+    res.send({ status: "logout" });
   });
 };
