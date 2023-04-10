@@ -1,25 +1,21 @@
-const NewsAPI = require("newsapi");
-const newsapi = new NewsAPI(process.env.API_KEY2);
-const userinfo = require("../models/user");
+const NewsAPI = require('newsapi');
+const newsapi = new NewsAPI(process.env.API_KEY3);
+const userinfo = require('../models/user');
 exports.PostNewsArticlesFromAPI = async (req, res, next) => {
   if (req.body.category === null) {
     // console.log("null");
 
     const username = req.user.username;
-    // const email = req.user.email;
-    // console.log("username=", req.user.username);
+
     const userdata = await userinfo.findOne({ username });
-    // console.log(userdata);
-    // const [sport_art, health_art, tech_art, entertain_art] =
-    //   userdata.latent_features;
-    // console.log("sports=", sport_art);
+
     const prop_vec = userdata.latent_features;
     // console.log(userdata);
     let sports_list = await newsapi.v2
       .topHeadlines({
-        category: "sports",
-        country: "in",
-        pageSize: (prop_vec[0] / prop_vec[prop_vec.length - 1]) * 20,
+        category: 'sports',
+        country: 'in',
+        pageSize: 20,
       })
       .then((response) => {
         return response;
@@ -29,9 +25,9 @@ exports.PostNewsArticlesFromAPI = async (req, res, next) => {
       });
     let health_list = await newsapi.v2
       .topHeadlines({
-        category: "health",
-        country: "in",
-        pageSize: (prop_vec[1] / prop_vec[prop_vec.length - 1]) * 20,
+        category: 'health',
+        country: 'in',
+        pageSize: 20,
       })
       .then((response) => {
         return response;
@@ -42,9 +38,9 @@ exports.PostNewsArticlesFromAPI = async (req, res, next) => {
 
     let tech_list = await newsapi.v2
       .topHeadlines({
-        category: "technology",
-        country: "in",
-        pageSize: (prop_vec[2] / prop_vec[prop_vec.length - 1]) * 20,
+        category: 'technology',
+        country: 'in',
+        pageSize: 20,
       })
       .then((response) => {
         return response;
@@ -55,9 +51,9 @@ exports.PostNewsArticlesFromAPI = async (req, res, next) => {
 
     let entertainment_list = await newsapi.v2
       .topHeadlines({
-        category: "entertainment",
-        country: "in",
-        pageSize: (prop_vec[3] / prop_vec[prop_vec.length - 1]) * 20,
+        category: 'entertainment',
+        country: 'in',
+        pageSize: 20,
       })
       .then((response) => {
         return response;
@@ -66,27 +62,26 @@ exports.PostNewsArticlesFromAPI = async (req, res, next) => {
         return err.message;
       });
 
-    // console.log("sports list", sports_list.articles);
     // console.log("entertin=", entertainment_list);
     sports_list = sports_list.articles.map((single_article) => {
-      single_article["category"] = "sports";
-      single_article["category_id"] = 0;
+      single_article['category'] = 'sports';
+      single_article['category_id'] = 0;
       // console.log(single_article);
       return single_article;
     });
     tech_list = tech_list.articles.map((single_article) => {
-      single_article["category"] = "tech";
-      single_article["category_id"] = 1;
+      single_article['category'] = 'tech';
+      single_article['category_id'] = 1;
       return single_article;
     });
     health_list = health_list.articles.map((single_article) => {
-      single_article["category"] = "health";
-      single_article["category_id"] = 2;
+      single_article['category'] = 'health';
+      single_article['category_id'] = 2;
       return single_article;
     });
     entertainment_list = entertainment_list.articles.map((single_article) => {
-      single_article["category"] = "entertainment";
-      single_article["category_id"] = 3;
+      single_article['category'] = 'entertainment';
+      single_article['category_id'] = 3;
       return single_article;
     });
     // console.log(sports_list);
@@ -110,8 +105,8 @@ exports.PostNewsArticlesFromAPI = async (req, res, next) => {
   // console.log(category)
   newsapi.v2
     .topHeadlines({
-      category: category || "sports",
-      country: req.body.country || "in",
+      category: category || 'sports',
+      country: req.body.country || 'in',
       pageSize: 20,
     })
     .then((response) => {
@@ -127,6 +122,6 @@ exports.GetNewsArticles = (req, res, next) => {
     // console.log(req.session.);
     res.send(req.session.passport.user);
   } else {
-    res.send({ status: "not login" });
+    res.send({ status: 'not login' });
   }
 };

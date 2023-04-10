@@ -47,10 +47,13 @@
 
 
 .article_bottom{
+    margin:auto;
     display:flex;
+    width:1000px;
     flex-direction:row;
     justify-content:space-between;
     align-items:center;
+    transition: all 0.5s
 }
 
 
@@ -63,7 +66,7 @@
     width:auto;    
     height:auto;
     padding: 3px 6px 3px 6px;
-    background: #FFFFFF;
+    background: #ECF2FF;
     margin-left:20px;
 }
 
