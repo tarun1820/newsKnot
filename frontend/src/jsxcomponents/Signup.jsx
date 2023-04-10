@@ -161,7 +161,9 @@ function Signup() {
         </div>
         <p className="signup-using">Or Sign Up using</p>
         <div id="sign-up-icons">
-          <img alt="" className="s-icons" src={googlelogo} />
+          <a href="http://localhost:5000/auth/google">
+            <img alt="" className="s-icons" src={googlelogo} />
+          </a>
           <img
             alt=""
             className="s-icons"

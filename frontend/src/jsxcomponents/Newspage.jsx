@@ -13,7 +13,8 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
 import Tab from "@mui/joy/Tab";
-
+import Dlobu from "../StandardComponents/pngs/Dlobu.gif";
+import { set } from "mongoose";
 const theme = createTheme({
   typography: {
     allVariants: {
@@ -58,19 +59,26 @@ function Newspage() {
   }, []);
 
   const [category, setcategory] = useState(null);
-
+  const [loder, setloader] = useState(true);
   const [topHeadlinesNews, setNews] = useState([]);
-
+  function sleep(time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+  }
   function topHeadlinesArticals() {
+    if (!username) {
+      return;
+    }
     const data = JSON.stringify({ category, username });
     const options = {
       withCredentials: true,
       headers: { "content-type": "application/json" },
     };
+    sleep(2000);
     axios
       .post("http://localhost:5000/user", data, options)
       .then((res) => {
         setNews(res.data);
+        setloader(false);
       })
       .catch((error) => {
         console.log(error);
@@ -81,7 +89,7 @@ function Newspage() {
     // console.log(name)
     setcategory(name);
   }
-  useEffect(topHeadlinesArticals, [category]);
+  useEffect(topHeadlinesArticals, [category, username]);
 
   return (
     <div>
@@ -117,28 +125,40 @@ function Newspage() {
               <Button
                 variant="text"
                 size="medium"
-                onClick={() => handleChange("sports")}
+                onClick={() => {
+                  handleChange("sports");
+                  setloader(true);
+                }}
               >
                 Sports
               </Button>
               <Button
                 variant="text"
                 size="medium"
-                onClick={() => handleChange("health")}
+                onClick={() => {
+                  handleChange("health");
+                  setloader(true);
+                }}
               >
                 Health
               </Button>
               <Button
                 variant="text"
                 size="medium"
-                onClick={() => handleChange("entertainment")}
+                onClick={() => {
+                  handleChange("entertainment");
+                  setloader(true);
+                }}
               >
                 Entertainment
               </Button>
               <Button
                 variant="text"
                 size="medium"
-                onClick={() => handleChange("technology")}
+                onClick={() => {
+                  handleChange("technology");
+                  setloader(true);
+                }}
               >
                 Technology
               </Button>
@@ -168,22 +188,28 @@ function Newspage() {
               </div> */}
             </div>
             <Line className="newspage_line" />
-            {topHeadlinesNews.map((article) => {
-              return (
-                <NewsCardItem
-                  username={username}
-                  key={Math.random()}
-                  save={false}
-                  cardarticle={article}
-                  likes={0}
-                  dislikes={0}
-                />
-              );
-            })}
+
+            {loder === true ? (
+              <img src={Dlobu} alt="loader"></img>
+            ) : (
+              topHeadlinesNews.map((article) => {
+                return (
+                  <NewsCardItem
+                    username={username}
+                    key={Math.random()}
+                    save={false}
+                    cardarticle={article}
+                    likes={0}
+                    dislikes={0}
+                  />
+                );
+              })
+            )}
           </div>
         ) : (
           <div>
             <h1>please wait</h1>
+            <img src={Dlobu} alt="loder"></img>
             {/* <img src="load" alt="loader"></img> */}
           </div>
         )}

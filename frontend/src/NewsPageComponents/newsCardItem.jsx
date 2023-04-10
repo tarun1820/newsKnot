@@ -44,9 +44,23 @@ function NewsCardItem(props) {
   const navigate = useNavigate();
   useEffect(() => {
     if (clickarticle === true) {
-      const aricles_info = encodeURIComponent(
-        JSON.stringify(props.cardarticle)
-      );
+      const data = {
+        category: props.cardarticle.category,
+        category_id: props.cardarticle.category_id,
+        username: username,
+      };
+      const articledata = JSON.stringify(props.cardarticle);
+      const aricles_info = encodeURIComponent(articledata);
+      console.log("articledata.category_id,==", articledata);
+
+      axios
+        .put("http://localhost:5000/user", data, { withCredentials: true })
+        .then((res) => {
+          console.log(res.status);
+        })
+        .then((err) => {
+          console.log(err);
+        });
       console.log(props.cardarticle);
       navigate(`/user/article/${aricles_info}`, {
         state: { article_data: props.cardarticle, username: username },
@@ -54,31 +68,31 @@ function NewsCardItem(props) {
     }
   }, [clickarticle]);
 
-  useEffect( () => {
-        axios
-          .get(`http://localhost:5000/user/${Title}`, { withCredentials: true })
-          .then((res) => {
-            if (res.data.success === true) {
-              if(res.data.liked === true){
-                setIcon(1);
-              }else{
-                setIcon(0);
-              }
-              setReactions(() => {
-                return res.data.likes;
-              });
-            } else {
-              if (res.data.error_id === 0) {
-                setReactions(() => {
-                  return 0;
-                });
-              }
-            }
-          })
-          .catch((err) => {
-            console.log(err)
-            console.log(err.message)
+  useEffect(() => {
+    axios
+      .get(`http://localhost:5000/user/${Title}`, { withCredentials: true })
+      .then((res) => {
+        if (res.data.success === true) {
+          if (res.data.liked === true) {
+            setIcon(1);
+          } else {
+            setIcon(0);
+          }
+          setReactions(() => {
+            return res.data.likes;
           });
+        } else {
+          if (res.data.error_id === 0) {
+            setReactions(() => {
+              return 0;
+            });
+          }
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        console.log(err.message);
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
