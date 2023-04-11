@@ -1,5 +1,5 @@
 const NewsAPI = require('newsapi');
-const newsapi = new NewsAPI(process.env.API_KEY3);
+const newsapi = new NewsAPI(process.env.API_KEY1);
 const userinfo = require('../models/user');
 exports.PostNewsArticlesFromAPI = async (req, res, next) => {
   if (req.body.category === null) {

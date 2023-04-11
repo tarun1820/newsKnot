@@ -5,9 +5,6 @@ import "../cssfiles/News-Page/main_page.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import MyButton from "../StandardComponents/JsxFiles/button";
 import Line from "../StandardComponents/JsxFiles/line";
-import { arrows_square_plus } from "react-icons-kit/linea/arrows_square_plus";
-import { user } from "react-icons-kit/fa/user";
-import { Icon } from "react-icons-kit";
 import { Button } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Tabs from "@mui/joy/Tabs";
@@ -16,7 +13,10 @@ import Tab from "@mui/joy/Tab";
 import Tooltip from "@mui/material/Tooltip";
 import Fade from "@mui/material/Fade";
 import Dlobu from "../StandardComponents/pngs/Dlobu.gif";
-import { set } from "mongoose";
+import CircularProgress from '@mui/material/CircularProgress';
+import IconButton from "@mui/material/IconButton";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const theme = createTheme({
   typography: {
@@ -35,6 +35,10 @@ const theme = createTheme({
       main: "#000000",
       dark: "#ffffff",
     },
+    secondary:{
+      main: "#537FE7",
+      dark : "#537FE7",
+    }
   },
 });
 
@@ -60,7 +64,7 @@ function Newspage() {
   }, []);
 
   const [category, setcategory] = useState(null);
-  const [loder, setloader] = useState(true);
+  const [loader, setloader] = useState(true);
   const [topHeadlinesNews, setNews] = useState([]);
   function sleep(time) {
     return new Promise((resolve) => setTimeout(resolve, time));
@@ -100,36 +104,26 @@ function Newspage() {
             <div className="navbar_newspage_header">
               <div className="proName_newspage">NewsKnot</div>
               <div className="navbar_newspage_btns">
-                {/* Should change routes */}
-                <div className="newspage__Icons">
-                  <div
-                    className="navbar_newspage_btn_icon"
-                    onClick={() => navigate("/saved")}
-                  >
                     <Tooltip
                       TransitionComponent={Fade}
                       TransitionProps={{ timeout: 600 }}
-                      title="Add Like"
+                      title="View Profile"
                       arrow
                     >
-                      <Icon size={32} icon={arrows_square_plus} />
+                      <IconButton onClick = {() => navigate("/user/profile")}>
+                        <AccountCircleIcon sx={{  color : 'black' , fontSize: 40 }} />
+                      </IconButton>
                     </Tooltip>
-                  </div>
-                  <div
-                    className="navbar_newspage_btn_icon"
-                    onClick={() => navigate("/user/profile")}
-                  >
                     <Tooltip
                       TransitionComponent={Fade}
                       TransitionProps={{ timeout: 600 }}
-                      title="Add Like"
+                      title="Write A Blog"
                       arrow
                     >
-                      <Icon size={32} icon={user} />
+                      <IconButton onClick = {() => navigate("/user/profile")}>
+                        < AddCircleIcon sx={{ color : 'gold' , fontSize: 40 }} />
+                      </IconButton>
                     </Tooltip>
-                  </div>
-                </div>
-                {/* <Button className = "navbar_newspage_btn" link = "/saved"  > Saved</Button> */}
                 <div className="navbar_newspage_btn">
                   <MyButton link="/logout"> Logout </MyButton>
                 </div>
@@ -177,35 +171,24 @@ function Newspage() {
               >
                 Technology
               </Button>
-              {/* <div
-              className="navbar_newspage_item"
-              onClick={() => handleChange("sports")}
-            >
-              Sports
-            </div>
-            <div
-              className="navbar_newspage_item"
-              onClick={() => handleChange("health")}
-            >
-              Health
-            </div>
-            <div
-              className="navbar_newspage_item"
-              onClick={() => handleChange("entertainment")}
-            >
-              Entertainment
-            </div>
-            <div
-              className="navbar_newspage_item"
-              onClick={() => handleChange("technology")}
-            >
-              Technology
-              </div> */}
             </div>
             <Line className="newspage_line" />
 
-            {loder === true ? (
-              <img src={Dlobu} alt="loader"></img>
+            {loader === true ? (
+              <div className="newspage_Progress">
+              <CircularProgress
+              variant="indeterminate"
+              color = "secondary"
+              style={{
+                width: "150px",
+                height: "150px",                
+                borderRadius: "100%",
+                boxShadow: "inset 0 0 0px 15px #ECF2FF",
+                backgroundColor: "transparent",
+              }}
+              thickness={5}
+            />
+            </div>
             ) : (
               topHeadlinesNews.map((article) => {
                 return (
@@ -222,10 +205,19 @@ function Newspage() {
             )}
           </div>
         ) : (
-          <div>
-            <h1>please wait</h1>
-            <img src={Dlobu} alt="loder"></img>
-            {/* <img src="load" alt="loader"></img> */}
+          <div className="newspage_Progress">
+            <CircularProgress
+            variant="indeterminate"
+            color = "secondary"
+            style={{
+              width: "150px",
+              height: "150px",
+              borderRadius: "100%",
+              boxShadow: "inset 0 0 0px 15px #ECF2FF",
+              backgroundColor: "transparent",
+            }}
+            thickness={5}
+            />
           </div>
         )}
       </ThemeProvider>

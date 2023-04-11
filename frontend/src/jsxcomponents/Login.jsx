@@ -86,7 +86,7 @@ function Login() {
             <Snackbar anchorOrigin={{ vertical:'top' , horizontal:'center' }} open = {open} autoHideDuration = {3000}  onClose = {handleClose} sx= {{width:1}}>
                 <Alert onClose={handleClose} severity="error">{message}</Alert>
             </Snackbar>
-        </div>
+            </div>
       <h1 id="pro-Name">NewsKnot</h1>
       <div id="LoginBox">
         <h1 className="Login-heading">Login</h1>
