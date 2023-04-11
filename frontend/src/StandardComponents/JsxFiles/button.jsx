@@ -10,27 +10,19 @@ const theme = createTheme({
         textTransform: "none",
       },
       button: {
-        fontFamily: "'Montserrat', sans-serif",
         textTransform: "none",
         fontSize: 20,  
       }
     },
-    palette: {
-      primary : {
-        main : "#000000",
-        dark : "#ffffff",
-      }
-    }
+    
   });
 
 function MyButton(props){
     const navigate = useNavigate();
-
-    var classes= "button__mstyle " + props.className
     return (
         <div>
         <ThemeProvider theme={theme}>
-        <Button variant = "outlined" onClick={()=>navigate(props.link)} sx={{borderRadius:2}} className= {classes}>
+        <Button variant = "contained" sx= {{ fontFamily:'Poppins',borderRadius:2 , width:200 , py:1 , fontWeight:'bold'}}  onClick={()=>navigate(props.link)}    disableElevation>
             {props.children}
         </Button>
         </ThemeProvider>

@@ -13,8 +13,11 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
 import Tab from "@mui/joy/Tab";
+import Tooltip from "@mui/material/Tooltip";
+import Fade from "@mui/material/Fade";
 import Dlobu from "../StandardComponents/pngs/Dlobu.gif";
 import { set } from "mongoose";
+
 const theme = createTheme({
   typography: {
     allVariants: {
@@ -36,8 +39,6 @@ const theme = createTheme({
 });
 
 function Newspage() {
-  const [index, setIndex] = useState(0);
-
   const [userfound, setuserfound] = useState(0);
 
   const navigate = useNavigate();
@@ -105,13 +106,27 @@ function Newspage() {
                     className="navbar_newspage_btn_icon"
                     onClick={() => navigate("/saved")}
                   >
-                    <Icon size={32} icon={arrows_square_plus} />
+                    <Tooltip
+                      TransitionComponent={Fade}
+                      TransitionProps={{ timeout: 600 }}
+                      title="Add Like"
+                      arrow
+                    >
+                      <Icon size={32} icon={arrows_square_plus} />
+                    </Tooltip>
                   </div>
                   <div
                     className="navbar_newspage_btn_icon"
                     onClick={() => navigate("/user/profile")}
                   >
-                    <Icon size={32} icon={user} />
+                    <Tooltip
+                      TransitionComponent={Fade}
+                      TransitionProps={{ timeout: 600 }}
+                      title="Add Like"
+                      arrow
+                    >
+                      <Icon size={32} icon={user} />
+                    </Tooltip>
                   </div>
                 </div>
                 {/* <Button className = "navbar_newspage_btn" link = "/saved"  > Saved</Button> */}

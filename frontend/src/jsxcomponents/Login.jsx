@@ -1,5 +1,4 @@
-// import envelopeopen from "./envelope-open-regular.svg";
-// import eveloponensolid from "./envelope-open-solid.svg";
+import * as React from 'react';
 import locksolid from "../png&svg/lock-solid.svg";
 import usersolid from "../png&svg/user-solid.svg";
 import metalogo from "../png&svg/meta.png";
@@ -8,23 +7,36 @@ import "../cssfiles/login.css";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
+
 function Login() {
   const location = useLocation();
   const navigate = useNavigate();
   //json object for storing email,password and username when changed
-  const [userExist, setUserExist] = useState(0);
+  // const [userExist, setUserExist] = useState(0);
+  const [message , setMessage] =useState("");
+  const [open,setOpen] = useState(false);
+
+  const handleClose = (event , reason) => {
+      if(reason === 'clickaway'){
+          return;
+      }
+      setOpen(false);
+  };
 
   const [loginCredtials, setLoginCreditials] = useState({
     username: "",
     password: "",
   });
 
-  //funtion to handle change state when chages are made in input fields tags
   function handleChange(event) {
-    // console.log(loginCredtials);
     const { name, value } = event.target;
-    // console.log(event.target);
-    // const value=event.target.value;
     setLoginCreditials((prevItem) => {
       return {
         ...prevItem,
@@ -32,33 +44,22 @@ function Login() {
       };
     });
   }
-  let banner;
-  //function to handle submit button when it is clicked
+
+
   function handleSubmit(event) {
     const { username, password } = loginCredtials;
     const data = JSON.stringify({ username, password });
     console.log("usename==", username);
+    setOpen(true);
     const options = {
       withCredentials: true,
       headers: { "content-type": "application/json" },
     };
-
-    //axios post reqest for sign in
     axios
       .post("http://localhost:5000/login", data, options)
       .then((res) => {
-        // if(res.data.error==="incorrect password"){
-        //     setUserExist(2);
-
-        // }else if(res.data.status==="user not registered"){
-        //     setUserExist(3);
-        // }else{
-        //     setUserExist(1);
-        // }
-        console.log("hello");
-        console.log(res.data);
         if (res.data.status === "ok") {
-          setUserExist(1);
+          setMessage("Login Successfull")
           if (
             location.state != null &&
             location.state.url === "/user/article"
@@ -69,43 +70,26 @@ function Login() {
           }
           navigate("/user", { state: { username: username } });
         } else {
-          setUserExist(2);
+          setMessage("Username or Password is Incorrect")
         }
-        // console.log(res.data)
       })
-      // .then((data)=>console.log(data))
       .catch(
         (err) => console.log(err)
-        // console.log("some thing went wrong");
       );
-    // axios.post("/login", data, options);
-
     event.preventDefault();
-    // console.log(username,password);
-  }
-
-  var classNameForuserExist = "";
-
-  if (userExist === 0) {
-    classNameForuserExist = "login_user_exists__not";
-  } else {
-    classNameForuserExist = "login_user_exists";
-    if (userExist === 1) {
-      banner = "Successfully logged in";
-    } else if (userExist === 2) {
-      banner = "Username or Password is Incorrect";
-    } else {
-      banner = "User not Registered yet";
-    }
   }
 
   // console.log(banner);
   return (
     <div id="login-Container">
+            <div className = "">
+            <Snackbar anchorOrigin={{ vertical:'top' , horizontal:'center' }} open = {open} autoHideDuration = {3000}  onClose = {handleClose} sx= {{width:1}}>
+                <Alert onClose={handleClose} severity="error">{message}</Alert>
+            </Snackbar>
+        </div>
       <h1 id="pro-Name">NewsKnot</h1>
       <div id="LoginBox">
         <h1 className="Login-heading">Login</h1>
-        <p className={classNameForuserExist}>{banner}</p>
         <div id="Login-Form">
           <form
             onSubmit={handleSubmit}
@@ -151,7 +135,7 @@ function Login() {
             <label className="label-form-item" id="forget-passcode">
               Forgot passcode?
             </label>
-            <button
+            <button 
               type="submit"
               className="login-page-button"
               id="login-button"
