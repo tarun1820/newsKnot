@@ -43,8 +43,9 @@ function EditForm(props) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/user/profile/edit", { withCredentials: true })
+      .get("http://localhost:5000/user/profile", { withCredentials: true })
       .then((res) => {
+        console.log("res=",res)
         setDetails(() => {
           return {
             FirstName: res.data.details.FirstName,
@@ -63,7 +64,7 @@ function EditForm(props) {
       .catch((err) => {
         console.log(err.message);
       });
-  }, []);
+  }, [photoName]);
 
   function handleChange(e) {
     setDetails((prevItem) => {
@@ -111,6 +112,10 @@ function EditForm(props) {
               };
             axios.post("http://localhost:5000/user/profile/edit/photo" , files , options)
             .then(res => {
+              console.log(res);
+              // res=JSON.parse(res)
+              setPhotoName(()=>{return res.data.data})
+              console.log(photoName);
             })
             .catch(err => {
                 console.log(err);
@@ -118,17 +123,7 @@ function EditForm(props) {
             })
             setPhoto(1);
 
-            axios.get("http://localhost:5000/user/profile/edit/photo" , { withCredentials: true} )
-            .then((res) => {
-              console.log(res);
-              setPhotoName(()=>{return res.data.photo})
-              console.log("This is executed")
-              console.log(res.data.photo);
-            })
-            .catch(err => {
-              console.log(err);
-              console.log(err.message);
-            })
+            
         }else{
             setPhoto(0);
         }
@@ -258,7 +253,7 @@ function EditForm(props) {
             </div>
           </div>
           <div>
-            <img key={Date.now()} className="EditProfile_image" src={`http://localhost:5000/uploads/${photoName}`} alt="NI" />
+            <img  className="EditProfile_image" src={`http://localhost:5000/uploads/${photoName}`} alt="NI" />
             <button onClick={openFileLocater}>ImageFileUpload</button>
             <input
               className="invisible-ele"
