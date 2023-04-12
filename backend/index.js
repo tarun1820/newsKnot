@@ -72,22 +72,26 @@ app.get('/user/profile', async (req, res) => {
   if (req.isAuthenticated()) {
     const userId = req.user.id;
     try {
-      const userDetails = await userinfo.findById(userId);
-      if (!userDetails) {
-        return res.status(402).json({
-          success: false,
-          message:
-            'Some weird error already login , so this should not come while getting user Details',
-        });
-      }
+      const user = await userinfo.findById(userId);
+      var data = {
+        FirstName: user.FirstName,
+        LastName: user.LastName,
+        Bio: user.Bio,
+        Org: user.Org,
+        link1: user.links[0],
+        link2: user.links[1],
+        link3: user.links[2],
+        link4: user.links[3],
+        photo: user.profilePhoto,
+      };
       res.status(200).json({
-        username: userDetails.username,
-        email: userDetails.email,
+        success: true,
+        details: data,
       });
     } catch {
       res.status(400).json({
         success: false,
-        message: 'database fetching failed',
+        message: 'Database operation failed',
       });
     }
   } else {

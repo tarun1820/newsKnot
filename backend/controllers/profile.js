@@ -35,7 +35,9 @@ exports.photoUpload = async (req, res, next) => {
 
       // Create custom fileName
 
-      file.name = `photo_${userId}${path.parse(file.name).ext}`;
+      file.name = `photo_${userId}_${Date.now().toString()}${
+        path.parse(file.name).ext
+      }`;
       file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async (err) => {
         if (err) {
           console.log(err);
@@ -67,64 +69,6 @@ exports.photoUpload = async (req, res, next) => {
     }
   }
 };
-
-exports.getPhoto = async (req, res, next) => {
-  if (req.isAuthenticated()) {
-    const userId = req.user.id;
-    try {
-      const userDetails = await userinfo.findById(userId);
-      if (!userDetails) {
-        return res.status(402).json({
-          success: false,
-          message:
-            'Some weird error already login , so this should not come while getting user Details',
-        });
-      }
-
-      res.status(200).json({
-        success: true,
-        photo: userDetails.profilePhoto,
-        message: 'Photo sent form backend successfully',
-      });
-    } catch {
-      res.status(400).json({
-        success: false,
-        message: 'database fetching failed',
-      });
-    }
-  } else {
-    console.log('Logged Out');
-    res.send({ status: 'not login' });
-  }
-};
-
-// exports.getUserDetails = async (req, res, next) => {
-//   if (req.isAuthenticated()) {
-//     const userId = req.user.id;
-//     try {
-//       const userDetails = await userinfo.findById(userId);
-//       if (!userDetails) {
-//         return res.status(402).json({
-//           success: false,
-//           message:
-//             'Some weird error already login , so this should not come while getting user Details',
-//         });
-//       }
-//       res.status(200).json({
-//         username: userDetails.username,
-//         email: userDetails.email,
-//       });
-//     } catch {
-//       res.status(400).json({
-//         success: false,
-//         message: 'database fetching failed',
-//       });
-//     }
-//   } else {
-//     // console.log("log out");
-//     res.send({ status: 'not login' });
-//   }
-// };
 
 exports.getSavedArticles = async (req, res, next) => {
   const userId = req.user.id;
