@@ -33,6 +33,7 @@ function Discussions(props) {
   const [Discussions, setDiscussions] = useState([]);
   const [message, setMessage] = useState("");
   const username = props.username;
+  const profile_pic = props.profile_pic;
   useEffect(() => {
     const fetchDisussions = () => {
       console.log(title);
@@ -67,7 +68,7 @@ function Discussions(props) {
   const sendMessage = () => {
     console.log("send mess usrname=", username);
     // console.log(message);
-    socket.emit("send_message", { message, username, title });
+    socket.emit("send_message", { message, username, title, profile_pic });
   };
 
   useEffect(() => {
@@ -75,7 +76,11 @@ function Discussions(props) {
       // console.log("receve  mess");
 
       setDiscussions((prevMessages) => [
-        { message: data.message, username: data.username },
+        {
+          message: data.message,
+          username: data.username,
+          profile_pic: data.profile_pic,
+        },
         ...prevMessages,
       ]);
     });
@@ -129,6 +134,11 @@ function Discussions(props) {
           <div className="article_other_comment">
             <Typography variant="p">{msg.username}</Typography>
             <Typography variant="p">{msg.message}</Typography>
+            <img
+              className="EditProfile_image"
+              src={`http://localhost:5000/uploads/${msg.profile_pic}`}
+              alt="NI"
+            />
             <Divider />
           </div>
         ))}

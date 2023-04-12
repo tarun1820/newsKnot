@@ -13,10 +13,10 @@ import Tab from "@mui/joy/Tab";
 import Tooltip from "@mui/material/Tooltip";
 import Fade from "@mui/material/Fade";
 import Dlobu from "../StandardComponents/pngs/Dlobu.gif";
-import CircularProgress from '@mui/material/CircularProgress';
+import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const theme = createTheme({
   typography: {
@@ -35,10 +35,10 @@ const theme = createTheme({
       main: "#000000",
       dark: "#ffffff",
     },
-    secondary:{
+    secondary: {
       main: "#537FE7",
-      dark : "#537FE7",
-    }
+      dark: "#537FE7",
+    },
   },
 });
 
@@ -48,6 +48,7 @@ function Newspage() {
   const navigate = useNavigate();
   const location = useLocation();
   const [username, setUsername] = useState("");
+  const [photoName, setPhotoName] = useState("random.png");
   useEffect(() => {
     axios
       .get("http://localhost:5000/user", { withCredentials: true })
@@ -56,8 +57,10 @@ function Newspage() {
           setuserfound(1);
           navigate("/login");
         } else {
-          setUsername(res.data);
+          setUsername(res.data.username);
           setuserfound(2);
+          setPhotoName(res.data.profile_pic);
+          // add image here by creating profile pic state
         }
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -66,6 +69,7 @@ function Newspage() {
   const [category, setcategory] = useState(null);
   const [loader, setloader] = useState(true);
   const [topHeadlinesNews, setNews] = useState([]);
+
   function sleep(time) {
     return new Promise((resolve) => setTimeout(resolve, time));
   }
@@ -104,26 +108,31 @@ function Newspage() {
             <div className="navbar_newspage_header">
               <div className="proName_newspage">NewsKnot</div>
               <div className="navbar_newspage_btns">
-                    <Tooltip
-                      TransitionComponent={Fade}
-                      TransitionProps={{ timeout: 600 }}
-                      title="View Profile"
-                      arrow
-                    >
-                      <IconButton onClick = {() => navigate("/user/profile")}>
-                        <AccountCircleIcon sx={{  color : 'black' , fontSize: 40 }} />
-                      </IconButton>
-                    </Tooltip>
-                    <Tooltip
-                      TransitionComponent={Fade}
-                      TransitionProps={{ timeout: 600 }}
-                      title="Write A Blog"
-                      arrow
-                    >
-                      <IconButton onClick = {() => navigate("/user/profile")}>
-                        < AddCircleIcon sx={{ color : 'gold' , fontSize: 40 }} />
-                      </IconButton>
-                    </Tooltip>
+                <img
+                  className="EditProfile_image"
+                  src={`http://localhost:5000/uploads/${photoName}`}
+                  alt="NI"
+                />
+                <Tooltip
+                  TransitionComponent={Fade}
+                  TransitionProps={{ timeout: 600 }}
+                  title="View Profile"
+                  arrow
+                >
+                  <IconButton onClick={() => navigate("/user/profile")}>
+                    <AccountCircleIcon sx={{ color: "black", fontSize: 40 }} />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip
+                  TransitionComponent={Fade}
+                  TransitionProps={{ timeout: 600 }}
+                  title="Write A Blog"
+                  arrow
+                >
+                  <IconButton onClick={() => navigate("/user/profile")}>
+                    <AddCircleIcon sx={{ color: "gold", fontSize: 40 }} />
+                  </IconButton>
+                </Tooltip>
                 <div className="navbar_newspage_btn">
                   <MyButton link="/logout"> Logout </MyButton>
                 </div>
@@ -176,19 +185,19 @@ function Newspage() {
 
             {loader === true ? (
               <div className="newspage_Progress">
-              <CircularProgress
-              variant="indeterminate"
-              color = "secondary"
-              style={{
-                width: "150px",
-                height: "150px",                
-                borderRadius: "100%",
-                boxShadow: "inset 0 0 0px 15px #ECF2FF",
-                backgroundColor: "transparent",
-              }}
-              thickness={5}
-            />
-            </div>
+                <CircularProgress
+                  variant="indeterminate"
+                  color="secondary"
+                  style={{
+                    width: "150px",
+                    height: "150px",
+                    borderRadius: "100%",
+                    boxShadow: "inset 0 0 0px 15px #ECF2FF",
+                    backgroundColor: "transparent",
+                  }}
+                  thickness={5}
+                />
+              </div>
             ) : (
               topHeadlinesNews.map((article) => {
                 return (
@@ -207,16 +216,16 @@ function Newspage() {
         ) : (
           <div className="newspage_Progress">
             <CircularProgress
-            variant="indeterminate"
-            color = "secondary"
-            style={{
-              width: "150px",
-              height: "150px",
-              borderRadius: "100%",
-              boxShadow: "inset 0 0 0px 15px #ECF2FF",
-              backgroundColor: "transparent",
-            }}
-            thickness={5}
+              variant="indeterminate"
+              color="secondary"
+              style={{
+                width: "150px",
+                height: "150px",
+                borderRadius: "100%",
+                boxShadow: "inset 0 0 0px 15px #ECF2FF",
+                backgroundColor: "transparent",
+              }}
+              thickness={5}
             />
           </div>
         )}

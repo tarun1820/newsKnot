@@ -1,12 +1,12 @@
-const express = require('express');
+const express = require("express");
 
 const {
   PostNewsArticlesFromAPI,
-  GetNewsArticles,
-} = require('../controllers/newspage');
+  GetUserDetails,
+} = require("../controllers/newspage");
 
 const router = express.Router();
 
-router.route('/user').post(PostNewsArticlesFromAPI).get(GetNewsArticles);
+router.route("/user").post(PostNewsArticlesFromAPI).get(GetUserDetails);
 
 module.exports = router;

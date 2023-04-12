@@ -1,6 +1,6 @@
-const NewsAPI = require('newsapi');
-const newsapi = new NewsAPI(process.env.API_KEY1);
-const userinfo = require('../models/user');
+const NewsAPI = require("newsapi");
+const newsapi = new NewsAPI(process.env.API_KEY2);
+const userinfo = require("../models/user");
 exports.PostNewsArticlesFromAPI = async (req, res, next) => {
   if (req.body.category === null) {
     // console.log("null");
@@ -13,8 +13,8 @@ exports.PostNewsArticlesFromAPI = async (req, res, next) => {
     // console.log(userdata);
     let sports_list = await newsapi.v2
       .topHeadlines({
-        category: 'sports',
-        country: 'in',
+        category: "sports",
+        country: "in",
         pageSize: 20,
       })
       .then((response) => {
@@ -25,8 +25,8 @@ exports.PostNewsArticlesFromAPI = async (req, res, next) => {
       });
     let health_list = await newsapi.v2
       .topHeadlines({
-        category: 'health',
-        country: 'in',
+        category: "health",
+        country: "in",
         pageSize: 20,
       })
       .then((response) => {
@@ -38,8 +38,8 @@ exports.PostNewsArticlesFromAPI = async (req, res, next) => {
 
     let tech_list = await newsapi.v2
       .topHeadlines({
-        category: 'technology',
-        country: 'in',
+        category: "technology",
+        country: "in",
         pageSize: 20,
       })
       .then((response) => {
@@ -51,8 +51,8 @@ exports.PostNewsArticlesFromAPI = async (req, res, next) => {
 
     let entertainment_list = await newsapi.v2
       .topHeadlines({
-        category: 'entertainment',
-        country: 'in',
+        category: "entertainment",
+        country: "in",
         pageSize: 20,
       })
       .then((response) => {
@@ -63,25 +63,41 @@ exports.PostNewsArticlesFromAPI = async (req, res, next) => {
       });
 
     // console.log("entertin=", entertainment_list);
+    // const art = "sjkjjf % dffkjfk % %% jbdwfwf ??erefheroife";
+
+    // console.log(art.replaceAll("?", "-"));
     sports_list = sports_list.articles.map((single_article) => {
-      single_article['category'] = 'sports';
-      single_article['category_id'] = 0;
+      single_article.displayTitle = single_article.title;
+      single_article.title = single_article.title.replaceAll("?", " ");
+      single_article.title = single_article.title.replaceAll("%", " ");
+      single_article["category"] = "sports";
+      single_article["category_id"] = 0;
       // console.log(single_article);
       return single_article;
     });
     tech_list = tech_list.articles.map((single_article) => {
-      single_article['category'] = 'tech';
-      single_article['category_id'] = 1;
+      single_article.displayTitle = single_article.title;
+      single_article.title = single_article.title.replaceAll("?", " ");
+      single_article.title = single_article.title.replaceAll("%", " ");
+      single_article["category"] = "tech";
+      single_article["category_id"] = 1;
       return single_article;
     });
     health_list = health_list.articles.map((single_article) => {
-      single_article['category'] = 'health';
-      single_article['category_id'] = 2;
+      single_article.displayTitle = single_article.title;
+      single_article.title = single_article.title.replaceAll("?", " ");
+      single_article.title = single_article.title.replaceAll("%", " ");
+      single_article["category"] = "health";
+      single_article["category_id"] = 2;
       return single_article;
     });
     entertainment_list = entertainment_list.articles.map((single_article) => {
-      single_article['category'] = 'entertainment';
-      single_article['category_id'] = 3;
+      single_article.displayTitle = single_article.title;
+      single_article.title = single_article.title.replaceAll("?", " ");
+      single_article.title = single_article.title.replaceAll("%", " ");
+      // console.log(single_article);
+      single_article["category"] = "entertainment";
+      single_article["category_id"] = 3;
       return single_article;
     });
     // console.log(sports_list);
@@ -105,11 +121,28 @@ exports.PostNewsArticlesFromAPI = async (req, res, next) => {
   // console.log(category)
   newsapi.v2
     .topHeadlines({
-      category: category || 'sports',
-      country: req.body.country || 'in',
+      category: category,
+      country: req.body.country || "in",
       pageSize: 20,
     })
     .then((response) => {
+      const id = 0;
+      if (category === "technology") {
+        id = 1;
+      } else if (category === "health") {
+        id = 2;
+      } else if (category === "entertainment") {
+        id = 3;
+      }
+      cat_article = response.articles;
+      cat_article = cat_article.map((single_article) => {
+        single_article.displayTitle = single_article.title;
+        single_article.title = single_article.title.replaceAll("?", " ");
+        single_article.title = single_article.title.replaceAll("%", " ");
+        // console.log(single_article);
+        single_article["category"] = category;
+        single_article["category_id"] = id;
+      });
       res.send(response.articles);
     })
     .catch((err) => {
@@ -117,11 +150,13 @@ exports.PostNewsArticlesFromAPI = async (req, res, next) => {
     });
 };
 
-exports.GetNewsArticles = (req, res, next) => {
+exports.GetUserDetails = async (req, res, next) => {
   if (req.isAuthenticated()) {
     // console.log(req.session.);
-    res.send(req.session.passport.user);
+    const username = req.session.passport.user;
+    const userdata = await userinfo.findOne({ username });
+    res.send({ username: username, profile_pic: userdata.profilePhoto });
   } else {
-    res.send({ status: 'not login' });
+    res.send({ status: "not login" });
   }
 };
