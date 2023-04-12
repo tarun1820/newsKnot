@@ -8,6 +8,7 @@ const discussionSchema = new mongoose.Schema(
       unique: true,
     },
     list_of_message_and_user: [],
+    profilePhoto: { type: String, default: "random.png" },
   },
   {
     collection: "discussionsInfo",

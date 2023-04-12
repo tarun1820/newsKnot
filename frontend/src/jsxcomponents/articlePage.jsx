@@ -7,7 +7,35 @@ import Line from "../StandardComponents/JsxFiles/line";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import CircularProgress from "@mui/material/CircularProgress";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+
+const theme = createTheme({
+  typography: {
+    allVariants: {
+      fontFamily: "'Montserrat', sans-serif",
+      textTransform: "none",
+    },
+    button: {
+      fontFamily: "'Montserrat', sans-serif",
+      textTransform: "none",
+      fontSize: 20,
+    },
+  },
+  palette: {
+    primary: {
+      main: "#000000",
+      dark: "#ffffff",
+    },
+    secondary: {
+      main: "#537FE7",
+      dark: "#537FE7",
+    },
+  },
+});
+
 function ArticlePage(props) {
+  const [pageload, setpageload] = useState(0);
   const { articleurl } = useParams();
   const Articledata = JSON.parse(articleurl);
   console.log("article data from article page=", Articledata);
@@ -16,6 +44,7 @@ function ArticlePage(props) {
   // const username = location.state.username;
   // const Articledata = location.state.article_data;
   const [username, setUsername] = useState("");
+  const [photoName, setPhotoName] = useState("random.png");
   useEffect(() => {
     axios
       .get("http://localhost:5000/user", { withCredentials: true })
@@ -29,8 +58,11 @@ function ArticlePage(props) {
             },
           });
         } else {
-          setUsername(res.data);
+          setUsername(res.data.username);
           // setNews(res.data.articles);
+          // add image here by creating profile pic state
+          setpageload(1);
+          setPhotoName(res.data.profile_pic);
         }
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -38,19 +70,43 @@ function ArticlePage(props) {
 
   return (
     <div>
-      <div className="article_page_header">
-        <div className="article_page_proName">NewsKnot</div>
-        <div className="article_page_btns">
-          <div className="article_page_feed_btn">
-            <Button link="/user">Feed</Button>
+      {pageload === 1 ? (
+        <div>
+          <div className="article_page_header">
+            <div className="article_page_proName">NewsKnot</div>
+            <div className="article_page_btns">
+              <div className="article_page_feed_btn">
+                <Button link="/user">Feed</Button>
+              </div>
+            </div>
           </div>
+          <ArticleData article_data={Articledata}></ArticleData>
+          <Line></Line>
+          <Discussions
+            title={Articledata.title}
+            username={username}
+            profile_pic={photoName}
+          ></Discussions>
+          <Line></Line>
+          <Footer></Footer>
         </div>
-      </div>
-      <ArticleData article_data={Articledata}></ArticleData>
-      <Line></Line>
-      <Discussions title={Articledata.title} username={username}></Discussions>
-      <Line></Line>
-      <Footer></Footer>
+      ) : (
+        <div className="newspage_Progress">
+          <CircularProgress
+            variant="indeterminate"
+            color="secondary"
+            style={{
+              width: "150px",
+              height: "150px",
+              borderRadius: "100%",
+              boxShadow: "inset 0 0 0px 15px #ECF2FF",
+              backgroundColor: "transparent",
+            }}
+            thickness={5}
+          />
+        </div>
+      )}{" "}
+      ;
     </div>
   );
 }

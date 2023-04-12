@@ -1,5 +1,5 @@
 const NewsAPI = require("newsapi");
-const newsapi = new NewsAPI(process.env.API_KEY1);
+const newsapi = new NewsAPI(process.env.API_KEY2);
 const userinfo = require("../models/user");
 exports.PostNewsArticlesFromAPI = async (req, res, next) => {
   if (req.body.category === null) {
@@ -150,10 +150,12 @@ exports.PostNewsArticlesFromAPI = async (req, res, next) => {
     });
 };
 
-exports.GetNewsArticles = (req, res, next) => {
+exports.GetUserDetails = async (req, res, next) => {
   if (req.isAuthenticated()) {
     // console.log(req.session.);
-    res.send(req.session.passport.user);
+    const username = req.session.passport.user;
+    const userdata = await userinfo.findOne({ username });
+    res.send({ username: username, profile_pic: userdata.profilePhoto });
   } else {
     res.send({ status: "not login" });
   }
