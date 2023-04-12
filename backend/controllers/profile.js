@@ -4,12 +4,9 @@ const path = require('path');
 // Uploading a photo to user Schema
 
 exports.photoUpload = async (req, res, next) => {
-  console.log(req);
   if (req.isAuthenticated()) {
-    console.log('hello');
     const userId = req.user.id;
     try {
-      console.log(req.files);
       if (!req.files) {
         return res.status(403).json({
           success: false,
@@ -57,7 +54,6 @@ exports.photoUpload = async (req, res, next) => {
               'Some weird error already login , so this should not come while getting user Details',
           });
         }
-
         res.status(200).json({
           success: true,
           data: file.name,
@@ -85,7 +81,11 @@ exports.getPhoto = async (req, res, next) => {
         });
       }
 
-      res.status(200).json({});
+      res.status(200).json({
+        success: true,
+        photo: userDetails.profilePhoto,
+        message: 'Photo sent form backend successfully',
+      });
     } catch {
       res.status(400).json({
         success: false,
@@ -98,33 +98,33 @@ exports.getPhoto = async (req, res, next) => {
   }
 };
 
-exports.getUserDetails = async (req, res, next) => {
-  if (req.isAuthenticated()) {
-    const userId = req.user.id;
-    try {
-      const userDetails = await userinfo.findById(userId);
-      if (!userDetails) {
-        return res.status(402).json({
-          success: false,
-          message:
-            'Some weird error already login , so this should not come while getting user Details',
-        });
-      }
-      res.status(200).json({
-        username: userDetails.username,
-        email: userDetails.email,
-      });
-    } catch {
-      res.status(400).json({
-        success: false,
-        message: 'database fetching failed',
-      });
-    }
-  } else {
-    // console.log("log out");
-    res.send({ status: 'not login' });
-  }
-};
+// exports.getUserDetails = async (req, res, next) => {
+//   if (req.isAuthenticated()) {
+//     const userId = req.user.id;
+//     try {
+//       const userDetails = await userinfo.findById(userId);
+//       if (!userDetails) {
+//         return res.status(402).json({
+//           success: false,
+//           message:
+//             'Some weird error already login , so this should not come while getting user Details',
+//         });
+//       }
+//       res.status(200).json({
+//         username: userDetails.username,
+//         email: userDetails.email,
+//       });
+//     } catch {
+//       res.status(400).json({
+//         success: false,
+//         message: 'database fetching failed',
+//       });
+//     }
+//   } else {
+//     // console.log("log out");
+//     res.send({ status: 'not login' });
+//   }
+// };
 
 exports.getSavedArticles = async (req, res, next) => {
   const userId = req.user.id;
@@ -217,7 +217,7 @@ exports.editProfilePostForm = async (req, res, next) => {
   }
 };
 
-exports.getProfileEditDetails = async (req, res, next) => {
+exports.getProfileDetails = async (req, res, next) => {
   if (req.isAuthenticated()) {
     const userId = req.user.id;
     try {
@@ -231,6 +231,7 @@ exports.getProfileEditDetails = async (req, res, next) => {
         link2: user.links[1],
         link3: user.links[2],
         link4: user.links[3],
+        photo: user.profilePhoto,
       };
       res.status(200).json({
         success: true,

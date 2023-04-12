@@ -2,7 +2,6 @@ import "../cssfiles/Profile/EditProfileForm.css";
 import { TextField, Divider, Typography, Button } from "@mui/material";
 import AddLinkIcon from "@mui/icons-material/AddLink";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import Random from "../png&svg/random.png";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
@@ -28,6 +27,7 @@ const theme = createTheme({
 
 function EditForm(props) {
   const [photo, setPhoto] = useState(0);
+  const [photoName , setPhotoName] = useState("random.png");
 
   const [details, setDetails] = useState({
     FirstName: "",
@@ -38,13 +38,13 @@ function EditForm(props) {
     link2: "",
     link3: "",
     link4: "",
+    photo : "",
   });
 
   useEffect(() => {
     axios
       .get("http://localhost:5000/user/profile/edit", { withCredentials: true })
       .then((res) => {
-        console.log(res);
         setDetails(() => {
           return {
             FirstName: res.data.details.FirstName,
@@ -55,36 +55,15 @@ function EditForm(props) {
             link2: res.data.details.link2,
             link3: res.data.details.link3,
             link4: res.data.details.link4,
+            photo : res.data.details.photo,
           };
         });
+        setPhotoName(res.data.details.photo)
       })
       .catch((err) => {
         console.log(err.message);
       });
   }, []);
-    useEffect(() => {
-        axios.get("http://localhost:5000/user/profile/edit" , { withCredentials: true})
-        .then((res) => {
-            console.log(res);
-            setDetails(() => {
-                return{
-                    FirstName : res.data.details.FirstName,
-                    LastName : res.data.details.LastName,
-                    Bio : res.data.details.Bio,
-                    Org : res.data.details.Org,
-                    link1 : res.data.details.link1,
-                    link2 : res.data.details.link2,
-                    link3 : res.data.details.link3,
-                    link4 : res.data.details.link4,
-                }                
-            })
-        })
-        .catch(err => {
-            console.log(err.message)
-        })
-    },[]);
-
-    useEffect()
 
   function handleChange(e) {
     setDetails((prevItem) => {
@@ -97,7 +76,6 @@ function EditForm(props) {
 
   function handleSubmit(e) {
     const data = { ...details };
-    console.log(data);
     const options = {
       withCredentials: true,
       headers: { "Content-Type": "multipart/form-data" },
@@ -105,7 +83,6 @@ function EditForm(props) {
     axios
       .post("http://localhost:5000/user/profile/edit", data, options)
       .then((res) => {
-        console.log(res);
         if (res.data.success === true) {
           console.log("Data Uploaded");
         } else {
@@ -119,12 +96,10 @@ function EditForm(props) {
 
   function openFileLocater(e) {
     const ele = document.querySelector("#img-upload");
-    console.log("Element Found");
     ele.click();
   }
 
     function handlePhotoChange(e){
-        console.log(e);
         if(e.target.files[0].type.startsWith("image")){
             const files = {...e.target.files}
             
@@ -136,14 +111,24 @@ function EditForm(props) {
               };
             axios.post("http://localhost:5000/user/profile/edit/photo" , files , options)
             .then(res => {
-                console.log(res);
-                console.log("Hello World");
             })
             .catch(err => {
                 console.log(err);
                 console.log(err.message)
             })
             setPhoto(1);
+
+            axios.get("http://localhost:5000/user/profile/edit/photo" , { withCredentials: true} )
+            .then((res) => {
+              console.log(res);
+              setPhotoName(()=>{return res.data.photo})
+              console.log("This is executed")
+              console.log(res.data.photo);
+            })
+            .catch(err => {
+              console.log(err);
+              console.log(err.message);
+            })
         }else{
             setPhoto(0);
         }
@@ -273,7 +258,7 @@ function EditForm(props) {
             </div>
           </div>
           <div>
-            <img className="EditProfile_image" src={Random} alt="NI" />
+            <img key={Date.now()} className="EditProfile_image" src={`http://localhost:5000/uploads/${photoName}`} alt="NI" />
             <button onClick={openFileLocater}>ImageFileUpload</button>
             <input
               className="invisible-ele"
