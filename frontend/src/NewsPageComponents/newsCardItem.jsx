@@ -31,7 +31,7 @@ function NewsCardItem(props) {
   var content = props.cardarticle.content;
   var image = props.cardarticle.urlToImage;
   let Title = props.cardarticle.title;
-
+  const disptitle = props.cardarticle.displayTitle;
   const username = props.username;
 
   const [reactions, setReactions] = useState(0);
@@ -140,7 +140,7 @@ function NewsCardItem(props) {
           </div>
           <div className="Content__container">
             <div className="title__article">
-              <h1>{props.cardarticle.title}</h1>
+              <h1>{disptitle}</h1>
             </div>
             <div>
               <p className="content__article">{content}</p>

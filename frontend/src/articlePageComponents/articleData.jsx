@@ -15,7 +15,7 @@ function ArticleData(props) {
   const username = props.username;
   var content = data.content;
   var image = data.urlToImage;
-  var title = data.title;
+  var title = data.displayTitle;
   var author = data.author;
   var description = data.description;
   var url = data.url;
