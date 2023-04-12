@@ -1,8 +1,5 @@
 import '../cssfiles/Profile/Articles(L&F).css'
 import axios from "axios";
-import { Button} from '@mui/material';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
-import Box from '@mui/joy/Box';
 import Tabs from '@mui/joy/Tabs';
 import TabList from '@mui/joy/TabList';
 import Tab from '@mui/joy/Tab';
@@ -11,25 +8,6 @@ import {useState , useEffect} from 'react';
 import NewsCardItem from '../NewsPageComponents/newsCardItem';
 
 
-const theme = createTheme({
-    typography: {
-      allVariants: {
-        fontFamily: "'Montserrat', sans-serif",
-        textTransform: "none",
-      },
-      button: {
-        fontFamily: "'Montserrat', sans-serif",
-        textTransform: "none",
-        fontSize: 20,  
-      }
-    },
-    palette: {
-      primary : {
-        main : "#000000",
-        dark : "#ffffff",
-      }
-    }
-  });
 
 function UserArticles(props){
 

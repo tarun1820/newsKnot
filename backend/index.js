@@ -60,6 +60,7 @@ const savedRoute = require('./routes/save');
 const authenticationRoute = require('./routes/authentication');
 const discussionsRoute = require('./routes/discussions');
 const profileRoute = require('./routes/profile');
+const blogRoute = require('./routes/blog');
 
 const { title } = require('process');
 
@@ -106,6 +107,7 @@ app.use('/', savedRoute);
 app.use('/', authenticationRoute);
 app.use('/', discussionsRoute);
 app.use('/', profileRoute);
+app.use('/', blogRoute);
 
 const server = app.listen(5000, () =>
   console.log(
