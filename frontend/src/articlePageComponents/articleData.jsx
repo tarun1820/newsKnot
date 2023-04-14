@@ -1,23 +1,13 @@
 import { useEffect, useState } from "react";
 import "../cssfiles/articlePage/articleData.css";
 import axios from "axios";
-// import { useLocation } from "react-router-dom";
-import Random from "../png&svg/random.png";
-// import io from "socket.io-client";
-// import { useEffect, useState } from "react";
 import Parser from "html-react-parser";
-// const socket = io.connect("http://localhost:5000");
 
 function ArticleData(props) {
   // const location = useLocation();
   const data = props.article_data;
   console.log("from article data=", data.description);
-  const username = props.username;
-  var content = data.content;
-  var image = data.urlToImage;
-  var title = data.displayTitle;
   var author = data.author;
-  var description = data.description;
   var url = data.url;
   const [scrapeddata, setscrapeddata] = useState("");
   const encoded = encodeURIComponent(url);
@@ -38,35 +28,10 @@ function ArticleData(props) {
 
   return (
     <div>
-      <div>
-        <div>
-          <img
-            className="article__image"
-            alt="img"
-            src={image === null ? Random : image}
-          ></img>
+        <div className="article_content_container">
+            <div><h3 className = "article_author">Author : {author}</h3></div>
+            <div className = "article_scraped_data">{Parser(scrapeddata)}</div>          
         </div>
-        <div className="Content__container">
-          <div className="title__article">
-            <h1>{title}</h1>
-          </div>
-          <div>
-            <span>
-              <p>author</p>
-            </span>
-            <h4>{author}</h4>
-            <p className="content__article">{description}</p>
-            <div>{Parser(scrapeddata)}</div>
-          </div>
-        </div>
-      </div>
-      {/* <input
-        placeholder="Message..."
-        onChange={(event) => {
-          setMessage(event.target.value);
-        }}
-      />
-      <button onClick={sendMessage}> Send Message</button> */}
     </div>
   );
 }

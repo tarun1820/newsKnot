@@ -132,13 +132,17 @@ function Discussions(props) {
       <div className="article_other_comments">
         {Discussions.map((msg) => (
           <div className="article_other_comment">
-            <Typography variant="p">{msg.username}</Typography>
-            <Typography variant="p">{msg.message}</Typography>
+            <div>
             <img
-              className="EditProfile_image"
+              className="comment_user_image"
               src={`http://localhost:5000/uploads/${msg.profile_pic}`}
               alt="NI"
             />
+            </div>
+            <div className = "article_other_comment_text">
+            <div className = "comment_user">{msg.username}</div>
+            <div className = "comment_text">{msg.message}</div>
+            </div>            
             <Divider />
           </div>
         ))}

@@ -1,8 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
 ._outer_{
     display:flex;
     flex-direction:column;
     align-items:center;
     gap : 15px;
+    transform: scale(0.9)
+}
+
+.editProfile_header{
+    font-family:'Poppins';
+    color: #FE1D1D;
 }
 
 .EditProfile__container{
@@ -29,8 +40,49 @@
 }
 
 .EditProfile_image{
-    width:400px;
-    height:400px;
+    width:300px;
+    height:300px;
     border-radius:50%;
 }
 
+
+.invisible-ele{
+    visibility:hidden;
+}
+
+.editProfile_image_upload{
+    display:flex;
+    flex-direction:column;
+    gap:20px;
+    justify-content: center;
+}
+
+@media screen and (max-width: 780px){
+    ._outer_{
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        gap : 15px;
+        transform: scale(0.9)
+    }
+
+    .EditProfile__container{
+        margin-top:10px;
+        display:flex;
+        flex-direction:column-reverse;
+        align-items:center;
+        justify-content:center;    
+    }
+
+
+
+    .EditProfile__Form{
+        width:70%;
+        display:flex;
+        flex-direction:column;
+        align-items:flex-start;
+        justify-content:center;
+        margin-right:30%;
+        gap:10px;
+    }
+}

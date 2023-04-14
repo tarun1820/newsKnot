@@ -18,7 +18,20 @@
 
 .article_other_comment{
     display:flex;
+    flex-direction:row;
+    align-items:center;
+    gap:18px;
+}
+
+.article_other_comment_text{
+    display : flex;
     flex-direction:column;
-    gap:15px;
+}
+
+
+.comment_user_image{
+    width:40px;
+    height:40px;
+    border-radius:50%;
 }
 

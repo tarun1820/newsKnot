@@ -7,12 +7,8 @@ import MyButton from "../StandardComponents/JsxFiles/button";
 import Line from "../StandardComponents/JsxFiles/line";
 import { Button } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import Tabs from "@mui/joy/Tabs";
-import TabList from "@mui/joy/TabList";
-import Tab from "@mui/joy/Tab";
 import Tooltip from "@mui/material/Tooltip";
 import Fade from "@mui/material/Fade";
-import Dlobu from "../StandardComponents/pngs/Dlobu.gif";
 import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
@@ -46,7 +42,6 @@ function Newspage() {
   const [userfound, setuserfound] = useState(0);
 
   const navigate = useNavigate();
-  const location = useLocation();
   const [username, setUsername] = useState("");
   const [photoName, setPhotoName] = useState("random.png");
   useEffect(() => {
@@ -108,20 +103,20 @@ function Newspage() {
             <div className="navbar_newspage_header">
               <div className="proName_newspage">NewsKnot</div>
               <div className="navbar_newspage_btns">
-                <img
-                  className="EditProfile_image"
-                  src={`http://localhost:5000/uploads/${photoName}`}
-                  alt="NI"
-                />
                 <Tooltip
                   TransitionComponent={Fade}
                   TransitionProps={{ timeout: 600 }}
                   title="View Profile"
                   arrow
                 >
-                  <IconButton onClick={() => navigate("/user/profile")}>
-                    <AccountCircleIcon sx={{ color: "black", fontSize: 40 }} />
-                  </IconButton>
+                  <Button onClick={() => navigate("/user/profile")}>
+                  <img
+                  className="profile_image"
+                  src={`http://localhost:5000/uploads/${photoName}`}
+                  alt="NI"
+                  />
+                  <p className = "newspage_username">{username}</p>
+                  </Button>
                 </Tooltip>
                 <Tooltip
                   TransitionComponent={Fade}

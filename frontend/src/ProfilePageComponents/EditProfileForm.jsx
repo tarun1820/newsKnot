@@ -5,6 +5,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+
 const theme = createTheme({
   typography: {
     allVariants: {
@@ -21,6 +22,10 @@ const theme = createTheme({
     primary: {
       main: "#000000",
       dark: "#ffffff",
+    },
+    secondary: {
+      main: "#537FE7",
+      dark: "#537FE7",
     },
   },
 });
@@ -136,7 +141,7 @@ function EditForm(props) {
     <div className="_outer_">
       <ThemeProvider theme={theme}>
         <div>
-          <h1>Edit Details</h1>
+          <h1 className = "editProfile_header">Edit Details</h1>
         </div>
         <Divider />
         <div className="EditProfile__container">
@@ -255,13 +260,13 @@ function EditForm(props) {
               </div>
             </div>
           </div>
-          <div>
+          <div className = "editProfile_image_upload">
             <img
               className="EditProfile_image"
               src={`http://localhost:5000/uploads/${photoName}`}
               alt="NI"
             />
-            <button onClick={openFileLocater}>ImageFileUpload</button>
+            <Button size="small" variant = "contained" color = "secondary" onClick={openFileLocater} >ImageFileUpload</Button>
             <input
               className="invisible-ele"
               type="file"
@@ -272,7 +277,8 @@ function EditForm(props) {
           </div>
         </div>
         <Button
-          variant="outlined"
+          variant="contained"
+          color = "secondary"
           sx={{ borderRadius: 1 }}
           onClick={handleSubmit}
         >
