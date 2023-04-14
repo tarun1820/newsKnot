@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import locksolid from "../png&svg/lock-solid.svg";
 import usersolid from "../png&svg/user-solid.svg";
 import metalogo from "../png&svg/meta.png";
@@ -7,9 +7,8 @@ import "../cssfiles/login.css";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
-
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
   return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -20,14 +19,14 @@ function Login() {
   const navigate = useNavigate();
   //json object for storing email,password and username when changed
   // const [userExist, setUserExist] = useState(0);
-  const [message , setMessage] =useState("");
-  const [open,setOpen] = useState(false);
+  const [message, setMessage] = useState("");
+  const [open, setOpen] = useState(false);
 
-  const handleClose = (event , reason) => {
-      if(reason === 'clickaway'){
-          return;
-      }
-      setOpen(false);
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
   };
 
   const [loginCredtials, setLoginCreditials] = useState({
@@ -45,7 +44,6 @@ function Login() {
     });
   }
 
-
   function handleSubmit(event) {
     const { username, password } = loginCredtials;
     const data = JSON.stringify({ username, password });
@@ -59,7 +57,7 @@ function Login() {
       .post("http://localhost:5000/login", data, options)
       .then((res) => {
         if (res.data.status === "ok") {
-          setMessage("Login Successfull")
+          setMessage("Login Successfull");
           if (
             location.state != null &&
             location.state.url === "/user/article"
@@ -70,23 +68,29 @@ function Login() {
           }
           navigate("/user", { state: { username: username } });
         } else {
-          setMessage("Username or Password is Incorrect")
+          setMessage("Username or Password is Incorrect");
         }
       })
-      .catch(
-        (err) => console.log(err)
-      );
+      .catch((err) => console.log(err));
     event.preventDefault();
   }
 
   // console.log(banner);
   return (
     <div id="login-Container">
-            <div className = "">
-            <Snackbar anchorOrigin={{ vertical:'top' , horizontal:'center' }} open = {open} autoHideDuration = {3000}  onClose = {handleClose} sx= {{width:1}}>
-                <Alert onClose={handleClose} severity="error">{message}</Alert>
-            </Snackbar>
-            </div>
+      <div className="">
+        <Snackbar
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          open={open}
+          autoHideDuration={3000}
+          onClose={handleClose}
+          sx={{ width: 1 }}
+        >
+          <Alert onClose={handleClose} severity="error">
+            {message}
+          </Alert>
+        </Snackbar>
+      </div>
       <h1 id="pro-Name">NewsKnot</h1>
       <div id="LoginBox">
         <h1 className="Login-heading">Login</h1>
@@ -135,7 +139,7 @@ function Login() {
             <label className="label-form-item" id="forget-passcode">
               Forgot passcode?
             </label>
-            <button 
+            <button
               type="submit"
               className="login-page-button"
               id="login-button"

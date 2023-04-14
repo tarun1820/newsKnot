@@ -1,38 +1,39 @@
-const express = require('express');
-const connectDB = require('./config/db');
-const colors = require('colors');
-const cors = require('cors');
-const session = require('express-session');
-const fileupload = require('express-fileupload');
-const dotenv = require('dotenv');
-const passport = require('passport');
-const bodyParser = require('body-parser');
-const http = require('http');
-const socket = require('socket.io');
-const path = require('path');
+const express = require("express");
+const connectDB = require("./config/db");
+const colors = require("colors");
+const cors = require("cors");
+const session = require("express-session");
+const fileupload = require("express-fileupload");
+const dotenv = require("dotenv");
+const passport = require("passport");
+const bodyParser = require("body-parser");
+const http = require("http");
+const socket = require("socket.io");
+const path = require("path");
 const PORT = process.env.PORT || 5000;
-const GoogleStrategy = require('passport-google-oauth20').Strategy;
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
 // Load env Vars
-dotenv.config({ path: './config/config.env' });
-const { JSDOM } = require('jsdom');
-const { Readability } = require('@mozilla/readability');
-const axios = require('axios');
+dotenv.config({ path: "./config/config.env" });
+const { JSDOM } = require("jsdom");
+const { Readability } = require("@mozilla/readability");
+const axios = require("axios");
 
 const app = express();
-app.use(express.json({ limit: '10mb', extended: true }));
+app.use(express.json({ limit: "10mb", extended: true }));
 app.use(
-  express.urlencoded({ limit: '10mb', extended: true, parameterLimit: 50000 })
+  express.urlencoded({ limit: "10mb", extended: true, parameterLimit: 50000 })
 );
 app.use(cors({ origin: true, credentials: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.json({ limit: '10mb', extended: true }));
+app.use(express.json({ limit: "10mb", extended: true }));
 app.use(
-  express.urlencoded({ limit: '10mb', extended: true, parameterLimit: 50000 })
+  express.urlencoded({ limit: "10mb", extended: true, parameterLimit: 50000 })
 );
+
 app.use(
   session({
-    secret: 'news api',
+    secret: "news api",
     resave: true,
     saveUninitialized: true,
     rolling: true,
@@ -51,24 +52,24 @@ connectDB();
 app.use(fileupload());
 
 // Set static folder
-app.use(express.static(path.join(__dirname, 'public')));
-const userinfo = require('./models/user');
-const discussionsInfo = require('./models/discussion'); //discussion model
-const reactionsRoute = require('./routes/reactions');
-const newsPageRoute = require('./routes/newspage');
-const savedRoute = require('./routes/save');
-const authenticationRoute = require('./routes/authentication');
-const discussionsRoute = require('./routes/discussions');
-const profileRoute = require('./routes/profile');
+app.use(express.static(path.join(__dirname, "public")));
+const userinfo = require("./models/user");
+const discussionsInfo = require("./models/discussion"); //discussion model
+const reactionsRoute = require("./routes/reactions");
+const newsPageRoute = require("./routes/newspage");
+const savedRoute = require("./routes/save");
+const authenticationRoute = require("./routes/authentication");
+const discussionsRoute = require("./routes/discussions");
+const profileRoute = require("./routes/profile");
 
-const { title } = require('process');
+const { title } = require("process");
 
 passport.use(userinfo.createStrategy());
 
 passport.serializeUser(userinfo.serializeUser());
 passport.deserializeUser(userinfo.deserializeUser());
 
-app.get('/user/profile', async (req, res) => {
+app.get("/user/profile", async (req, res) => {
   if (req.isAuthenticated()) {
     const userId = req.user.id;
     try {
@@ -91,21 +92,21 @@ app.get('/user/profile', async (req, res) => {
     } catch {
       res.status(400).json({
         success: false,
-        message: 'Database operation failed',
+        message: "Database operation failed",
       });
     }
   } else {
-    console.log('log out');
-    res.send({ status: 'not login' });
+    console.log("log out");
+    res.send({ status: "not login" });
   }
 });
 
-app.use('/', reactionsRoute);
-app.use('/', newsPageRoute);
-app.use('/', savedRoute);
-app.use('/', authenticationRoute);
-app.use('/', discussionsRoute);
-app.use('/', profileRoute);
+app.use("/", reactionsRoute);
+app.use("/", newsPageRoute);
+app.use("/", savedRoute);
+app.use("/", authenticationRoute);
+app.use("/", discussionsRoute);
+app.use("/", profileRoute);
 
 const server = app.listen(5000, () =>
   console.log(
@@ -115,19 +116,19 @@ const server = app.listen(5000, () =>
 
 const io = socket(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: "http://localhost:3000",
     credentials: true,
-    methods: ['GET', 'POST'],
+    methods: ["GET", "POST"],
   },
 });
 
-io.on('connect', (socket) => {
-  socket.on('discuus_on_article', (data) => {
+io.on("connect", (socket) => {
+  socket.on("discuus_on_article", (data) => {
     const userexist = discussionsInfo.findOne(
       { title: data },
       (err, foundArticle) => {
         if (err) {
-          console.log('error responce =', err);
+          console.log("error responce =", err);
         } else {
           // console.log("title in room find", foundArticle);
           if (!foundArticle) {
@@ -144,7 +145,7 @@ io.on('connect', (socket) => {
     socket.join(data);
   });
 
-  socket.on('send_message', (data) => {
+  socket.on("send_message", (data) => {
     // console.log(data.username);
     const userexist = discussionsInfo.findOne(
       { title: data.title },
@@ -157,11 +158,11 @@ io.on('connect', (socket) => {
         }
       }
     );
-    io.to(data.title).emit('receve_message', data);
+    io.to(data.title).emit("receve_message", data);
   });
 });
 
-app.get('/news_article', (req, res) => {
+app.get("/news_article", (req, res) => {
   // const encodedurl = req.params.encoded;
   const url = req.query.encodedurl;
   // console.log("url==", url);
@@ -193,7 +194,7 @@ passport.use(
     {
       clientID: client_id,
       clientSecret: client_secret,
-      callbackURL: 'http://localhost:5000/google/callback',
+      callbackURL: "http://localhost:5000/google/callback",
     },
     function (accessToken, refreshToken, profile, done) {
       //check user table for anyone with a facebook ID of profile.id
@@ -243,17 +244,17 @@ passport.use(
 );
 
 app.get(
-  '/auth/google',
-  passport.authenticate('google', { scope: ['profile', 'email'] })
+  "/auth/google",
+  passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
 app.get(
-  '/google/callback',
-  passport.authenticate('google', {
-    failureRedirect: 'http://localhost:3000/login',
+  "/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "http://localhost:3000/login",
   }),
   function (req, res) {
-    res.redirect('http://localhost:3000/user');
+    res.redirect("http://localhost:3000/user");
   }
 );
 
@@ -263,7 +264,7 @@ function normalise(prop_list) {
     return prop_val / den;
   });
 }
-app.put('/user', async (req, res) => {
+app.put("/user", async (req, res) => {
   const username = req.body.username;
   const category = req.body.category;
   const category_id = req.body.category_id;
@@ -275,9 +276,9 @@ app.put('/user', async (req, res) => {
     latent_features[category_id] = latent_features[category_id] + 1;
     latent_features[latent_features.length - 1] =
       latent_features[latent_features.length - 1] + 1;
-    console.log('laten update=', latent_features);
+    console.log("laten update=", latent_features);
     // latent_features = normalise(latent_features);
-    console.log('laten update=', latent_features);
+    console.log("laten update=", latent_features);
     const user_data = await userinfo.findOneAndUpdate(
       {
         username,
@@ -292,7 +293,7 @@ app.put('/user', async (req, res) => {
 
 // Handle Unhandled promise rejections
 
-process.on('unhandledRejections', (err, promise) => {
+process.on("unhandledRejections", (err, promise) => {
   console.log(`Error : ${err.message}.red`);
 
   server.close(() => process.exit(1));

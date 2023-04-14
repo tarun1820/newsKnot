@@ -3,7 +3,7 @@ import "../cssfiles/News-Page/newsCardItem.css";
 import Random from "../png&svg/random.png";
 import IconButton from "@mui/material/IconButton";
 import axios from "axios";
-import {React ,  useState, useEffect } from "react";
+import { React, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
@@ -11,9 +11,6 @@ import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import ArrowDown from "@mui/icons-material/KeyboardDoubleArrowDownOutlined";
 import Tooltip from "@mui/material/Tooltip";
 import Fade from "@mui/material/Fade";
-
-
-
 
 function NewsCardItem(props) {
   var content = props.cardarticle.content;
@@ -27,13 +24,11 @@ function NewsCardItem(props) {
   const [icon, setIcon] = useState(0);
   const [transform, setTransform] = useState([-90, 0]);
 
-
-
   function saveArticle(newsArticle) {
     const options = {
       withCredentials: true,
       headers: { "content-type": "application/json" },
-    }
+    };
     axios
       .post("http://localhost:5000/save", newsArticle, options)
       .then((res) => {

@@ -1,4 +1,4 @@
-const userinfo = require('../models/user');
+const userinfo = require("../models/user");
 
 exports.createSavedArtcle = (req, res, next) => {
   const { cardarticle } = req.body;
@@ -10,13 +10,13 @@ exports.createSavedArtcle = (req, res, next) => {
       if (foundUser) {
         for (let i = 0; i < foundUser.saved.length; i++) {
           if (foundUser.saved[i].title === cardarticle.title) {
-            return res.send({ status: 'already saved' });
+            return res.send({ status: "already saved" });
           }
         }
 
         foundUser.saved.unshift(cardarticle); //pushing article to saved object to user
         foundUser.save(() => {
-          res.send({ status: 'saved sucess' });
+          res.send({ status: "saved sucess" });
         });
         return; //function to save founduserobject in db
       }

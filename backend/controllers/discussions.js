@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const discussionsInfo = require('../models/discussion');
+const mongoose = require("mongoose");
+const discussionsInfo = require("../models/discussion");
 exports.getDiscussions = (req, res, next) => {
   const title = req.params.title;
 

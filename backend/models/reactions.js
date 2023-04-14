@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const reactionSchema = new mongoose.Schema(
   {
@@ -14,8 +14,8 @@ const reactionSchema = new mongoose.Schema(
     liked_users: [],
   },
   {
-    collection: 'reactionInfo',
+    collection: "reactionInfo",
   }
 );
 
-module.exports = mongoose.model('reactionInfo', reactionSchema);
+module.exports = mongoose.model("reactionInfo", reactionSchema);

@@ -27,7 +27,7 @@ const theme = createTheme({
 
 function EditForm(props) {
   const [photo, setPhoto] = useState(0);
-  const [photoName , setPhotoName] = useState("random.png");
+  const [photoName, setPhotoName] = useState("random.png");
 
   const [details, setDetails] = useState({
     FirstName: "",
@@ -38,14 +38,14 @@ function EditForm(props) {
     link2: "",
     link3: "",
     link4: "",
-    photo : "",
+    photo: "",
   });
 
   useEffect(() => {
     axios
       .get("http://localhost:5000/user/profile", { withCredentials: true })
       .then((res) => {
-        console.log("res=",res)
+        console.log("res=", res);
         setDetails(() => {
           return {
             FirstName: res.data.details.FirstName,
@@ -56,10 +56,10 @@ function EditForm(props) {
             link2: res.data.details.link2,
             link3: res.data.details.link3,
             link4: res.data.details.link4,
-            photo : res.data.details.photo,
+            photo: res.data.details.photo,
           };
         });
-        setPhotoName(res.data.details.photo)
+        setPhotoName(res.data.details.photo);
       })
       .catch((err) => {
         console.log(err.message);
@@ -100,34 +100,37 @@ function EditForm(props) {
     ele.click();
   }
 
-    function handlePhotoChange(e){
-        if(e.target.files[0].type.startsWith("image")){
-            const files = {...e.target.files}
-            
-            // Post to backend
-            const options = {
-                withCredentials: true,
-                headers: { "Content-Type": "multipart/form-data" ,
-                "Access-Control-Allow-Origin": "*"},
-              };
-            axios.post("http://localhost:5000/user/profile/edit/photo" , files , options)
-            .then(res => {
-              console.log(res);
-              // res=JSON.parse(res)
-              setPhotoName(()=>{return res.data.data})
-              console.log(photoName);
-            })
-            .catch(err => {
-                console.log(err);
-                console.log(err.message)
-            })
-            setPhoto(1);
+  function handlePhotoChange(e) {
+    if (e.target.files[0].type.startsWith("image")) {
+      const files = { ...e.target.files };
 
-            
-        }else{
-            setPhoto(0);
-        }
+      // Post to backend
+      const options = {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "Access-Control-Allow-Origin": "*",
+        },
+      };
+      axios
+        .post("http://localhost:5000/user/profile/edit/photo", files, options)
+        .then((res) => {
+          console.log(res);
+          // res=JSON.parse(res)
+          setPhotoName(() => {
+            return res.data.data;
+          });
+          console.log(photoName);
+        })
+        .catch((err) => {
+          console.log(err);
+          console.log(err.message);
+        });
+      setPhoto(1);
+    } else {
+      setPhoto(0);
     }
+  }
 
   return (
     <div className="_outer_">
@@ -253,7 +256,11 @@ function EditForm(props) {
             </div>
           </div>
           <div>
-            <img  className="EditProfile_image" src={`http://localhost:5000/uploads/${photoName}`} alt="NI" />
+            <img
+              className="EditProfile_image"
+              src={`http://localhost:5000/uploads/${photoName}`}
+              alt="NI"
+            />
             <button onClick={openFileLocater}>ImageFileUpload</button>
             <input
               className="invisible-ele"

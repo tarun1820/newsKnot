@@ -1,5 +1,5 @@
-const userinfo = require('../models/user');
-const path = require('path');
+const userinfo = require("../models/user");
+const path = require("path");
 
 // Uploading a photo to user Schema
 
@@ -18,7 +18,7 @@ exports.photoUpload = async (req, res, next) => {
 
       // Make sure that file is a photo
 
-      if (!file.mimetype.startsWith('image')) {
+      if (!file.mimetype.startsWith("image")) {
         return res.status(400).json({
           success: false,
           message: `Please upload an image file`,
@@ -53,7 +53,7 @@ exports.photoUpload = async (req, res, next) => {
           return res.status(402).json({
             success: false,
             message:
-              'Some weird error already login , so this should not come while getting user Details',
+              "Some weird error already login , so this should not come while getting user Details",
           });
         }
         res.status(200).json({
@@ -64,7 +64,7 @@ exports.photoUpload = async (req, res, next) => {
     } catch {
       res.status(400).json({
         success: false,
-        message: 'database fetching failed',
+        message: "database fetching failed",
       });
     }
   }
@@ -78,7 +78,7 @@ exports.getSavedArticles = async (req, res, next) => {
       return res.status(402).json({
         success: false,
         message:
-          'Some weird error already login , so this should not come while getting user Details',
+          "Some weird error already login , so this should not come while getting user Details",
       });
     }
     let saved_articles = user.saved;
@@ -89,7 +89,7 @@ exports.getSavedArticles = async (req, res, next) => {
   } catch {
     res.status(400).json({
       success: false,
-      message: 'Database operation failed',
+      message: "Database operation failed",
     });
   }
 };
@@ -102,7 +102,7 @@ exports.getLikedArtcles = async (req, res, next) => {
       return res.status(402).json({
         success: false,
         message:
-          'Some weird error already login , so this should not come while getting user Details',
+          "Some weird error already login , so this should not come while getting user Details",
       });
     }
     let li = user.liked;
@@ -117,7 +117,7 @@ exports.getLikedArtcles = async (req, res, next) => {
   } catch {
     res.status(400).json({
       success: false,
-      message: 'Database operation failed',
+      message: "Database operation failed",
     });
   }
 };
@@ -145,17 +145,17 @@ exports.editProfilePostForm = async (req, res, next) => {
         return res.status(402).json({
           success: false,
           message:
-            'Some weird error already login , so this should not come while getting user Details',
+            "Some weird error already login , so this should not come while getting user Details",
         });
       }
       res.status(200).json({
         success: true,
-        message: 'Profile Updated Successfully',
+        message: "Profile Updated Successfully",
       });
     } catch {
       res.status(400).json({
         success: false,
-        message: 'Database operation failed',
+        message: "Database operation failed",
       });
     }
   }
@@ -184,7 +184,7 @@ exports.getProfileDetails = async (req, res, next) => {
     } catch {
       res.status(400).json({
         success: false,
-        message: 'Database operation failed',
+        message: "Database operation failed",
       });
     }
   }

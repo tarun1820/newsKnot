@@ -1,5 +1,5 @@
-const reactionInfo = require('../models/reactions');
-const userinfo = require('../models/user');
+const reactionInfo = require("../models/reactions");
+const userinfo = require("../models/user");
 
 exports.getReactions = async (req, res, next) => {
   if (req.isAuthenticated()) {
@@ -10,7 +10,7 @@ exports.getReactions = async (req, res, next) => {
         return res.status(200).json({
           success: false,
           error_id: 0,
-          message: 'The article with title not found',
+          message: "The article with title not found",
         });
       }
       item_liked_users = item[0].liked_users;
@@ -22,7 +22,7 @@ exports.getReactions = async (req, res, next) => {
       }
       res.status(200).json({
         success: true,
-        message: 'successFull get Request',
+        message: "successFull get Request",
         likes: item[0].likes,
         liked: isLiked,
       });
@@ -34,8 +34,8 @@ exports.getReactions = async (req, res, next) => {
       });
     }
   } else {
-    console.log('log out');
-    res.send({ status: 'not login' });
+    console.log("log out");
+    res.send({ status: "not login" });
   }
 };
 
@@ -43,13 +43,13 @@ exports.putReactions = async (req, res, next) => {
   if (req.isAuthenticated()) {
     const userid = req.user.id; // User id to access into database
     let isLiked = true;
-    console.log('hello');
+    console.log("hello");
     try {
-      console.log('hello Inside Try');
+      console.log("hello Inside Try");
       const articleReactions = await reactionInfo.find({
         title: req.params.title,
       });
-      console.log('hello After database Query');
+      console.log("hello After database Query");
       if (articleReactions.length !== 0) {
         let liked_users_data = articleReactions[0].liked_users;
         let presentFlag = 0;
@@ -69,7 +69,7 @@ exports.putReactions = async (req, res, next) => {
                 user_details.liked.splice(i, 1);
               }
               console.log(req.params.title);
-              console.log('Hello in Another Try');
+              console.log("Hello in Another Try");
             }
             // user_details.liked.splice(
             //   user_details.liked.indexOf(req.params.title),
@@ -106,14 +106,14 @@ exports.putReactions = async (req, res, next) => {
           } catch {
             res.status(400).json({
               success: false,
-              message: 'replace Failed',
+              message: "replace Failed",
             });
           }
         } catch (err) {
           console.log(err.message);
           res.status(400).json({
             success: false,
-            messsage: 'user Not found',
+            messsage: "user Not found",
           });
         }
       } else {
@@ -140,7 +140,7 @@ exports.putReactions = async (req, res, next) => {
         } catch (err) {
           res.status(400).json({
             success: false,
-            message: 'creating an entry in database failed',
+            message: "creating an entry in database failed",
           });
         }
       }
@@ -151,7 +151,7 @@ exports.putReactions = async (req, res, next) => {
       });
     }
   } else {
-    console.log('log out');
-    res.send({ status: 'not login' });
+    console.log("log out");
+    res.send({ status: "not login" });
   }
 };
