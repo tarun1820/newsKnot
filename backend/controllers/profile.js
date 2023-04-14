@@ -70,6 +70,30 @@ exports.photoUpload = async (req, res, next) => {
   }
 };
 
+exports.getBlogArticles = async (req, res, next) => {
+  const userId = req.user.id;
+  try {
+    const user = await userinfo.findById(userId);
+    if (!user) {
+      return res.status(402).json({
+        success: false,
+        message:
+          'Some weird error already login , so this should not come while getting user Details',
+      });
+    }
+    let blog_articles = user.blogs;
+    res.status(200).json({
+      success: true,
+      blogs: blog_articles,
+    });
+  } catch {
+    res.status(400).json({
+      success: false,
+      message: 'Database operation failed',
+    });
+  }
+};
+
 exports.getSavedArticles = async (req, res, next) => {
   const userId = req.user.id;
   try {

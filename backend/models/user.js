@@ -10,6 +10,7 @@ const userSchema = new mongoose.Schema(
     socialId: { type: String, default: "" },
     saved: [Object],
     liked: [Object],
+    blogs: [Object],
     FirstName: { type: String, default: "" },
     LastName: { type: String, default: "" },
     Bio: { type: String, default: "" },
