@@ -266,32 +266,6 @@ function normalise(prop_list) {
     return prop_val / den;
   });
 }
-app.put("/user", async (req, res) => {
-  const username = req.body.username;
-  const category = req.body.category;
-  const category_id = req.body.category_id;
-  const userdata = await userinfo.findOne({ username });
-  const [sports, tech, health, entertainment] = [0, 1, 2, 3];
-  if (userdata) {
-    let latent_features = userdata.latent_features;
-    console.log(category_id);
-    latent_features[category_id] = latent_features[category_id] + 1;
-    latent_features[latent_features.length - 1] =
-      latent_features[latent_features.length - 1] + 1;
-    console.log("laten update=", latent_features);
-    // latent_features = normalise(latent_features);
-    console.log("laten update=", latent_features);
-    const user_data = await userinfo.findOneAndUpdate(
-      {
-        username,
-      },
-      { latent_features },
-      {
-        new: true,
-      }
-    );
-  }
-});
 
 // Handle Unhandled promise rejections
 

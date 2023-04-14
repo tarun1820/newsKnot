@@ -1,6 +1,7 @@
 const NewsAPI = require("newsapi");
 const newsapi = new NewsAPI(process.env.API_KEY2);
 const userinfo = require("../models/user");
+const handle_fun = require("./propabilityFunction");
 exports.PostNewsArticlesFromAPI = async (req, res, next) => {
   if (req.body.category === null) {
     // console.log("null");
@@ -10,62 +11,22 @@ exports.PostNewsArticlesFromAPI = async (req, res, next) => {
     const userdata = await userinfo.findOne({ username });
 
     const prop_vec = userdata.latent_features;
-    // console.log(userdata);
-    let sports_list = await newsapi.v2
-      .topHeadlines({
-        category: "sports",
-        country: "in",
-        pageSize: 20,
-      })
-      .then((response) => {
-        return response;
-      })
-      .catch((err) => {
-        return err.message;
-      });
-    let health_list = await newsapi.v2
-      .topHeadlines({
-        category: "health",
-        country: "in",
-        pageSize: 20,
-      })
-      .then((response) => {
-        return response;
-      })
-      .catch((err) => {
-        return err.message;
-      });
 
-    let tech_list = await newsapi.v2
-      .topHeadlines({
-        category: "technology",
-        country: "in",
-        pageSize: 20,
-      })
-      .then((response) => {
-        return response;
-      })
-      .catch((err) => {
-        return err.message;
-      });
+    let sports_list = await handle_fun.newsapireq("sports", "in", prop_vec, 0);
+    let health_list = await handle_fun.newsapireq("health", "in", prop_vec, 1);
+    let tech_list = await handle_fun.newsapireq(
+      "technology",
+      "in",
+      prop_vec,
+      2
+    );
+    let entertainment_list = await handle_fun.newsapireq(
+      "entertainment",
+      "in",
+      prop_vec,
+      3
+    );
 
-    let entertainment_list = await newsapi.v2
-      .topHeadlines({
-        category: "entertainment",
-        country: "in",
-        pageSize: 20,
-      })
-      .then((response) => {
-        return response;
-      })
-      .catch((err) => {
-        return err.message;
-      });
-
-    // console.log("entertin=", entertainment_list);
-    // const art = "sjkjjf % dffkjfk % %% jbdwfwf ??erefheroife";
-
-    // console.log(art.replaceAll("?", "-"));
     sports_list = sports_list.articles.map((single_article) => {
       single_article.displayTitle = single_article.title;
       single_article.title = single_article.title.replaceAll("?", " ");
@@ -126,14 +87,16 @@ exports.PostNewsArticlesFromAPI = async (req, res, next) => {
       pageSize: 20,
     })
     .then((response) => {
-      const id = 0;
-      if (category === "technology") {
+      let id = 0;
+
+      if (category === "health") {
         id = 1;
-      } else if (category === "health") {
+      } else if (category === "technology") {
         id = 2;
       } else if (category === "entertainment") {
         id = 3;
       }
+
       cat_article = response.articles;
       cat_article = cat_article.map((single_article) => {
         single_article.displayTitle = single_article.title;
@@ -158,5 +121,32 @@ exports.GetUserDetails = async (req, res, next) => {
     res.send({ username: username, profile_pic: userdata.profilePhoto });
   } else {
     res.send({ status: "not login" });
+  }
+};
+
+exports.PutUserPropability = async (req, res, next) => {
+  const username = req.body.username;
+  const category = req.body.category;
+  const category_id = req.body.category_id;
+  const userdata = await userinfo.findOne({ username });
+  const [sports, health, tech, entertainment] = [0, 1, 2, 3];
+  if (userdata) {
+    let latent_features = userdata.latent_features;
+    console.log(category_id);
+    latent_features[category_id] = latent_features[category_id] + 1;
+    latent_features[latent_features.length - 1] =
+      latent_features[latent_features.length - 1] + 1;
+    console.log("laten update=", latent_features);
+    // latent_features = normalise(latent_features);
+    console.log("laten update=", latent_features);
+    const user_data = await userinfo.findOneAndUpdate(
+      {
+        username,
+      },
+      { latent_features },
+      {
+        new: true,
+      }
+    );
   }
 };
