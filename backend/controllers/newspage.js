@@ -1,7 +1,7 @@
-const NewsAPI = require('newsapi');
+const NewsAPI = require("newsapi");
 const newsapi = new NewsAPI(process.env.API_KEY1);
-const userinfo = require('../models/user');
-const handle_fun = require('./probabilityFunction');
+const userinfo = require("../models/user");
+const handle_fun = require("./probabilityFunction");
 exports.PostNewsArticlesFromAPI = async (req, res, next) => {
   if (req.body.category === null) {
     // console.log("null");
@@ -11,61 +11,105 @@ exports.PostNewsArticlesFromAPI = async (req, res, next) => {
     const userdata = await userinfo.findOne({ username });
 
     const prop_vec = userdata.latent_features;
-
-    let sports_list = await handle_fun.newsapireq('sports', 'in', prop_vec, 0);
-    let health_list = await handle_fun.newsapireq('health', 'in', prop_vec, 1);
+    const country = req.body.country;
+    console.log(country);
+    let sports_list = await handle_fun.newsapireq(
+      "sports",
+      country,
+      prop_vec,
+      0
+    );
+    let health_list = await handle_fun.newsapireq(
+      "health",
+      country,
+      prop_vec,
+      1
+    );
     let tech_list = await handle_fun.newsapireq(
-      'technology',
-      'in',
+      "technology",
+      country,
       prop_vec,
       2
     );
     let entertainment_list = await handle_fun.newsapireq(
-      'entertainment',
-      'in',
+      "entertainment",
+      country,
       prop_vec,
       3
+    );
+    let science_list = await handle_fun.newsapireq(
+      "science",
+      country,
+      prop_vec,
+      4
+    );
+    let business_list = await handle_fun.newsapireq(
+      "business",
+      country,
+      prop_vec,
+      5
     );
 
     sports_list = sports_list.articles.map((single_article) => {
       single_article.displayTitle = single_article.title;
-      single_article.title = single_article.title.replaceAll('?', ' ');
-      single_article.title = single_article.title.replaceAll('%', ' ');
-      single_article['category'] = 'sports';
-      single_article['category_id'] = 0;
+      single_article.title = single_article.title.replaceAll("?", " ");
+      single_article.title = single_article.title.replaceAll("%", " ");
+      single_article["category"] = "sports";
+      single_article["category_id"] = 0;
       // console.log(single_article);
       return single_article;
     });
     tech_list = tech_list.articles.map((single_article) => {
       single_article.displayTitle = single_article.title;
-      single_article.title = single_article.title.replaceAll('?', ' ');
-      single_article.title = single_article.title.replaceAll('%', ' ');
-      single_article['category'] = 'tech';
-      single_article['category_id'] = 1;
+      single_article.title = single_article.title.replaceAll("?", " ");
+      single_article.title = single_article.title.replaceAll("%", " ");
+      single_article["category"] = "tech";
+      single_article["category_id"] = 1;
       return single_article;
     });
     health_list = health_list.articles.map((single_article) => {
       single_article.displayTitle = single_article.title;
-      single_article.title = single_article.title.replaceAll('?', ' ');
-      single_article.title = single_article.title.replaceAll('%', ' ');
-      single_article['category'] = 'health';
-      single_article['category_id'] = 2;
+      single_article.title = single_article.title.replaceAll("?", " ");
+      single_article.title = single_article.title.replaceAll("%", " ");
+      single_article["category"] = "health";
+      single_article["category_id"] = 2;
       return single_article;
     });
     entertainment_list = entertainment_list.articles.map((single_article) => {
       single_article.displayTitle = single_article.title;
-      single_article.title = single_article.title.replaceAll('?', ' ');
-      single_article.title = single_article.title.replaceAll('%', ' ');
+      single_article.title = single_article.title.replaceAll("?", " ");
+      single_article.title = single_article.title.replaceAll("%", " ");
       // console.log(single_article);
-      single_article['category'] = 'entertainment';
-      single_article['category_id'] = 3;
+      single_article["category"] = "entertainment";
+      single_article["category_id"] = 3;
+      return single_article;
+    });
+    science_list = science_list.articles.map((single_article) => {
+      single_article.displayTitle = single_article.title;
+      single_article.title = single_article.title.replaceAll("?", " ");
+      single_article.title = single_article.title.replaceAll("%", " ");
+      // console.log(single_article);
+      single_article["category"] = "entertainment";
+      single_article["category_id"] = 4;
+      return single_article;
+    });
+
+    business_list = business_list.articles.map((single_article) => {
+      single_article.displayTitle = single_article.title;
+      single_article.title = single_article.title.replaceAll("?", " ");
+      single_article.title = single_article.title.replaceAll("%", " ");
+      // console.log(single_article);
+      single_article["category"] = "busin";
+      single_article["category_id"] = 5;
       return single_article;
     });
     // console.log(sports_list);
     let total_articles = sports_list.concat(
       tech_list,
       health_list,
-      entertainment_list
+      entertainment_list,
+      science_list,
+      business_list
     );
 
     function shuffle(array) {
@@ -79,32 +123,36 @@ exports.PostNewsArticlesFromAPI = async (req, res, next) => {
   }
 
   let category = req.body.category;
-  // console.log(category)
+  console.log(req.body.country);
   newsapi.v2
     .topHeadlines({
       category: category,
-      country: req.body.country || 'in',
+      country: req.body.country,
       pageSize: 100,
     })
     .then((response) => {
       let id = 0;
 
-      if (category === 'health') {
+      if (category === "health") {
         id = 1;
-      } else if (category === 'technology') {
+      } else if (category === "technology") {
         id = 2;
-      } else if (category === 'entertainment') {
+      } else if (category === "entertainment") {
         id = 3;
+      } else if (category === "science") {
+        id = 4;
+      } else if (category === "business") {
+        id = 5;
       }
 
       cat_article = response.articles;
       cat_article = cat_article.map((single_article) => {
         single_article.displayTitle = single_article.title;
-        single_article.title = single_article.title.replaceAll('?', ' ');
-        single_article.title = single_article.title.replaceAll('%', ' ');
+        single_article.title = single_article.title.replaceAll("?", " ");
+        single_article.title = single_article.title.replaceAll("%", " ");
         // console.log(single_article);
-        single_article['category'] = category;
-        single_article['category_id'] = id;
+        single_article["category"] = category;
+        single_article["category_id"] = id;
       });
       res.send(response.articles);
     })
@@ -120,7 +168,7 @@ exports.GetUserDetails = async (req, res, next) => {
     const userdata = await userinfo.findOne({ username });
     res.send({ username: username, profile_pic: userdata.profilePhoto });
   } else {
-    res.send({ status: 'not login' });
+    res.send({ status: "not login" });
   }
 };
 
@@ -129,7 +177,9 @@ exports.PutUserProbability = async (req, res, next) => {
   const category = req.body.category;
   const category_id = req.body.category_id;
   const userdata = await userinfo.findOne({ username });
-  const [sports, health, tech, entertainment] = [0, 1, 2, 3];
+  const [sports, health, tech, entertainment, science, business] = [
+    0, 1, 2, 3, 4, 5,
+  ];
   if (userdata) {
     let latent_features = userdata.latent_features;
     console.log(category_id);

@@ -23,7 +23,7 @@ exports.SignUpPostRequest = async (req, res, next) => {
       {
         username: req.body.username,
         email: email,
-        latent_features: [25, 25, 25, 25, 100],
+        latent_features: [25, 25, 25, 25, 25, 25, 150],
       },
       password,
       (err, user) => {
