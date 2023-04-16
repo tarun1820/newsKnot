@@ -7,17 +7,20 @@
     display:flex;
     flex-direction:column;
     align-items:center;
-    gap : 15px;
+    gap : 10px;
     transform: scale(0.9)
 }
 
-.editProfile_header{
+.editProfile_Profile_btn{
+    margin-left:80%;
+}
+
+.editProfile_edit{
     font-family:'Poppins';
     color: #FE1D1D;
 }
 
 .EditProfile__container{
-    margin-top:10px;
     display:flex;
     flex-direction:row;
     align-items:center;
@@ -66,6 +69,10 @@
         transform: scale(0.9)
     }
 
+    .editProfile_Profile_btn{
+        margin-left:50%;
+    }
+
     .EditProfile__container{
         margin-top:10px;
         display:flex;
@@ -73,8 +80,6 @@
         align-items:center;
         justify-content:center;    
     }
-
-
 
     .EditProfile__Form{
         width:70%;

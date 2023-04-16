@@ -1,7 +1,7 @@
-const NewsAPI = require("newsapi");
-const newsapi = new NewsAPI(process.env.API_KEY2);
+const NewsAPI = require('newsapi');
+const newsapi = new NewsAPI(process.env.API_KEY1);
 
-function caliculate_propbility(prop_vec, category_id) {
+function calculate_probability(prop_vec, category_id) {
   const prop = prop_vec[category_id] / prop_vec[prop_vec.length - 1];
   // console.log(prop);
   return Math.round(20 * prop);
@@ -9,8 +9,7 @@ function caliculate_propbility(prop_vec, category_id) {
 
 async function newsapireq(category, country, prop_vec, category_id) {
   // console.log("in side newsnot");
-  const page_size = caliculate_propbility(prop_vec, category_id);
-  console.log(page_size);
+  const page_size = calculate_probability(prop_vec, category_id);
   const response = await newsapi.v2
     .topHeadlines({
       category: category,
@@ -27,4 +26,4 @@ async function newsapireq(category, country, prop_vec, category_id) {
   return response;
 }
 
-module.exports = { caliculate_propbility, newsapireq };
+module.exports = { calculate_probability, newsapireq };

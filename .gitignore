@@ -1,5 +1,7 @@
 # Exclude node modules
 *node_modules/*
+backend/public/*
+
 Todo
 # Logs
 logs

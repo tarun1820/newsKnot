@@ -9,6 +9,7 @@ import Saved from "./Saved";
 import ArticlePage from "./articlePage";
 import Profile from "./Profile";
 import EditProfile from "../ProfilePageComponents/EditProfileForm";
+import BlogPage from "./blog";
 export const App = () => {
   return (
     <Routes>
@@ -21,6 +22,7 @@ export const App = () => {
       <Route path="/user/profile" element={<Profile />}></Route>
       <Route path="/user/profile/edit" element={<EditProfile />}></Route>
       <Route path="/user/article/:articleurl" element={<ArticlePage />}></Route>
+      <Route path = "/user/blog/createBlog" element = {<BlogPage />}></Route>
     </Routes>
   );
 };

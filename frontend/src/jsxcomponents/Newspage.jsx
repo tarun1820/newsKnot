@@ -2,7 +2,7 @@ import axios from "axios";
 import { React, useState, useEffect } from "react";
 import NewsCardItem from "../NewsPageComponents/newsCardItem";
 import "../cssfiles/News-Page/main_page.css";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import MyButton from "../StandardComponents/JsxFiles/button";
 import Line from "../StandardComponents/JsxFiles/line";
 import { Button } from "@mui/material";
@@ -12,7 +12,6 @@ import Fade from "@mui/material/Fade";
 import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const theme = createTheme({
   typography: {
@@ -124,7 +123,7 @@ function Newspage() {
                   title="Write A Blog"
                   arrow
                 >
-                  <IconButton onClick={() => navigate("/user/profile")}>
+                  <IconButton onClick={() => navigate("/user/blog/createBlog")}>
                     <AddCircleIcon sx={{ color: "gold", fontSize: 40 }} />
                   </IconButton>
                 </Tooltip>

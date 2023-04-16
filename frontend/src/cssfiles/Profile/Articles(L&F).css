@@ -2,9 +2,9 @@
     display:flex;
     flex-direction:row;
     justify-content:center;
-    gap:80px;
+    gap:20px;
 }
 
-.article_card_profile{
+/* .article_card_profile{
     transform : scale(0.9);
-}
+}  */

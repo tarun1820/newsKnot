@@ -140,10 +140,10 @@ function NewsCardItem(props) {
           </div>
           <div className="Content__container">
             <div className="title__article">
-              <h1>{disptitle}</h1>
+              {disptitle}
             </div>
-            <div>
-              <p className="content__article">{content}</p>
+            <div className="content__article">
+             {content}
             </div>
           </div>
         </div>

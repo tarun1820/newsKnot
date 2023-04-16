@@ -1,17 +1,17 @@
-const express = require("express");
+const express = require('express');
 
 const {
   PostNewsArticlesFromAPI,
   GetUserDetails,
-  PutUserPropability,
-} = require("../controllers/newspage");
+  PutUserProbability,
+} = require('../controllers/newspage');
 
 const router = express.Router();
 
 router
-  .route("/user")
+  .route('/user')
   .post(PostNewsArticlesFromAPI)
   .get(GetUserDetails)
-  .put(PutUserPropability);
+  .put(PutUserProbability);
 
 module.exports = router;

@@ -1,9 +1,17 @@
+import * as React from "react";
 import "../cssfiles/Profile/EditProfileForm.css";
 import { TextField, Divider, Typography, Button } from "@mui/material";
 import AddLinkIcon from "@mui/icons-material/AddLink";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useState, useEffect } from "react";
+import MyButton from "../StandardComponents/JsxFiles/button";
 import axios from "axios";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 
 const theme = createTheme({
@@ -32,7 +40,18 @@ const theme = createTheme({
 
 function EditForm(props) {
   const [photo, setPhoto] = useState(0);
-  const [photoName, setPhotoName] = useState("random.png");
+  const [photoName, setPhotoName] = useState("random.png");  
+  const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("");
+  const [success , setSuccess] = useState(0);
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
+
 
   const [details, setDetails] = useState({
     FirstName: "",
@@ -81,6 +100,7 @@ function EditForm(props) {
   }
 
   function handleSubmit(e) {
+    setOpen(true);
     const data = { ...details };
     const options = {
       withCredentials: true,
@@ -91,12 +111,17 @@ function EditForm(props) {
       .then((res) => {
         if (res.data.success === true) {
           console.log("Data Uploaded");
+          setMessage("Details Updated Successfully");
+          setSuccess(1);
         } else {
           console.log("Fault Occured");
+          setMessage("Some fault during Updating , please try again later.");
+          setSuccess(0);
         }
       })
       .catch((err) => {
         console.log(err);
+        setSuccess(0);
       });
   }
 
@@ -138,10 +163,15 @@ function EditForm(props) {
   }
 
   return (
+    <div className = "editProfile__">
+        <div className="editProfile_Profile_btn">
+          <MyButton  link="/user/profile">Profile</MyButton>
+        </div>
+    
     <div className="_outer_">
       <ThemeProvider theme={theme}>
         <div>
-          <h1 className = "editProfile_header">Edit Details</h1>
+          <h1 className = "editProfile_edit">Edit Details</h1>
         </div>
         <Divider />
         <div className="EditProfile__container">
@@ -284,7 +314,23 @@ function EditForm(props) {
         >
           Save Changes
         </Button>
+        <div className="">
+        <Snackbar
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          open={open}
+          autoHideDuration={3000}
+          onClose={handleClose}
+          sx={{ width: 1 }}
+        >{success === 1 ? <Alert onClose={handleClose} severity="success">
+        {message}
+      </Alert> : <Alert onClose={handleClose} severity="error">
+            {message}
+          </Alert>}
+          
+        </Snackbar>
+      </div>
       </ThemeProvider>
+    </div>
     </div>
   );
 }

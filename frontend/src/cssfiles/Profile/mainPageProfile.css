@@ -32,3 +32,38 @@
 .profilepage_details{
     margin-right:20px;
 }
+
+@media screen and (max-width: 780px){
+    .profilepage_body{
+        display:flex;
+        flex-direction:column;
+        gap:10px;
+        justify-content:center;
+        margin-top:40px;
+    }
+
+    .profilepage_proname{
+        margin-left:50px;
+        margin-top:20px;
+        display:inline;
+        margin-block-start: 0.1em;
+        margin-block-end: 0.1em;
+        font-size:30px;
+        font-family: 'Pacifico';
+        font-style: normal;
+        color: #FE1D1D;
+    }
+
+    .profilepage_header{
+        display:flex;
+        flex-direction:row;    
+        align-items:flex-end;
+        justify-content:flex-end;    
+    }
+
+    .profilepage_feed_btn{
+        margin:auto;
+        transform:scale(0.75);
+    }
+    
+}

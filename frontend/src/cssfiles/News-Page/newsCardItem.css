@@ -6,7 +6,7 @@
 
 .new_article__styles{    
     height:auto; 
-    width:1000px;    
+    width:73%;    
     margin:auto;
     margin-bottom:30px;
     padding-bottom:1.1%;
@@ -21,8 +21,6 @@
     margin-top:2%;
 }
 
-
-
 .article__image{
     width:330px;
     height:220px;
@@ -31,13 +29,16 @@
 }
 
 .Content__container{
-    width:500px;
+    width:55%;
+    display:flex;
+    flex-direction:column;
+    gap:20px;
 }
 
 .title__article{
     font-family: 'Poppins';
-    font-style: normal;
-    font-size:12px;
+    font-weight:700;
+    font-size:larger;
 }
 
 .content__article{
@@ -49,7 +50,7 @@
 .article_bottom{
     margin:auto;
     display:flex;
-    width:1000px;
+    width:73%;
     flex-direction:row;
     justify-content:space-between;
     align-items:center;
@@ -79,8 +80,8 @@
 
 @media screen and (max-width: 780px){
     .new_article__styles{
-        margin-top: 10px;;
-        width:70%;
+        margin-top: 10px;
+        width:75%;
         height:auto;    
         gap : 15px;
         display:flex;
@@ -97,34 +98,35 @@
         margin-top:5%;
     }
 
+    .title__article{
+        font-family: 'Poppins';
+        font-weight:700;
+        font-size:small;
+    }
+
+    .content__article{
+        font-family: 'Montserrat';
+        font-size:11px;
+    }
+
+
     .article__container :nth-child(1) {order:2;}
     .article__container :nth-child(2) {order:3;}
     .article__container :nth-child(3) {order:1;}
 
 
     .article__image{
-        margin-top: 10px;
-        margin-left:0px;
-        border-radius :10%;
-    }
-    .Content__container{
-        width:450px;
+        width:220px;
+        height:147px;
+        margin-left:5px;
+        border-radius:5%;
     }
 
-    .title__article{
-        width:75%;
-        height:auto;
-        padding-bottom:0px;
-        margin-left:13%;
-        font-size:10px;
-        
+    .Content__container{
+        width:90%;
+        display:flex;
+        flex-direction:column;
+        gap:20px;
     }
-/* 
-    .bookmark__image_icon{
-        height:20px;
-        width:32px;
-        margin-bottom:5px;
-        margin-left: 380%;
-        transition:0.8s;
-    } */
+
 }

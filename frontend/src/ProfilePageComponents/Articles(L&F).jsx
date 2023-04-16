@@ -80,7 +80,7 @@ function UserArticles(props) {
           <TabPanel value={0}>
             <div>
               {userLikedArticles.map((article) => (
-                <div className="article_card_profile">
+                <div key ={Date.now() + Math.random()}  className="article_card_profile">
                   <NewsCardItem save={false} cardarticle={article} />
                 </div>
               ))}
@@ -89,8 +89,8 @@ function UserArticles(props) {
           <TabPanel value={1}>
             <div>
               {userSavedArticles.map((article) => (
-                <div className="article_card_profile">
-                  <NewsCardItem save={true} cardarticle={article} />
+                <div key ={Date.now() + Math.random()} className="article_card_profile">
+                  <NewsCardItem  save={true} cardarticle={article} />
                 </div>
               ))}
             </div>

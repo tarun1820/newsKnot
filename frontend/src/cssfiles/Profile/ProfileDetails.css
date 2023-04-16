@@ -1,24 +1,27 @@
-.profile_details_container{
-    margin-top:10px;
-    display:flex;
-    flex-direction:column;
-    gap:20px;
-    align-items:center;
-    justify-content:center;
+.profile_details_container {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
 }
 
 
-.profile_details_photo_img{
-    width:300px;
-    height:300px;
-    border-radius:50%;
+.profile_details_photo_img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
 }
 
+.profile_details_user {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
 
-.profile_details_user{
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    gap:20px;
+@media screen and (max-width: 780px){
+    
 }
