@@ -22,7 +22,9 @@ exports.getAllBlogs = async (req, res, next) => {
 
 exports.PostBlog = async (req, res, next) => {
   if (req.isAuthenticated()) {
-    const blog = req.body;
+    let name = req.user.username;
+    const data = req.body;
+    const blog = { ...data, AuthorName: name };
     try {
       const newblog = await blogInfo.create(blog);
       // This created blog should also appended to Blogs attribute of respective customer for further uses.

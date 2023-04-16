@@ -110,11 +110,9 @@ function EditForm(props) {
       .post("http://localhost:5000/user/profile/edit", data, options)
       .then((res) => {
         if (res.data.success === true) {
-          console.log("Data Uploaded");
           setMessage("Details Updated Successfully");
           setSuccess(1);
         } else {
-          console.log("Fault Occured");
           setMessage("Some fault during Updating , please try again later.");
           setSuccess(0);
         }

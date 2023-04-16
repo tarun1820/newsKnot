@@ -19,10 +19,6 @@ const blogSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    Image: {
-      type: String,
-      default: 'random.png',
-    },
     UploadedTime: {
       type: Date,
       default: Date.now(),
