@@ -216,7 +216,7 @@ passport.use(
               socialId: profile.id,
               email: profile.emails[0].value,
               username: profile.displayName,
-              latent_features: [25, 25, 25, 25, 100],
+              latent_features: [25, 25, 25, 25, 25, 25, 150],
             });
             user.save(function (err) {
               if (err) console.log(err);

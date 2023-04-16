@@ -43,6 +43,7 @@ function Newspage() {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [photoName, setPhotoName] = useState("random.png");
+  const [country, setcountry] = useState("in");
   useEffect(() => {
     axios
       .get("http://localhost:5000/user", { withCredentials: true })
@@ -68,10 +69,11 @@ function Newspage() {
     return new Promise((resolve) => setTimeout(resolve, time));
   }
   function topHeadlinesArticals() {
+    console.log(country);
     if (!username) {
       return;
     }
-    const data = JSON.stringify({ category, username });
+    const data = JSON.stringify({ category, username, country });
     const options = {
       withCredentials: true,
       headers: { "content-type": "application/json" },
@@ -92,7 +94,13 @@ function Newspage() {
     // console.log(name)
     setcategory(name);
   }
-  useEffect(topHeadlinesArticals, [category, username]);
+
+  function countrychanged(e) {
+    setloader(true);
+    setcountry(e.target.value);
+    // console.log(country);
+  }
+  useEffect(topHeadlinesArticals, [category, country, username]);
 
   return (
     <div>
@@ -109,12 +117,12 @@ function Newspage() {
                   arrow
                 >
                   <Button onClick={() => navigate("/user/profile")}>
-                  <img
-                  className="profile_image"
-                  src={`http://localhost:5000/uploads/${photoName}`}
-                  alt="NI"
-                  />
-                  <p className = "newspage_username">{username}</p>
+                    <img
+                      className="profile_image"
+                      src={`http://localhost:5000/uploads/${photoName}`}
+                      alt="NI"
+                    />
+                    <p className="newspage_username">{username}</p>
                   </Button>
                 </Tooltip>
                 <Tooltip
@@ -174,6 +182,34 @@ function Newspage() {
               >
                 Technology
               </Button>
+              <Button
+                variant="text"
+                size="medium"
+                onClick={() => {
+                  handleChange("science");
+                  setloader(true);
+                }}
+              >
+                Science
+              </Button>
+              <Button
+                variant="text"
+                size="medium"
+                onClick={() => {
+                  handleChange("business");
+                  setloader(true);
+                }}
+              >
+                Business
+              </Button>
+              <div className="App">
+                <select onChange={countrychanged}>
+                  <option value="in">india</option>
+                  <option value="us">usa</option>
+                  <option value="cn">china</option>
+                  <option value="ru">russia</option>
+                </select>
+              </div>
             </div>
             <Line className="newspage_line" />
 
