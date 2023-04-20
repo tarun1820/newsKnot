@@ -1,7 +1,6 @@
 import * as React from "react";
 import locksolid from "../png&svg/lock-solid.svg";
 import usersolid from "../png&svg/user-solid.svg";
-import metalogo from "../png&svg/meta.png";
 import googlelogo from "../png&svg/google.png";
 import "../cssfiles/login.css";
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -155,12 +154,6 @@ function Login() {
           <a href="http://localhost:5000/auth/google">
             <img alt="" className="s-icons" src={googlelogo} />
           </a>
-          <img
-            alt=""
-            className="s-icons"
-            src={metalogo}
-            style={{ width: 38 }}
-          />
         </div>
       </div>
 

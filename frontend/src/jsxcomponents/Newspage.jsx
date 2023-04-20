@@ -3,15 +3,11 @@ import { React, useState, useEffect } from "react";
 import NewsCardItem from "../NewsPageComponents/newsCardItem";
 import "../cssfiles/News-Page/main_page.css";
 import { useNavigate } from "react-router-dom";
-import MyButton from "../StandardComponents/JsxFiles/button";
 import Line from "../StandardComponents/JsxFiles/line";
 import { Button } from "@mui/material";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import Tooltip from "@mui/material/Tooltip";
-import Fade from "@mui/material/Fade";
 import CircularProgress from "@mui/material/CircularProgress";
-import IconButton from "@mui/material/IconButton";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
+import Header from '../NewsPageComponents/Header'
 
 const theme = createTheme({
   typography: {
@@ -107,40 +103,9 @@ function Newspage() {
       <ThemeProvider theme={theme}>
         {userfound === 2 ? (
           <div>
-            <div className="navbar_newspage_header">
-              <div className="proName_newspage">NewsKnot</div>
-              <div className="navbar_newspage_btns">
-                <Tooltip
-                  TransitionComponent={Fade}
-                  TransitionProps={{ timeout: 600 }}
-                  title="View Profile"
-                  arrow
-                >
-                  <Button onClick={() => navigate("/user/profile")}>
-                    <img
-                      className="profile_image"
-                      src={`http://localhost:5000/uploads/${photoName}`}
-                      alt="NI"
-                    />
-                    <p className="newspage_username">{username}</p>
-                  </Button>
-                </Tooltip>
-                <Tooltip
-                  TransitionComponent={Fade}
-                  TransitionProps={{ timeout: 600 }}
-                  title="Write A Blog"
-                  arrow
-                >
-                  <IconButton onClick={() => navigate("/user/blog/createBlog")}>
-                    <AddCircleIcon sx={{ color: "gold", fontSize: 40 }} />
-                  </IconButton>
-                </Tooltip>
-                <div className="navbar_newspage_btn">
-                  <MyButton link="/logout"> Logout </MyButton>
-                </div>
-              </div>
+            <div>
+              <Header user = {username} photo = {photoName}/>
             </div>
-
             <div className="navbar_newspage">
               <Button
                 variant="text"
@@ -204,10 +169,10 @@ function Newspage() {
               </Button>
               <div className="App">
                 <select onChange={countrychanged}>
-                  <option value="in">india</option>
-                  <option value="us">usa</option>
-                  <option value="cn">china</option>
-                  <option value="ru">russia</option>
+                  <option value="in">INDIA</option>
+                  <option value="us">USA</option>
+                  <option value="cn">CHINA</option>
+                  <option value="ru">RUSSIA</option>
                 </select>
               </div>
             </div>

@@ -10,6 +10,7 @@ import ArticlePage from "./articlePage";
 import Profile from "./Profile";
 import EditProfile from "../ProfilePageComponents/EditProfileForm";
 import BlogPage from "./blog";
+import AllBlogs from './AllBlogs'
 export const App = () => {
   return (
     <Routes>
@@ -23,6 +24,7 @@ export const App = () => {
       <Route path="/user/profile/edit" element={<EditProfile />}></Route>
       <Route path="/user/article/:articleurl" element={<ArticlePage />}></Route>
       <Route path = "/user/blog/createBlog" element = {<BlogPage />}></Route>
+      <Route path = "/user/blog/AllBlogs" element = {<AllBlogs/>}></Route>
     </Routes>
   );
 };

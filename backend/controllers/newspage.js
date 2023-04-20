@@ -1,5 +1,5 @@
 const NewsAPI = require('newsapi');
-const newsapi = new NewsAPI(process.env.API_KEY2);
+const newsapi = new NewsAPI(process.env.API_KEY3);
 const userinfo = require('../models/user');
 const handle_fun = require('./probabilityFunction');
 exports.PostNewsArticlesFromAPI = async (req, res, next) => {
@@ -11,8 +11,7 @@ exports.PostNewsArticlesFromAPI = async (req, res, next) => {
     const userdata = await userinfo.findOne({ username });
 
     const prop_vec = userdata.latent_features;
-    const country = req.body.country;
-    console.log(country);
+    const country = req.body.country.toLowerCase();
     let sports_list = await handle_fun.newsapireq(
       'sports',
       country,
@@ -56,7 +55,6 @@ exports.PostNewsArticlesFromAPI = async (req, res, next) => {
       single_article.title = single_article.title.replaceAll('%', ' ');
       single_article['category'] = 'sports';
       single_article['category_id'] = 0;
-      // console.log(single_article);
       return single_article;
     });
     tech_list = tech_list.articles.map((single_article) => {
@@ -79,7 +77,6 @@ exports.PostNewsArticlesFromAPI = async (req, res, next) => {
       single_article.displayTitle = single_article.title;
       single_article.title = single_article.title.replaceAll('?', ' ');
       single_article.title = single_article.title.replaceAll('%', ' ');
-      // console.log(single_article);
       single_article['category'] = 'entertainment';
       single_article['category_id'] = 3;
       return single_article;
@@ -88,7 +85,6 @@ exports.PostNewsArticlesFromAPI = async (req, res, next) => {
       single_article.displayTitle = single_article.title;
       single_article.title = single_article.title.replaceAll('?', ' ');
       single_article.title = single_article.title.replaceAll('%', ' ');
-      // console.log(single_article);
       single_article['category'] = 'entertainment';
       single_article['category_id'] = 4;
       return single_article;
@@ -98,12 +94,10 @@ exports.PostNewsArticlesFromAPI = async (req, res, next) => {
       single_article.displayTitle = single_article.title;
       single_article.title = single_article.title.replaceAll('?', ' ');
       single_article.title = single_article.title.replaceAll('%', ' ');
-      // console.log(single_article);
       single_article['category'] = 'busin';
       single_article['category_id'] = 5;
       return single_article;
     });
-    // console.log(sports_list);
     let total_articles = sports_list.concat(
       tech_list,
       health_list,
@@ -118,7 +112,6 @@ exports.PostNewsArticlesFromAPI = async (req, res, next) => {
 
     shuffle(total_articles);
 
-    // console.log("total articles=", total_articles);
     return res.send(total_articles);
   }
 
@@ -128,7 +121,7 @@ exports.PostNewsArticlesFromAPI = async (req, res, next) => {
     .topHeadlines({
       category: category,
       country: req.body.country,
-      pageSize: 100,
+      pageSize: 30,
     })
     .then((response) => {
       let id = 0;

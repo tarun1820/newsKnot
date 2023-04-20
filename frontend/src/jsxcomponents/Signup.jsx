@@ -2,7 +2,6 @@ import * as React from "react";
 import envelopeopen from "../png&svg/envelope-open-regular.svg";
 import locksolid from "../png&svg/lock-solid.svg";
 import usersolid from "../png&svg/user-solid.svg";
-import metalogo from "../png&svg/meta.png";
 import googlelogo from "../png&svg/google.png";
 import "../cssfiles/signup.css";
 import { useState } from "react";
@@ -234,12 +233,6 @@ function Signup() {
           <a href="http://localhost:5000/auth/google">
             <img alt="" className="s-icons" src={googlelogo} />
           </a>
-          <img
-            alt=""
-            className="s-icons"
-            src={metalogo}
-            style={{ width: 38 }}
-          />
         </div>
       </div>
 

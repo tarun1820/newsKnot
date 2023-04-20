@@ -4,11 +4,11 @@ import ArticleData from "../articlePageComponents/articleData";
 import Footer from "../StandardComponents/JsxFiles/Footer";
 import Button from "../StandardComponents/JsxFiles/button";
 import Line from "../StandardComponents/JsxFiles/line";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import CircularProgress from "@mui/material/CircularProgress";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
+import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
   typography: {
@@ -40,9 +40,6 @@ function ArticlePage(props) {
   const Articledata = JSON.parse(articleurl);
   console.log("article data from article page=", Articledata);
   const navigate = useNavigate();
-  const location = useLocation();
-  // const username = location.state.username;
-  // const Articledata = location.state.article_data;
   const [username, setUsername] = useState("");
   const [photoName, setPhotoName] = useState("random.png");
   useEffect(() => {
@@ -59,8 +56,6 @@ function ArticlePage(props) {
           });
         } else {
           setUsername(res.data.username);
-          // setNews(res.data.articles);
-          // add image here by creating profile pic state
           setpageload(1);
           setPhotoName(res.data.profile_pic);
         }

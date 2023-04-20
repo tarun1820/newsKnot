@@ -4,7 +4,6 @@ import axios from "axios";
 import Parser from "html-react-parser";
 
 function ArticleData(props) {
-  // const location = useLocation();
   const data = props.article_data;
   console.log("from article data=", data.description);
   var author = data.author;
@@ -24,6 +23,7 @@ function ArticleData(props) {
       .catch((err) => {
         console.log(err);
       });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

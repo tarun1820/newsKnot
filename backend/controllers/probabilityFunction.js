@@ -1,5 +1,5 @@
 const NewsAPI = require('newsapi');
-const newsapi = new NewsAPI(process.env.API_KEY2);
+const newsapi = new NewsAPI(process.env.API_KEY3);
 
 function calculate_probability(prop_vec, category_id) {
   const prop = prop_vec[category_id] / prop_vec[prop_vec.length - 1];

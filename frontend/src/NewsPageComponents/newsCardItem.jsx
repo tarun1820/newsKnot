@@ -64,6 +64,7 @@ function NewsCardItem(props) {
         state: { article_data: props.cardarticle, username: username },
       });
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clickarticle]);
 
   useEffect(() => {
