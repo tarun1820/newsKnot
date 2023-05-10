@@ -24,13 +24,16 @@
 .profilepage_body{
     display:flex;
     flex-direction:row;
-    gap:10px;
-    justify-content:center;
+    /* justify-content:center; */
+    gap:30px;
     margin-top:40px;
 }
 
+.profilepage_articles{
+    transform:scale(0.95);
+}
 .profilepage_details{
-    margin-right:20px;
+    margin-left:50px;
 }
 
 @media screen and (max-width: 780px){

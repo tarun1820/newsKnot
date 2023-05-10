@@ -11,7 +11,6 @@ function Profile(props) {
     <div>
       <div className="profilepage_header">
         <div className="profilepage_proname">NewsKnot</div>
-        {/* Should change routes */}
         <div className="profilepage_feed_btn">
           <Button link="/user">Feed</Button>
         </div>

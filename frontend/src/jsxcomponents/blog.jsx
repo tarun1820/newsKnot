@@ -190,7 +190,7 @@ function BlogPage(props){
                 
                 <Button onClick={ ()=>{handleSubmit();}} variant="contained" color = "secondary">POST</Button>
                 </div>
-                {/* Create a form and Verification*/}
+                {/* Create a form and Verification => Done*/}
 
             </div>
             <Line/>

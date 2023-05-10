@@ -14,7 +14,10 @@ const blogSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-
+    UploaderPhoto: {
+      type: String,
+      default: 'random.png',
+    },
     Description: {
       type: String,
       required: true,
